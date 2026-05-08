@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Execute Script</title>
+</head>
+<body style="text-align:center; margin-top:100px;">
+
+  <h2>Run Google Script</h2>
+
+  <button onclick="runScript()" style="padding:15px 25px; font-size:18px;">
+    Execute
+  </button>
+
+  <p id="status"></p>
+
+  <script>
+    function runScript() {
+      document.getElementById("status").innerText = "Running...";
+
+      fetch("https://script.google.com/macros/s/AKfycbxLqGrOqdgL9B9VTn-3JKfnW2YH5VWWy-OI-vLSALMovyW7eNTEtaT2i6dbU75R3RKygw/exec")
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("status").innerText = "Done: " + data;
+        })
+        .catch(error => {
+          document.getElementById("status").innerText = "Error!";
+          console.log(error);
+        });
+    }
+  </script>
+
+</body>
+</html>
