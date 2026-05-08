@@ -2,28 +2,36 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Run Google Script</title>
+  <title>10 Button Script Panel</title>
 
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: Arial;
       text-align: center;
-      margin-top: 120px;
-      background: #f5f5f5;
+      margin-top: 40px;
+      background: #f4f6f8;
     }
 
     h2 {
-      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      width: 300px;
+      margin: auto;
     }
 
     button {
-      padding: 15px 35px;
-      font-size: 18px;
-      background: #0d6efd;
-      color: white;
+      padding: 15px;
+      font-size: 16px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      background: #0d6efd;
+      color: white;
     }
 
     button:hover {
@@ -32,7 +40,7 @@
 
     #status {
       margin-top: 20px;
-      font-size: 16px;
+      font-size: 14px;
       color: #333;
     }
   </style>
@@ -40,23 +48,34 @@
 
 <body>
 
-  <h2>Google Apps Script Trigger</h2>
+  <h2>10 Script Buttons</h2>
 
-  <button onclick="runScript()">Execute</button>
+  <div class="grid">
+    <button onclick="runScript(1)">Button 1</button>
+    <button onclick="runScript(2)">Button 2</button>
+    <button onclick="runScript(3)">Button 3</button>
+    <button onclick="runScript(4)">Button 4</button>
+    <button onclick="runScript(5)">Button 5</button>
+    <button onclick="runScript(6)">Button 6</button>
+    <button onclick="runScript(7)">Button 7</button>
+    <button onclick="runScript(8)">Button 8</button>
+    <button onclick="runScript(9)">Button 9</button>
+    <button onclick="runScript(10)">Button 10</button>
+  </div>
 
   <div id="status"></div>
 
   <script>
-    function runScript() {
+    function runScript(id) {
       const status = document.getElementById("status");
-      status.innerText = "Running script...";
+      status.innerText = "Running Button " + id + "...";
 
-      fetch("https://script.google.com/macros/s/AKfycbyDlC-668oNqrnLGSzwAhQ3lTTmIZqT2YP24WJ43X8CJtPI7_7cDo9csIUL5FnUjF7TCQ/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbyDlC-668oNqrnLGSzwAhQ3lTTmIZqT2YP24WJ43X8CJtPI7_7cDo9csIUL5FnUjF7TCQ/exec?button=" + id, {
         method: "GET",
         mode: "no-cors"
       })
       .then(() => {
-        status.innerText = "Request sent ✔ (Check Google Script)";
+        status.innerText = "Button " + id + " sent ✔";
       })
       .catch(() => {
         status.innerText = "Error ❌";
