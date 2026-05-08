@@ -1,87 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>10 Button Script Panel</title>
+function doGet(e) {
+  var button = e.parameter.button;
 
-  <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      margin-top: 40px;
-      background: #f4f6f8;
-    }
+  if (!button) {
+    return ContentService.createTextOutput("No button selected");
+  }
 
-    h2 {
-      margin-bottom: 20px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      width: 300px;
-      margin: auto;
-    }
-
-    button {
-      padding: 15px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #0d6efd;
-      color: white;
-    }
-
-    button:hover {
-      background: #084298;
-    }
-
-    #status {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #333;
-    }
-  </style>
-</head>
-
-<body>
-
-  <h2>10 Script Buttons</h2>
-
-  <div class="grid">
-    <button onclick="runScript(1)">Button 1</button>
-    <button onclick="runScript(2)">Button 2</button>
-    <button onclick="runScript(3)">Button 3</button>
-    <button onclick="runScript(4)">Button 4</button>
-    <button onclick="runScript(5)">Button 5</button>
-    <button onclick="runScript(6)">Button 6</button>
-    <button onclick="runScript(7)">Button 7</button>
-    <button onclick="runScript(8)">Button 8</button>
-    <button onclick="runScript(9)">Button 9</button>
-    <button onclick="runScript(10)">Button 10</button>
-  </div>
-
-  <div id="status"></div>
-
-  <script>
-    function runScript(id) {
-      const status = document.getElementById("status");
-      status.innerText = "Running Button " + id + "...";
-
-      fetch("https://script.google.com/macros/s/AKfycbyDlC-668oNqrnLGSzwAhQ3lTTmIZqT2YP24WJ43X8CJtPI7_7cDo9csIUL5FnUjF7TCQ/exec?button=" + id, {
-        method: "GET",
-        mode: "no-cors"
-      })
-      .then(() => {
-        status.innerText = "Button " + id + " sent ✔";
-      })
-      .catch(() => {
-        status.innerText = "Error ❌";
-      });
-    }
-  </script>
-
-</body>
-</html>
+  // Example actions for each button
+  switch (button) {
+    case "1":
+      return ContentService.createTextOutput("Button 1 executed");
+    case "2":
+      return ContentService.createTextOutput("Button 2 executed");
+    case "3":
+      return ContentService.createTextOutput("Button 3 executed");
+    case "4":
+      return ContentService.createTextOutput("Button 4 executed");
+    case "5":
+      return ContentService.createTextOutput("Button 5 executed");
+    case "6":
+      return ContentService.createTextOutput("Button 6 executed");
+    case "7":
+      return ContentService.createTextOutput("Button 7 executed");
+    case "8":
+      return ContentService.createTextOutput("Button 8 executed");
+    case "9":
+      return ContentService.createTextOutput("Button 9 executed");
+    case "10":
+      return ContentService.createTextOutput("Button 10 executed");
+    default:
+      return ContentService.createTextOutput("Invalid button");
+  }
+}
