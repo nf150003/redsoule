@@ -1,33 +1,136 @@
-function doGet(e) {
-  var button = e.parameter.button;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Dashboard</title>
 
-  if (!button) {
-    return ContentService.createTextOutput("No button selected");
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
   }
 
-  // Example actions for each button
-  switch (button) {
-    case "1":
-      return ContentService.createTextOutput("Button 1 executed");
-    case "2":
-      return ContentService.createTextOutput("Button 2 executed");
-    case "3":
-      return ContentService.createTextOutput("Button 3 executed");
-    case "4":
-      return ContentService.createTextOutput("Button 4 executed");
-    case "5":
-      return ContentService.createTextOutput("Button 5 executed");
-    case "6":
-      return ContentService.createTextOutput("Button 6 executed");
-    case "7":
-      return ContentService.createTextOutput("Button 7 executed");
-    case "8":
-      return ContentService.createTextOutput("Button 8 executed");
-    case "9":
-      return ContentService.createTextOutput("Button 9 executed");
-    case "10":
-      return ContentService.createTextOutput("Button 10 executed");
-    default:
-      return ContentService.createTextOutput("Invalid button");
+  /* Header */
+  .header {
+    text-align: center;
+    color: white;
+    padding: 25px 10px;
+    font-size: 20px;
+    font-weight: 600;
   }
-}
+
+  /* Container */
+  .container {
+    background: #f9f9fb;
+    border-radius: 25px 25px 0 0;
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    max-width: 500px;
+    margin: auto;
+  }
+
+  /* App cards */
+  .card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px 10px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: 0.2s;
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* Icon circle */
+  .icon {
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: white;
+  }
+
+  .b1 { background: #ff6b6b; }
+  .b2 { background: #4dabf7; }
+  .b3 { background: #51cf66; }
+  .b4 { background: #ffd43b; }
+  .b5 { background: #845ef7; }
+  .b6 { background: #ff922b; }
+  .b7 { background: #20c997; }
+  .b8 { background: #339af0; }
+  .b9 { background: #f06595; }
+  .b10 { background: #9775fa; }
+
+  .title {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  📱 My Dashboard App
+</div>
+
+<div class="container">
+
+  <div class="grid">
+
+    <a href="https://docs.google.com/spreadsheets/d/1ZauIDWBjL3mx-NiIHIZ51nXATyaMUZKJXiU3SepSJzg/edit?gid=754117415#gid=754117415" target="_blank">
+      <div class="card">
+        <div class="icon b1">📊</div>
+        <div class="title">Sheet 1</div>
+      </div>
+    </a>
+
+    <a href="#"><div class="card"><div class="icon b2">📁</div><div class="title">Sheet 2</div></div></a>
+
+    <a href="#"><div class="card"><div class="icon b3">🧾</div><div class="title">Sheet 3</div></div></a>
+
+    <a href="#"><div class="card"><div class="icon b4">📄</div><div class="title">Sheet 4</div></div></a>
+
+    <a href="#"><div class="card"><div class="icon b5">📚</div><div class="title">Sheet 5</div></div></a>
+
+    <a href="#"><div class="card"><div class="icon b6">📝</div><div class="title">Sheet 6</div></div></a>
+
+    <a href="#"><div class="card"><div class="icon b7">📌</div><div class="title">Sheet 7</div></div></a>
+
+    <a href="#"><div class="card"><div class="icon b8">📈</div><div class="title">Sheet 8</div></div></a>
+
+    <a href="#"><div class="card"><div class="icon b9">🗂️</div><div class="title">Sheet 9</div></div></a>
+
+    <a href="#"><div class="card"><div class="icon b10">⚙️</div><div class="title">Sheet 10</div></div></a>
+
+  </div>
+
+</div>
+
+</body>
+</html>
