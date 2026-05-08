@@ -1,31 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Execute Script</title>
+  <meta charset="UTF-8">
+  <title>Google Script Button</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 120px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      background: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1557b0;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+  </style>
 </head>
-<body style="text-align:center; margin-top:100px;">
 
-  <h2>Run Google Script</h2>
+<body>
 
-  <button onclick="runScript()" style="padding:15px 25px; font-size:18px;">
-    Execute
-  </button>
+  <h2>Run Google Apps Script</h2>
 
-  <p id="status"></p>
+  <button onclick="runScript()">Execute</button>
+
+  <div id="status"></div>
 
   <script>
     function runScript() {
-      document.getElementById("status").innerText = "Running...";
+      const status = document.getElementById("status");
+      status.innerText = "Running...";
 
-      fetch("https://script.google.com/macros/s/AKfycbxLqGrOqdgL9B9VTn-3JKfnW2YH5VWWy-OI-vLSALMovyW7eNTEtaT2i6dbU75R3RKygw/exec")
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById("status").innerText = "Done: " + data;
-        })
-        .catch(error => {
-          document.getElementById("status").innerText = "Error!";
-          console.log(error);
-        });
+      fetch("https://script.google.com/macros/s/AKfycbxLqGrOqdgL9B9VTn-3JKfnW2YH5VWWy-OI-vLSALMovyW7eNTEtaT2i6dbU75R3RKygw/exec", {
+        method: "GET",
+        mode: "no-cors"
+      })
+      .then(() => {
+        status.innerText = "Request sent successfully ✔";
+      })
+      .catch(() => {
+        status.innerText = "Error sending request ❌";
+      });
     }
   </script>
 
