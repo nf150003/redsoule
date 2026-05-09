@@ -9,86 +9,98 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
 <style>
-  body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
-  }
 
-  /* Header */
-  .header {
-    text-align: center;
-    color: white;
-    padding: 25px 10px;
-    font-size: 20px;
-    font-weight: 600;
-  }
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#4facfe,#00f2fe);
+}
 
-  /* Container */
-  .container {
-    background: #f9f9fb;
-    border-radius: 25px 25px 0 0;
-    padding: 20px;
-    min-height: 100vh;
-  }
+/* Header */
+.header{
+  text-align:center;
+  color:white;
+  padding:25px 10px;
+  font-size:22px;
+  font-weight:600;
+}
 
-  /* Grid */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    max-width: 500px;
-    margin: auto;
-  }
+/* Container */
+.container{
+  background:#f9f9fb;
+  border-radius:25px 25px 0 0;
+  padding:20px;
+  min-height:100vh;
+}
 
-  /* App cards */
-  .card {
-    background: white;
-    border-radius: 18px;
-    padding: 20px 10px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transition: 0.2s;
-  }
+/* Grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  max-width:500px;
+  margin:auto;
+}
 
-  .card:hover {
-    transform: scale(1.05);
-  }
+/* Cards */
+.card{
+  background:white;
+  border-radius:18px;
+  padding:20px 10px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  transition:0.2s;
+  cursor:pointer;
+}
 
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
+.card:hover{
+  transform:scale(1.05);
+}
 
-  /* Icon circle */
-  .icon {
-    width: 50px;
-    height: 50px;
-    margin: auto;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    color: white;
-  }
+a{
+  text-decoration:none;
+  color:inherit;
+}
 
-  .b1 { background: #ff6b6b; }
-  .b2 { background: #4dabf7; }
-  .b3 { background: #51cf66; }
-  .b4 { background: #ffd43b; }
-  .b5 { background: #845ef7; }
-  .b6 { background: #ff922b; }
-  .b7 { background: #20c997; }
-  .b8 { background: #339af0; }
-  .b9 { background: #f06595; }
-  .b10 { background: #9775fa; }
+/* Icon */
+.icon{
+  width:55px;
+  height:55px;
+  margin:auto;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  color:white;
+}
 
-  .title {
-    margin-top: 10px;
-    font-size: 14px;
-    font-weight: 500;
-  }
+/* Colors */
+.b1{background:#ff6b6b;}
+.b2{background:#4dabf7;}
+.b3{background:#51cf66;}
+.b4{background:#ffd43b;}
+.b5{background:#845ef7;}
+.b6{background:#ff922b;}
+.b7{background:#20c997;}
+.b8{background:#339af0;}
+.b9{background:#f06595;}
+.b10{background:#9775fa;}
+
+.title{
+  margin-top:10px;
+  font-size:14px;
+  font-weight:500;
+}
+
+/* Status */
+.status{
+  text-align:center;
+  margin-top:20px;
+  font-size:15px;
+  color:#0d6efd;
+  font-weight:500;
+}
 
 </style>
 </head>
@@ -103,34 +115,110 @@
 
   <div class="grid">
 
-    <a href="https://docs.google.com/spreadsheets/d/1ZauIDWBjL3mx-NiIHIZ51nXATyaMUZKJXiU3SepSJzg/edit?gid=754117415#gid=754117415" target="_blank">
+    <!-- CT Analysis Button -->
+    <div class="card" onclick="runCT1()">
+      <div class="icon b1">📊</div>
+      <div class="title">CT-1 (Analysis)</div>
+    </div>
+
+    <!-- Other Buttons -->
+
+    <a href="#">
       <div class="card">
-        <div class="icon b1">📊</div>
-        <div class="title">CT-1 (Analysis)</div>
+        <div class="icon b2">📁</div>
+        <div class="title">Sheet 2</div>
       </div>
     </a>
 
-    <a href="#"><div class="card"><div class="icon b2">📁</div><div class="title">Sheet 2</div></div></a>
+    <a href="#">
+      <div class="card">
+        <div class="icon b3">🧾</div>
+        <div class="title">Sheet 3</div>
+      </div>
+    </a>
 
-    <a href="#"><div class="card"><div class="icon b3">🧾</div><div class="title">Sheet 3</div></div></a>
+    <a href="#">
+      <div class="card">
+        <div class="icon b4">📄</div>
+        <div class="title">Sheet 4</div>
+      </div>
+    </a>
 
-    <a href="#"><div class="card"><div class="icon b4">📄</div><div class="title">Sheet 4</div></div></a>
+    <a href="#">
+      <div class="card">
+        <div class="icon b5">📚</div>
+        <div class="title">Sheet 5</div>
+      </div>
+    </a>
 
-    <a href="#"><div class="card"><div class="icon b5">📚</div><div class="title">Sheet 5</div></div></a>
+    <a href="#">
+      <div class="card">
+        <div class="icon b6">📝</div>
+        <div class="title">Sheet 6</div>
+      </div>
+    </a>
 
-    <a href="#"><div class="card"><div class="icon b6">📝</div><div class="title">Sheet 6</div></div></a>
+    <a href="#">
+      <div class="card">
+        <div class="icon b7">📌</div>
+        <div class="title">Sheet 7</div>
+      </div>
+    </a>
 
-    <a href="#"><div class="card"><div class="icon b7">📌</div><div class="title">Sheet 7</div></div></a>
+    <a href="#">
+      <div class="card">
+        <div class="icon b8">📈</div>
+        <div class="title">Sheet 8</div>
+      </div>
+    </a>
 
-    <a href="#"><div class="card"><div class="icon b8">📈</div><div class="title">Sheet 8</div></div></a>
+    <a href="#">
+      <div class="card">
+        <div class="icon b9">🗂️</div>
+        <div class="title">Sheet 9</div>
+      </div>
+    </a>
 
-    <a href="#"><div class="card"><div class="icon b9">🗂️</div><div class="title">Sheet 9</div></div></a>
-
-    <a href="#"><div class="card"><div class="icon b10">⚙️</div><div class="title">Sheet 10</div></div></a>
+    <a href="#">
+      <div class="card">
+        <div class="icon b10">⚙️</div>
+        <div class="title">Sheet 10</div>
+      </div>
+    </a>
 
   </div>
 
+  <div class="status" id="status"></div>
+
 </div>
+
+<script>
+
+function runCT1(){
+
+  const status = document.getElementById("status");
+
+  status.innerHTML = "⏳ Processing PDF...";
+
+  fetch("https://script.google.com/macros/s/AKfycbxmMj2fOKowtWUqCjA67rdVcuXk9mGqdDipJ-24Yh6FwgM3eMObigofiNzpgWfZ5OdN/exec?action=ctreport")
+
+  .then(response => response.json())
+
+  .then(data => {
+
+    status.innerHTML = "✅ PDF Generated & Email Sent";
+
+  })
+
+  .catch(error => {
+
+    status.innerHTML = "❌ Error Running Script";
+
+  });
+
+}
+
+</script>
 
 </body>
 </html>
