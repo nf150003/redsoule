@@ -3,87 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>App Dashboard</title>
+<title>Education Dashboard</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
-  background:linear-gradient(135deg,#4facfe,#00f2fe);
+  background:#f4f7fb;
 }
 
+/* HEADER */
 .header{
-  text-align:center;
+  background:#2563eb;
   color:white;
-  padding:25px 10px;
-  font-size:22px;
+  text-align:center;
+  padding:18px;
+  font-size:18px;
   font-weight:600;
 }
 
+/* CONTAINER */
 .container{
-  background:#f9f9fb;
-  border-radius:25px 25px 0 0;
   padding:20px;
-  min-height:100vh;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
   max-width:500px;
   margin:auto;
 }
 
-.card{
-  background:white;
-  border-radius:18px;
-  padding:20px 10px;
+/* BUTTON GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+/* BUTTON STYLE */
+.btn{
+  background:#ffffff;
+  border:none;
+  border-radius:14px;
+  padding:18px 10px;
+  font-size:13px;
+  font-weight:500;
+  color:#1f2937;
   text-align:center;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
-  transition:0.2s;
+  box-shadow:0 6px 15px rgba(0,0,0,0.06);
   cursor:pointer;
-}
-
-.card:hover{
-  transform:scale(1.05);
-}
-
-a{
+  transition:0.2s ease;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
   text-decoration:none;
-  color:inherit;
 }
 
+.btn:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 20px rgba(0,0,0,0.12);
+}
+
+/* ICON */
 .icon{
-  width:55px;
-  height:55px;
-  margin:auto;
-  border-radius:50%;
+  width:45px;
+  height:45px;
+  border-radius:12px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:24px;
   color:white;
+  font-size:18px;
+  margin-bottom:8px;
 }
 
-.b1{background:#ff6b6b;}
-.b2{background:#4dabf7;}
-.b3{background:#51cf66;}
-.b4{background:#ffd43b;}
-.b5{background:#845ef7;}
-.b6{background:#ff922b;}
-.b7{background:#20c997;}
-.b8{background:#339af0;}
-.b9{background:#f06595;}
-.b10{background:#9775fa;}
+/* COLORS */
+.c1{background:#ef4444;}
+.c2{background:#3b82f6;}
+.c3{background:#10b981;}
+.c4{background:#f59e0b;}
+.c5{background:#8b5cf6;}
+.c6{background:#14b8a6;}
+.c7{background:#f97316;}
+.c8{background:#6366f1;}
+.c9{background:#ec4899;}
+.c10{background:#0ea5e9;}
 
-.title{
-  margin-top:10px;
-  font-size:14px;
-  font-weight:500;
+a{
+  text-decoration:none;
 }
 
 </style>
@@ -92,91 +99,61 @@ a{
 <body>
 
 <div class="header">
-  📱 Sajib's Taskboard
+  🎓 Sajib's Dashboard
 </div>
 
 <div class="container">
 
   <div class="grid">
 
-    <!-- CT Analysis -->
-    <a href="https://docs.google.com/spreadsheets/d/1ZauIDWBjL3mx-NiIHIZ51nXATyaMUZKJXiU3SepSJzg/edit?gid=754117415#gid=754117415">
-      <div class="card">
-        <div class="icon b1">📊</div>
-        <div class="title">CT-1 Analysis</div>
-      </div>
+    <a class="btn" href="https://docs.google.com/spreadsheets/d/1ZauIDWBjL3mx-NiIHIZ51nXATyaMUZKJXiU3SepSJzg/edit?gid=754117415#gid=754117415">
+      <div class="icon c1">📊</div>
+      CT Analysis
     </a>
 
-    <!-- Leaderboard -->
-    <a href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0" target="_blank">
-      <div class="card">
-        <div class="icon b2">🏆</div>
-        <div class="title">Leaderboard</div>
-      </div>
+    <a class="btn" href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0">
+      <div class="icon c2">🏆</div>
+      Leaderboard
     </a>
 
-    <!-- Sheet 3 -->
-    <a href="YOUR_LINK_HERE" target="_blank">
-      <div class="card">
-        <div class="icon b3">🧾</div>
-        <div class="title">Sheet 3</div>
-      </div>
+    <a class="btn" href="#">
+      <div class="icon c3">📚</div>
+      Courses
     </a>
 
-    <!-- Sheet 4 -->
-    <a href="YOUR_LINK_HERE" target="_blank">
-      <div class="card">
-        <div class="icon b4">📄</div>
-        <div class="title">Sheet 4</div>
-      </div>
+    <a class="btn" href="#">
+      <div class="icon c4">🧾</div>
+      Assignments
     </a>
 
-    <!-- Sheet 5 -->
-    <a href="YOUR_LINK_HERE" target="_blank">
-      <div class="card">
-        <div class="icon b5">📚</div>
-        <div class="title">Sheet 5</div>
-      </div>
+    <a class="btn" href="#">
+      <div class="icon c5">📝</div>
+      Exams
     </a>
 
-    <!-- Sheet 6 -->
-    <a href="YOUR_LINK_HERE" target="_blank">
-      <div class="card">
-        <div class="icon b6">📝</div>
-        <div class="title">Sheet 6</div>
-      </div>
+    <a class="btn" href="#">
+      <div class="icon c6">📄</div>
+      Results
     </a>
 
-    <!-- Sheet 7 -->
-    <a href="YOUR_LINK_HERE" target="_blank">
-      <div class="card">
-        <div class="icon b7">📌</div>
-        <div class="title">Sheet 7</div>
-      </div>
+    <a class="btn" href="#">
+      <div class="icon c7">📌</div>
+      Notices
     </a>
 
-    <!-- Sheet 8 -->
-    <a href="YOUR_LINK_HERE" target="_blank">
-      <div class="card">
-        <div class="icon b8">📈</div>
-        <div class="title">Sheet 8</div>
-      </div>
+    <a class="btn" href="#">
+      <div class="icon c8">⚙️</div>
+      Settings
     </a>
 
-    <!-- Sheet 9 -->
-    <a href="YOUR_LINK_HERE" target="_blank">
-      <div class="card">
-        <div class="icon b9">🗂️</div>
-        <div class="title">Sheet 9</div>
-      </div>
+    <a class="btn" href="#">
+      <div class="icon c9">👨‍🏫</div>
+      Teachers
     </a>
 
-    <!-- Settings -->
-    <a href="YOUR_LINK_HERE" target="_blank">
-      <div class="card">
-        <div class="icon b10">⚙️</div>
-        <div class="title">Settings</div>
-      </div>
+    <a class="btn" href="#">
+      <div class="icon c10">📱</div>
+      App Info
     </a>
 
   </div>
