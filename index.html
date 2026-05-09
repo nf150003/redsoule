@@ -123,10 +123,10 @@ a{
 
     <!-- Other Buttons -->
 
-    <a href="#">
+    <a href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0">
       <div class="card">
         <div class="icon b2">📁</div>
-        <div class="title">Sheet 2</div>
+        <div class="title">Leaderboard</div>
       </div>
     </a>
 
@@ -194,27 +194,6 @@ a{
 
 <script>
 
-function runCT1(){
-
-  const status = document.getElementById("status");
-
-  status.innerHTML = "⏳ Processing PDF...";
-
-  fetch("https://script.google.com/macros/s/AKfycbxmMj2fOKowtWUqCjA67rdVcuXk9mGqdDipJ-24Yh6FwgM3eMObigofiNzpgWfZ5OdN/exec?action=ctreport")
-
-  .then(response => response.json())
-
-  .then(data => {
-
-    status.innerHTML = "✅ PDF Generated & Email Sent";
-
-  })
-
-  .catch(error => {
-
-    status.innerHTML = "❌ Error Running Script";
-
-  });
 
 }
 
