@@ -39,7 +39,7 @@ body{
   gap:12px;
 }
 
-/* BUTTON */
+/* BUTTON STYLE */
 .btn{
   background:#ffffff;
   border:none;
@@ -106,20 +106,25 @@ a{
 
   <div class="grid">
 
-    <!-- CT REPORT BUTTON -->
-    <a class="btn" href="#" onclick="sendReport(event)">
+    <!-- CT ANALYSIS (direct link) -->
+    <a class="btn" href="https://script.google.com/macros/s/AKfycbyMqNARUd91z_EPpEyh91ACwqYtGE7Xz-5xXDdDYjIwoAT3BPeFz93kQsOKYywuMfLd/exec">
       <div class="icon c1">📊</div>
+      CT Analysis
+    </a>
+
+    <!-- SEND REPORT (Apps Script trigger) -->
+    <a class="btn" href="#" onclick="sendReport(event)">
+      <div class="icon c2">📤</div>
       Send Report
     </a>
 
     <!-- LEADERBOARD -->
     <a class="btn" href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0">
-      <div class="icon c2">🏆</div>
+      <div class="icon c3">🏆</div>
       Leaderboard
     </a>
 
-    <a class="btn" href="#"><div class="icon c3">📚</div>Courses</a>
-    <a class="btn" href="#"><div class="icon c4">🧾</div>Assignments</a>
+    <a class="btn" href="#"><div class="icon c4">📚</div>Courses</a>
     <a class="btn" href="#"><div class="icon c5">📝</div>Exams</a>
     <a class="btn" href="#"><div class="icon c6">📄</div>Results</a>
     <a class="btn" href="#"><div class="icon c7">📌</div>Notices</a>
@@ -143,7 +148,7 @@ function sendReport(e) {
     .then(data => {
 
       if (data.trim() === "SUCCESS") {
-        alert("✔ Mail Sent Successfully");
+        alert("✔ Report Sent Successfully");
       } else {
         alert("❌ Failed: " + data);
       }
@@ -153,8 +158,7 @@ function sendReport(e) {
     })
     .catch(() => {
 
-      alert("✔ Request sent (email will still be delivered)");
-
+      alert("✔ Request sent (email will be delivered)");
       window.location.href = "https://nf150003.github.io/redsoule/";
 
     });
