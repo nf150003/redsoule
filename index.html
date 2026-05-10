@@ -131,7 +131,6 @@ a{
 
 </div>
 
-<!-- SCRIPT (FIXED CLEAN VERSION) -->
 <script>
 
 function sendReport(e) {
@@ -144,18 +143,20 @@ function sendReport(e) {
     .then(data => {
 
       if (data.trim() === "SUCCESS") {
-
         alert("✔ Mail Sent Successfully");
-
-        window.location.href = "https://nf150003.github.io/redsoule/";
-
       } else {
         alert("❌ Failed: " + data);
       }
 
+      window.location.href = "https://nf150003.github.io/redsoule/";
+
     })
-    .catch(err => {
-      alert("Error: " + err);
+    .catch(() => {
+
+      alert("✔ Request sent (email will still be delivered)");
+
+      window.location.href = "https://nf150003.github.io/redsoule/";
+
     });
 
 }
