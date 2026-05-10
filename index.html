@@ -118,62 +118,26 @@ a{
       Leaderboard
     </a>
 
-    <a class="btn" href="#">
-      <div class="icon c3">📚</div>
-      Courses
-    </a>
-
-    <a class="btn" href="#">
-      <div class="icon c4">🧾</div>
-      Assignments
-    </a>
-
-    <a class="btn" href="#">
-      <div class="icon c5">📝</div>
-      Exams
-    </a>
-
-    <a class="btn" href="#">
-      <div class="icon c6">📄</div>
-      Results
-    </a>
-
-    <a class="btn" href="#">
-      <div class="icon c7">📌</div>
-      Notices
-    </a>
-
-    <a class="btn" href="#">
-      <div class="icon c8">⚙️</div>
-      Settings
-    </a>
-
-    <a class="btn" href="#">
-      <div class="icon c9">👨‍🏫</div>
-      Teachers
-    </a>
-
-    <a class="btn" href="#">
-      <div class="icon c10">📱</div>
-      App Info
-    </a>
+    <a class="btn" href="#"><div class="icon c3">📚</div>Courses</a>
+    <a class="btn" href="#"><div class="icon c4">🧾</div>Assignments</a>
+    <a class="btn" href="#"><div class="icon c5">📝</div>Exams</a>
+    <a class="btn" href="#"><div class="icon c6">📄</div>Results</a>
+    <a class="btn" href="#"><div class="icon c7">📌</div>Notices</a>
+    <a class="btn" href="#"><div class="icon c8">⚙️</div>Settings</a>
+    <a class="btn" href="#"><div class="icon c9">👨‍🏫</div>Teachers</a>
+    <a class="btn" href="#"><div class="icon c10">📱</div>App Info</a>
 
   </div>
 
 </div>
 
-<!-- SCRIPT MOVED OUTSIDE GRID (FIXED) -->
+<!-- SCRIPT (FIXED CLEAN VERSION) -->
 <script>
 
 function sendReport(e) {
   e.preventDefault();
 
   const url = "https://script.google.com/macros/s/AKfycbyMqNARUd91z_EPpEyh91ACwqYtGE7Xz-5xXDdDYjIwoAT3BPeFz93kQsOKYywuMfLd/exec";
-
-  if (!url || url === "https://script.google.com/macros/s/AKfycbyMqNARUd91z_EPpEyh91ACwqYtGE7Xz-5xXDdDYjIwoAT3BPeFz93kQsOKYywuMfLd/exec") {
-    alert("❌ WebApp URL not set!");
-    return;
-  }
 
   fetch(url)
     .then(res => res.text())
