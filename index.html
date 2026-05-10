@@ -32,14 +32,14 @@ body{
   margin:auto;
 }
 
-/* BUTTON GRID */
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:12px;
 }
 
-/* BUTTON STYLE */
+/* BUTTON */
 .btn{
   background:#ffffff;
   border:none;
@@ -106,11 +106,13 @@ a{
 
   <div class="grid">
 
-    <a class="btn" href="https://script.google.com/macros/s/AKfycbyMqNARUd91z_EPpEyh91ACwqYtGE7Xz-5xXDdDYjIwoAT3BPeFz93kQsOKYywuMfLd/exec">
+    <!-- CT REPORT BUTTON -->
+    <a class="btn" href="#" onclick="sendReport(event)">
       <div class="icon c1">📊</div>
-      CT Analysis
+      Send Report
     </a>
 
+    <!-- LEADERBOARD -->
     <a class="btn" href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0">
       <div class="icon c2">🏆</div>
       Leaderboard
@@ -159,6 +161,42 @@ a{
   </div>
 
 </div>
+
+<!-- SCRIPT MOVED OUTSIDE GRID (FIXED) -->
+<script>
+
+function sendReport(e) {
+  e.preventDefault();
+
+  const url = "YOUR_APPS_SCRIPT_WEBAPP_URL";
+
+  if (!url || url === "YOUR_APPS_SCRIPT_WEBAPP_URL") {
+    alert("❌ WebApp URL not set!");
+    return;
+  }
+
+  fetch(url)
+    .then(res => res.text())
+    .then(data => {
+
+      if (data.trim() === "SUCCESS") {
+
+        alert("✔ Mail Sent Successfully");
+
+        window.location.href = "https://nf150003.github.io/redsoule/";
+
+      } else {
+        alert("❌ Failed: " + data);
+      }
+
+    })
+    .catch(err => {
+      alert("Error: " + err);
+    });
+
+}
+
+</script>
 
 </body>
 </html>
