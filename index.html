@@ -39,7 +39,7 @@ body{
   gap:12px;
 }
 
-/* BUTTON STYLE */
+/* BUTTON */
 .btn{
   background:#ffffff;
   border:none;
@@ -106,25 +106,20 @@ a{
 
   <div class="grid">
 
-    <!-- CT ANALYSIS (direct link) -->
-    <a class="btn" href="https://script.google.com/macros/s/AKfycbyMqNARUd91z_EPpEyh91ACwqYtGE7Xz-5xXDdDYjIwoAT3BPeFz93kQsOKYywuMfLd/exec">
-      <div class="icon c1">📊</div>
-      CT Analysis
-    </a>
-
-    <!-- SEND REPORT (Apps Script trigger) -->
+    <!-- CT REPORT BUTTON -->
     <a class="btn" href="#" onclick="sendReport(event)">
-      <div class="icon c2">📤</div>
+      <div class="icon c1">📊</div>
       Send Report
     </a>
 
     <!-- LEADERBOARD -->
     <a class="btn" href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0">
-      <div class="icon c3">🏆</div>
+      <div class="icon c2">🏆</div>
       Leaderboard
     </a>
 
-    <a class="btn" href="#"><div class="icon c4">📚</div>Courses</a>
+    <a class="btn" href="#"><div class="icon c3">📚</div>Courses</a>
+    <a class="btn" href="#"><div class="icon c4">🧾</div>Assignments</a>
     <a class="btn" href="#"><div class="icon c5">📝</div>Exams</a>
     <a class="btn" href="#"><div class="icon c6">📄</div>Results</a>
     <a class="btn" href="#"><div class="icon c7">📌</div>Notices</a>
@@ -143,24 +138,22 @@ function sendReport(e) {
 
   const url = "https://script.google.com/macros/s/AKfycbyMqNARUd91z_EPpEyh91ACwqYtGE7Xz-5xXDdDYjIwoAT3BPeFz93kQsOKYywuMfLd/exec";
 
+  alert("⏳ Sending report...");
+
   fetch(url)
-    .then(res => res.text())
+    .then(res => res.json())
     .then(data => {
 
-      if (data.trim() === "SUCCESS") {
-        alert("✔ Report Sent Successfully");
+      if (data.status === "success") {
+        alert("✔ " + data.message);
       } else {
-        alert("❌ Failed: " + data);
+        alert("❌ " + data.message);
       }
 
-      window.location.href = "https://nf150003.github.io/redsoule/";
-
     })
-    .catch(() => {
-
-      alert("✔ Request sent (email will be delivered)");
-      window.location.href = "https://nf150003.github.io/redsoule/";
-
+    .catch(err => {
+      console.log(err);
+      alert("❌ Server error. Try again later.");
     });
 
 }
