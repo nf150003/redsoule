@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Simple App Buttons</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#f4f7fb;
+  padding:20px;
+}
+
+.container{
+  width:100%;
+  max-width:420px;
+  background:white;
+  padding:25px;
+  border-radius:25px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
+
+.title{
+  text-align:center;
+  font-size:24px;
+  font-weight:600;
+  color:#444;
+  margin-bottom:20px;
+}
+
+.apps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.app-btn{
+  border:none;
+  border-radius:18px;
+  height:75px;
+  color:white;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s ease;
+}
+
+.app-btn:hover{
+  transform:translateY(-3px);
+}
+
+.b1{background:#ff6b6b;}
+.b2{background:#4dabf7;}
+.b3{background:#51cf66;}
+.b4{background:#f59f00;}
+.b5{background:#845ef7;}
+.b6{background:#20c997;}
+.b7{background:#fa5252;}
+.b8{background:#228be6;}
+.b9{background:#40c057;}
+.b10{background:#7950f2;}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="title">
+    My Apps
+  </div>
+
+  <div class="apps">
+
+    <button class="app-btn b1" onclick="openPage()">App 1</button>
+
+    <button class="app-btn b2" onclick="openPage()">App 2</button>
+
+    <button class="app-btn b3" onclick="openPage()">App 3</button>
+
+    <button class="app-btn b4" onclick="openPage()">App 4</button>
+
+    <button class="app-btn b5" onclick="openPage()">App 5</button>
+
+    <button class="app-btn b6" onclick="openPage()">App 6</button>
+
+    <button class="app-btn b7" onclick="openPage()">App 7</button>
+
+    <button class="app-btn b8" onclick="openPage()">App 8</button>
+
+    <button class="app-btn b9" onclick="openPage()">App 9</button>
+
+    <button class="app-btn b10" onclick="openPage()">App 10</button>
+
+  </div>
+
+</div>
+
+<script>
+
+function openPage(){
+  window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>
