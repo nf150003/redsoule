@@ -8,56 +8,62 @@
 <style>
 body{
     font-family:"Segoe UI", sans-serif;
-    background:#f3f6fb;
+    background:#f7f8fc;
     margin:0;
     padding:20px;
+    color:#333;
 }
 
 .container{
     max-width:950px;
     margin:auto;
-    background:white;
+    background:#ffffff;
     padding:25px;
     border-radius:14px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    box-shadow:0 8px 25px rgba(0,0,0,0.06);
 }
 
+/* HEADER */
 .header{
     text-align:center;
-    border-bottom:3px solid #2563eb;
+    border-bottom:2px solid #d6dbe8;
     padding-bottom:10px;
 }
 
 .header h2{
     margin:0;
-    color:#2563eb;
+    color:#4a5568;
+    font-weight:600;
 }
 
+.header p{
+    margin:5px;
+    color:#718096;
+    font-size:13px;
+}
+
+/* SECTION */
 .section{
     margin-top:18px;
     padding:15px;
-    background:#fafafa;
-    border:1px solid #e5e7eb;
+    background:#f9fafc;
+    border:1px solid #e6e9f2;
     border-radius:10px;
 }
 
 .section-title{
-    font-weight:700;
+    font-weight:600;
     margin-bottom:10px;
-    color:#111827;
+    color:#4a5568;
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-}
-
+/* INPUTS */
 label{
     font-weight:600;
-    display:block;
+    font-size:13px;
     margin-top:10px;
-    font-size:14px;
+    display:block;
+    color:#555;
 }
 
 input, select{
@@ -65,9 +71,18 @@ input, select{
     padding:10px;
     margin-top:5px;
     border-radius:8px;
-    border:1px solid #ccc;
+    border:1px solid #d6dbe8;
+    background:#fff;
+    font-size:14px;
+    outline:none;
 }
 
+input:focus, select:focus{
+    border-color:#a3bffa;
+    box-shadow:0 0 0 3px rgba(163,191,250,0.3);
+}
+
+/* CHECKBOX */
 .checklist{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -76,53 +91,60 @@ input, select{
 }
 
 .checkitem{
-    background:white;
+    background:#ffffff;
     padding:8px;
     border-radius:8px;
-    border:1px solid #ddd;
-    font-size:14px;
+    border:1px solid #e6e9f2;
+    font-size:13px;
 }
 
+/* BUTTONS */
 button{
     width:100%;
     padding:12px;
     margin-top:15px;
     border:none;
     border-radius:10px;
-    font-size:16px;
+    font-size:15px;
     cursor:pointer;
     color:white;
-}
-
-.save{
-    background:#0ea5e9;
-}
-
-.save:hover{
-    background:#0284c7;
-}
-
-.print{
-    background:#16a34a;
-}
-
-.print:hover{
-    background:#15803d;
+    transition:0.2s;
 }
 
 .generate{
-    background:#2563eb;
+    background:#a3bffa;
+    color:#1a202c;
 }
 
 .generate:hover{
-    background:#1e40af;
+    background:#8daaf0;
 }
 
+.save{
+    background:#b7c4ff;
+    color:#1a202c;
+}
+
+.save:hover{
+    background:#9fb2ff;
+}
+
+.print{
+    background:#cbd5e0;
+    color:#1a202c;
+}
+
+.print:hover{
+    background:#a0aec0;
+}
+
+/* OUTPUT */
 .output{
     margin-top:20px;
     padding:15px;
-    border:1px solid #ddd;
+    border:1px solid #e6e9f2;
     border-radius:10px;
+    background:#ffffff;
 }
 </style>
 </head>
@@ -133,17 +155,14 @@ button{
 
 <div class="header">
 <h2>Class Audit Visit System</h2>
-<p>Professional Teaching Evaluation Tool</p>
+<p>Soft Professional Evaluation Interface</p>
 </div>
 
 <!-- BASIC INFO -->
 <div class="section">
 <div class="section-title">Audit Information</div>
 
-<div class="grid">
-
-<div>
-<label>Visiting Teacher (Auditor)</label>
+<label>Visiting Teacher</label>
 <select id="auditor">
 <option>Select Auditor</option>
 <option>Sajib Mahmud</option>
@@ -152,14 +171,8 @@ button{
 <option>Md. Mahbub Hasan</option>
 <option>Md. Imrul Kaes</option>
 <option>Rumana Yasmin</option>
-<option>Kibrya Ahmed</option>
-<option>Subrata Mitra</option>
-<option>Md. Nazrul Islam</option>
-<option>Md. Shahinur Islam</option>
 </select>
-</div>
 
-<div>
 <label>Teacher Observed</label>
 <select id="teacher">
 <option>Select Teacher</option>
@@ -169,13 +182,7 @@ button{
 <option>Md. Mahbub Hasan</option>
 <option>Md. Imrul Kaes</option>
 <option>Rumana Yasmin</option>
-<option>Kibrya Ahmed</option>
-<option>Md. Shohel Rana</option>
-<option>Md. Imran Ali Khan</option>
 </select>
-</div>
-
-</div>
 
 <label>Class / Room</label>
 <input type="text" id="room">
@@ -192,29 +199,28 @@ button{
 <div class="section-title">Audit Checklist</div>
 
 <div class="checklist">
-<label class="checkitem"><input type="checkbox" id="c1"> Lesson well prepared</label>
+<label class="checkitem"><input type="checkbox" id="c1"> Lesson prepared</label>
 <label class="checkitem"><input type="checkbox" id="c2"> Clear explanation</label>
 <label class="checkitem"><input type="checkbox" id="c3"> Classroom control</label>
 <label class="checkitem"><input type="checkbox" id="c4"> Student engagement</label>
 <label class="checkitem"><input type="checkbox" id="c5"> Teaching aids used</label>
-<label class="checkitem"><input type="checkbox" id="c6"> Interactive class</label>
-<label class="checkitem"><input type="checkbox" id="c7"> Time management</label>
+<label class="checkitem"><input type="checkbox" id="c6"> Interactive learning</label>
+<label class="checkitem"><input type="checkbox" id="c7"> Time managed well</label>
 <label class="checkitem"><input type="checkbox" id="c8"> Evaluation done</label>
 </div>
 </div>
 
-<!-- FINAL COMMENT -->
+<!-- FINAL -->
 <div class="section">
-<div class="section-title">Final Remarks</div>
-<input type="text" id="final" placeholder="Write final comment here...">
+<div class="section-title">Final Comment</div>
+<input type="text" id="final" placeholder="Write final observation...">
 </div>
 
 <!-- BUTTONS -->
 <button class="generate" onclick="generate()">Generate Report</button>
-<button class="print" onclick="window.print()">Print / Save PDF</button>
+<button class="print" onclick="window.print()">Print / PDF</button>
 <button class="save" onclick="saveToSheet()">Save to Google Sheet</button>
 
-<!-- OUTPUT -->
 <div id="output" class="output"></div>
 
 </div>
@@ -234,7 +240,7 @@ function getChecklist(){
 
 function generate(){
     document.getElementById("output").innerHTML = `
-    <h3>Class Audit Report</h3>
+    <h3>Audit Report</h3>
     <hr>
     <p><b>Auditor:</b> ${auditor.value}</p>
     <p><b>Teacher:</b> ${teacher.value}</p>
@@ -248,29 +254,25 @@ function generate(){
     `;
 }
 
-/* 🔥 GOOGLE SHEET SAVE */
+/* GOOGLE SHEET SAVE */
 function saveToSheet(){
 
-    let data = {
-        auditor: auditor.value,
-        teacher: teacher.value,
-        room: room.value,
-        subject: subject.value,
-        date: date.value,
-        checklist: getChecklist(),
-        comment: final.value
-    };
+    let data = new URLSearchParams();
+
+    data.append("auditor", auditor.value);
+    data.append("teacher", teacher.value);
+    data.append("room", room.value);
+    data.append("subject", subject.value);
+    data.append("date", date.value);
+    data.append("checklist", getChecklist());
+    data.append("comment", final.value);
 
     fetch("https://script.google.com/macros/s/AKfycbw1sJatw_bBylJMfsLuUGNrFmAMbFBJAvgPLynNdDGpGVpzMhhfTXkzJViIHr_ed88/exec", {
         method: "POST",
-        mode: "no-cors",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
+        body: data
     });
 
-    alert("Saved to Google Sheet ✅");
+    alert("Saved successfully ✅");
 }
 
 </script>
