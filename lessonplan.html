@@ -3,54 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson Plan System</title>
+<title>Academic Lesson Plan System</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
-body{
+/* =======================
+   GLOBAL STYLE
+======================= */
+*{
     margin:0;
+    padding:0;
+    box-sizing:border-box;
     font-family:'Poppins',sans-serif;
-    background:linear-gradient(135deg,#eef2ff,#ffffff,#f5f7ff);
+}
+
+body{
+    background:linear-gradient(135deg,#f7f9ff,#ffffff,#eef3ff);
     min-height:100vh;
-    padding:20px;
-}
-
-.container{
-    max-width:1000px;
-    margin:auto;
-}
-
-.header{
-    text-align:center;
-    margin-bottom:20px;
-}
-
-.header h1{
-    font-size:30px;
     color:#2c3e50;
 }
 
-.header p{
-    color:#7f8c8d;
+/* =======================
+   TOP HEADER
+======================= */
+.topbar{
+    background:linear-gradient(135deg,#2c3e50,#34495e);
+    color:white;
+    padding:18px;
+    text-align:center;
 }
 
+.topbar h1{
+    font-size:20px;
+    letter-spacing:1px;
+}
+
+.topbar p{
+    font-size:12px;
+    opacity:0.8;
+}
+
+/* =======================
+   CONTAINER
+======================= */
+.container{
+    max-width:1050px;
+    margin:auto;
+    padding:20px;
+}
+
+/* =======================
+   CARD
+======================= */
 .card{
     background:white;
+    border-radius:18px;
     padding:20px;
-    border-radius:20px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.05);
-    margin-bottom:20px;
+    margin-bottom:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
+    border:1px solid #eef2f7;
 }
 
-input, select, textarea{
+/* =======================
+   FORM ELEMENTS
+======================= */
+label{
+    display:block;
+    margin-top:10px;
+    font-size:13px;
+    font-weight:500;
+    color:#555;
+}
+
+select, textarea{
     width:100%;
-    padding:14px;
+    margin-top:6px;
+    padding:12px;
     border-radius:12px;
-    border:1px solid #e0e6ef;
-    margin-top:8px;
+    border:1px solid #e1e6f0;
     outline:none;
+    background:#f9fbff;
+    font-size:14px;
 }
 
 textarea{
@@ -58,62 +93,100 @@ textarea{
     resize:none;
 }
 
+/* =======================
+   BUTTONS
+======================= */
 button{
-    padding:12px 16px;
     border:none;
-    border-radius:12px;
+    border-radius:10px;
+    padding:12px 14px;
     cursor:pointer;
     font-weight:500;
+    font-size:14px;
 }
 
 .btn-save{
-    background:#4a69bd;
-    color:white;
     width:100%;
     margin-top:12px;
+    background:#4a69bd;
+    color:white;
+}
+
+.btn-save:hover{
+    background:#3b5998;
 }
 
 .btn-clear{
-    background:#f1f2f6;
-    margin-top:8px;
     width:100%;
+    margin-top:8px;
+    background:#ecf0f1;
 }
 
+/* =======================
+   STATUS
+======================= */
+.status{
+    text-align:center;
+    margin-top:10px;
+    font-size:13px;
+    color:#555;
+}
+
+/* =======================
+   TABLE
+======================= */
 table{
     width:100%;
     border-collapse:collapse;
 }
 
 th{
-    background:#f3f6ff;
+    background:#eef3ff;
     padding:12px;
     text-align:left;
+    font-size:13px;
+    color:#34495e;
 }
 
 td{
     padding:12px;
-    border-bottom:1px solid #eee;
+    border-bottom:1px solid #f0f2f7;
+    font-size:13px;
 }
 
+tr:hover{
+    background:#fafcff;
+}
+
+/* =======================
+   ACTION BUTTONS
+======================= */
 .action{
     display:flex;
-    gap:8px;
+    gap:6px;
 }
 
 .edit{
     background:#ffeaa7;
+    font-size:12px;
+    padding:8px 10px;
 }
 
 .delete{
     background:#ff7675;
     color:white;
+    font-size:12px;
+    padding:8px 10px;
 }
 
-.status{
+/* =======================
+   FOOTER
+======================= */
+.footer{
     text-align:center;
-    margin-top:10px;
-    font-size:14px;
-    color:#555;
+    padding:15px;
+    font-size:12px;
+    color:#95a5a6;
 }
 
 </style>
@@ -121,13 +194,19 @@ td{
 
 <body>
 
+<!-- =======================
+     HEADER
+======================= -->
+<div class="topbar">
+    <h1>National College & School</h1>
+    <p>Official Academic Lesson Plan Management System</p>
+</div>
+
 <div class="container">
 
-    <div class="header">
-        <h1>Lesson Plan System</h1>
-        <p>GitHub Pages + Google Sheets Backend</p>
-    </div>
-
+    <!-- =======================
+         FORM CARD
+    ======================= -->
     <div class="card">
 
         <input type="hidden" id="row">
@@ -140,22 +219,25 @@ td{
         <label>Lesson Plan</label>
         <textarea id="lesson"></textarea>
 
-        <button class="btn-save" onclick="save()">Save</button>
+        <button class="btn-save" onclick="save()">Save Lesson Plan</button>
         <button class="btn-clear" onclick="clearForm()">Clear</button>
 
         <div class="status" id="status"></div>
 
     </div>
 
+    <!-- =======================
+         TABLE CARD
+    ======================= -->
     <div class="card">
 
-        <h3>Lesson Plans</h3>
+        <h3 style="margin-bottom:10px;">Submitted Lesson Plans</h3>
 
         <table>
             <thead>
                 <tr>
                     <th>Subject</th>
-                    <th>Plan</th>
+                    <th>Lesson Plan</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -167,22 +249,24 @@ td{
 
 </div>
 
+<div class="footer">
+    © Academic Management System • College Edition
+</div>
+
+<!-- =======================
+     SCRIPT
+======================= -->
 <script>
 
 const URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
 
-
-// =========================
 // LOAD SUBJECTS
-// =========================
 async function loadSubjects(){
-
     try{
-        const res = await fetch(URL + "?action=getSubjects");
+        const res = await fetch(URL+"?action=getSubjects");
         const data = await res.json();
 
         const select = document.getElementById("subject");
-
         select.innerHTML = `<option value="">Select Subject</option>`;
 
         data.forEach(s=>{
@@ -194,18 +278,13 @@ async function loadSubjects(){
     }
 }
 
-
-// =========================
 // LOAD LESSONS
-// =========================
 async function loadLessons(){
-
     try{
-        const res = await fetch(URL + "?action=getLessonPlans");
+        const res = await fetch(URL+"?action=getLessonPlans");
         const data = await res.json();
 
         const table = document.getElementById("table");
-
         table.innerHTML = "";
 
         data.forEach(item=>{
@@ -215,24 +294,27 @@ async function loadLessons(){
                 <td>${item.lessonPlan}</td>
                 <td>
                     <div class="action">
-                        <button class="edit" onclick='edit(${item.row},${JSON.stringify(item.subject)},${JSON.stringify(item.lessonPlan)})'>Edit</button>
-                        <button class="delete" onclick="del(${item.row})">Del</button>
+                        <button class="edit"
+                        onclick='edit(${item.row},${JSON.stringify(item.subject)},${JSON.stringify(item.lessonPlan)})'>
+                        Edit
+                        </button>
+
+                        <button class="delete" onclick="del(${item.row})">
+                        Delete
+                        </button>
                     </div>
                 </td>
             </tr>`;
         });
 
     }catch(e){
-        document.getElementById("table").innerHTML = "<tr><td colspan='3'>Load failed</td></tr>";
+        document.getElementById("table").innerHTML =
+        "<tr><td colspan='3'>Load failed</td></tr>";
     }
 }
 
-
-// =========================
 // SAVE
-// =========================
 async function save(){
-
     const row = document.getElementById("row").value;
     const subject = document.getElementById("subject").value;
     const lesson = document.getElementById("lesson").value;
@@ -248,61 +330,41 @@ async function save(){
     form.append("subject",subject);
     form.append("lessonPlan",lesson);
 
-    const res = await fetch(URL,{
-        method:"POST",
-        body:form
-    });
-
-    const text = await res.text();
-
-    document.getElementById("status").innerText = text;
+    const res = await fetch(URL,{method:"POST",body:form});
+    document.getElementById("status").innerText = await res.text();
 
     clearForm();
     loadLessons();
 }
 
-
-// =========================
 // EDIT
-// =========================
 function edit(row,sub,plan){
     document.getElementById("row").value = row;
     document.getElementById("subject").value = sub;
     document.getElementById("lesson").value = plan;
 }
 
-
-// =========================
 // DELETE
-// =========================
 async function del(row){
-
-    if(!confirm("Delete?")) return;
+    if(!confirm("Delete this record?")) return;
 
     const form = new FormData();
     form.append("action","deleteLesson");
     form.append("row",row);
 
-    const res = await fetch(URL,{
-        method:"POST",
-        body:form
-    });
+    const res = await fetch(URL,{method:"POST",body:form});
 
     document.getElementById("status").innerText = await res.text();
 
     loadLessons();
 }
 
-
-// =========================
 // CLEAR
-// =========================
 function clearForm(){
-    document.getElementById("row").value = "";
-    document.getElementById("subject").value = "";
-    document.getElementById("lesson").value = "";
+    document.getElementById("row").value="";
+    document.getElementById("subject").value="";
+    document.getElementById("lesson").value="";
 }
-
 
 // INIT
 loadSubjects();
