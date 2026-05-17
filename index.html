@@ -98,17 +98,24 @@ a{
 
   <div class="grid">
 
+    <!-- Send Report -->
     <a class="btn" href="#" onclick="sendReport(event)">
       <div class="icon c1">📊</div>
       Send Report
     </a>
 
+    <!-- Leaderboard -->
     <a class="btn" href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0">
       <div class="icon c2">🏆</div>
       Leaderboard
     </a>
 
-    <a class="btn" href="#"><div class="icon c3">📚</div>Courses</a>
+    <!-- Lesson Plan -->
+    <a class="btn" href="#" onclick="generatePDF(event)">
+      <div class="icon c3">📚</div>
+      Lesson Plan
+    </a>
+
     <a class="btn" href="#"><div class="icon c4">🧾</div>Assignments</a>
     <a class="btn" href="#"><div class="icon c5">📝</div>Exams</a>
     <a class="btn" href="#"><div class="icon c6">📄</div>Results</a>
@@ -122,7 +129,9 @@ a{
 </div>
 
 <script>
-
+/* =========================
+   SEND REPORT
+========================= */
 function sendReport(e) {
   e.preventDefault();
 
@@ -131,15 +140,13 @@ function sendReport(e) {
   alert("⏳ Sending report...");
 
   fetch(url)
-    .then(res => res.text())   // 🔥 FIX: stop JSON crash
+    .then(res => res.text())
     .then(text => {
-
       let data;
-
       try {
-        data = JSON.parse(text); // try JSON
+        data = JSON.parse(text);
       } catch (e) {
-        data = { status: "error", message: text }; // fallback
+        data = { status: "error", message: text };
       }
 
       if (data.status === "success") {
@@ -147,15 +154,34 @@ function sendReport(e) {
       } else {
         alert("❌ " + data.message);
       }
-
     })
     .catch(err => {
       console.log(err);
-      alert("❌ Network error (not server response issue)");
+      alert("❌ Network error");
     });
-
 }
 
+/* =========================
+   GENERATE PDF (LESSON PLAN)
+========================= */
+function generatePDF(e) {
+  e.preventDefault();
+
+  const url = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
+
+  alert("⏳ Generating PDF...");
+
+  fetch(url + "?action=generateAndSendPDF")
+    .then(res => res.text())
+    .then(data => {
+      alert("✔ PDF process triggered!");
+      console.log(data);
+    })
+    .catch(err => {
+      console.log(err);
+      alert("❌ Failed to generate PDF");
+    });
+}
 </script>
 
 </body>
