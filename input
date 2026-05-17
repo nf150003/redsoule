@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Students Update System</title>
+<style>
+body{
+    font-family:Arial;
+    background:#f4f7ff;
+    padding:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    max-width:600px;
+    margin:auto;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#6c7ce0;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #eee;
+    padding:10px;
+    text-align:left;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Students Data Update</h2>
+
+<div id="formArea"></div>
+
+<button onclick="submitData()">Submit</button>
+
+<p id="status"></p>
+
+</div>
+
+<script>
+
+const URL = "YOUR_WEBAPP_URL";
+
+// LOAD STUDENTS
+async function loadStudents(){
+    const res = await fetch(URL + "?action=getStudents");
+    const data = await res.json();
+
+    let html = "";
+
+    data.forEach(s=>{
+        html += `
+        <div>
+            <label>Roll: ${s.roll}</label><br>
+            <input type="text" value="${s.roll}" readonly>
+            
+            <label>Name: ${s.name}</label><br>
+            <input type="text" value="${s.name}" readonly>
+
+            <label>Section: ${s.section}</label><br>
+            <input type="text" value="${s.section}" readonly>
+
+            <label>New Column Value</label>
+            <input type="text" id="val_${s.roll}" placeholder="Enter value">
+        </div>
+        <hr>
+        `;
+    });
+
+    document.getElementById("formArea").innerHTML = html;
+}
+
+// SUBMIT DATA
+async function submitData(){
+    const inputs = document.querySelectorAll("[id^='val_']");
+
+    for(let input of inputs){
+        const roll = input.id.replace("val_","");
+        const value = input.value;
+
+        if(value){
+            let form = new FormData();
+            form.append("roll", roll);
+            form.append("value", value);
+
+            await fetch(URL, {method:"POST", body: form});
+        }
+    }
+
+    document.getElementById("status").innerText = "Saved Successfully";
+}
+
+loadStudents();
+
+</script>
+
+</body>
+</html>
