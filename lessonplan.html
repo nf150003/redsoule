@@ -1,196 +1,314 @@
-const WEB_APP_URL =
-"https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Plan System</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-// =====================
-// SAFE JSON LOADER
-// =====================
-async function safeGet(url){
-    try{
-        const res = await fetch(url);
-        const text = await res.text();
-        console.log("RAW:", text);
+<style>
 
-        return JSON.parse(text);
-    }catch(e){
-        console.error("Parse Error:", e);
-        return null;
-    }
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#eef2ff,#ffffff,#f5f7ff);
+    min-height:100vh;
+    padding:20px;
 }
 
+.container{
+    max-width:1000px;
+    margin:auto;
+}
 
-// =====================
+.header{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.header h1{
+    font-size:30px;
+    color:#2c3e50;
+}
+
+.header p{
+    color:#7f8c8d;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+    margin-bottom:20px;
+}
+
+input, select, textarea{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:1px solid #e0e6ef;
+    margin-top:8px;
+    outline:none;
+}
+
+textarea{
+    height:140px;
+    resize:none;
+}
+
+button{
+    padding:12px 16px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:500;
+}
+
+.btn-save{
+    background:#4a69bd;
+    color:white;
+    width:100%;
+    margin-top:12px;
+}
+
+.btn-clear{
+    background:#f1f2f6;
+    margin-top:8px;
+    width:100%;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#f3f6ff;
+    padding:12px;
+    text-align:left;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+.action{
+    display:flex;
+    gap:8px;
+}
+
+.edit{
+    background:#ffeaa7;
+}
+
+.delete{
+    background:#ff7675;
+    color:white;
+}
+
+.status{
+    text-align:center;
+    margin-top:10px;
+    font-size:14px;
+    color:#555;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Lesson Plan System</h1>
+        <p>GitHub Pages + Google Sheets Backend</p>
+    </div>
+
+    <div class="card">
+
+        <input type="hidden" id="row">
+
+        <label>Subject</label>
+        <select id="subject">
+            <option>Loading...</option>
+        </select>
+
+        <label>Lesson Plan</label>
+        <textarea id="lesson"></textarea>
+
+        <button class="btn-save" onclick="save()">Save</button>
+        <button class="btn-clear" onclick="clearForm()">Clear</button>
+
+        <div class="status" id="status"></div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Lesson Plans</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Plan</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="table"></tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+const URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
+
+
+// =========================
 // LOAD SUBJECTS
-// =====================
+// =========================
 async function loadSubjects(){
 
-    const data = await safeGet(WEB_APP_URL + "?action=getSubjects");
+    try{
+        const res = await fetch(URL + "?action=getSubjects");
+        const data = await res.json();
 
-    const dropdown = document.getElementById("subject");
+        const select = document.getElementById("subject");
 
-    if(!data){
-        document.getElementById("status").innerText = "❌ Subject load failed";
-        return;
+        select.innerHTML = `<option value="">Select Subject</option>`;
+
+        data.forEach(s=>{
+            select.innerHTML += `<option value="${s}">${s}</option>`;
+        });
+
+    }catch(e){
+        document.getElementById("status").innerText = "Failed to load subjects";
     }
-
-    dropdown.innerHTML = `<option value="">Select Subject</option>`;
-
-    data.forEach(s=>{
-        dropdown.innerHTML += `<option value="${s}">${s}</option>`;
-    });
-
-    document.getElementById("status").innerText = "Subjects loaded ✔";
 }
 
 
-// =====================
-// LOAD LESSON PLANS
-// =====================
-async function loadLessonPlans(){
+// =========================
+// LOAD LESSONS
+// =========================
+async function loadLessons(){
 
-    const data = await safeGet(WEB_APP_URL + "?action=getLessonPlans");
+    try{
+        const res = await fetch(URL + "?action=getLessonPlans");
+        const data = await res.json();
 
-    const table = document.getElementById("lessonTable");
+        const table = document.getElementById("table");
 
-    if(!data){
-        table.innerHTML = `<tr><td colspan="3">❌ Load failed</td></tr>`;
-        return;
+        table.innerHTML = "";
+
+        data.forEach(item=>{
+            table.innerHTML += `
+            <tr>
+                <td>${item.subject}</td>
+                <td>${item.lessonPlan}</td>
+                <td>
+                    <div class="action">
+                        <button class="edit" onclick='edit(${item.row},${JSON.stringify(item.subject)},${JSON.stringify(item.lessonPlan)})'>Edit</button>
+                        <button class="delete" onclick="del(${item.row})">Del</button>
+                    </div>
+                </td>
+            </tr>`;
+        });
+
+    }catch(e){
+        document.getElementById("table").innerHTML = "<tr><td colspan='3'>Load failed</td></tr>";
     }
-
-    if(data.length === 0){
-        table.innerHTML = `<tr><td colspan="3">No data found</td></tr>`;
-        return;
-    }
-
-    table.innerHTML = "";
-
-    data.forEach(item=>{
-        table.innerHTML += `
-        <tr>
-            <td><div class="badge">${item.subject}</div></td>
-            <td>${item.lessonPlan}</td>
-            <td>
-                <div class="action-buttons">
-
-                    <button class="edit-btn"
-                    onclick='editLesson(
-                        "${item.row}",
-                        ${JSON.stringify(item.subject)},
-                        ${JSON.stringify(item.lessonPlan)}
-                    )'>
-                    Edit
-                    </button>
-
-                    <button class="delete-btn"
-                    onclick='deleteLesson("${item.row}")'>
-                    Delete
-                    </button>
-
-                </div>
-            </td>
-        </tr>`;
-    });
-
 }
 
 
-// =====================
+// =========================
 // SAVE
-// =====================
-async function saveLessonPlan(){
+// =========================
+async function save(){
 
-    const row = document.getElementById("rowNumber").value;
+    const row = document.getElementById("row").value;
     const subject = document.getElementById("subject").value;
-    const lessonPlan = document.getElementById("lessonPlan").value;
+    const lesson = document.getElementById("lesson").value;
 
-    if(!subject || !lessonPlan){
+    if(!subject || !lesson){
         document.getElementById("status").innerText = "Fill all fields";
         return;
     }
 
-    const formData = new FormData();
-    formData.append("action","saveLesson");
-    formData.append("row",row);
-    formData.append("subject",subject);
-    formData.append("lessonPlan",lessonPlan);
+    const form = new FormData();
+    form.append("action","saveLesson");
+    form.append("row",row);
+    form.append("subject",subject);
+    form.append("lessonPlan",lesson);
 
-    try{
+    const res = await fetch(URL,{
+        method:"POST",
+        body:form
+    });
 
-        const res = await fetch(WEB_APP_URL,{
-            method:"POST",
-            body:formData
-        });
+    const text = await res.text();
 
-        const text = await res.text();
+    document.getElementById("status").innerText = text;
 
-        document.getElementById("status").innerText = text;
-
-        clearForm();
-        loadLessonPlans();
-
-    }catch(e){
-        document.getElementById("status").innerText = "Save failed";
-    }
+    clearForm();
+    loadLessons();
 }
 
 
-// =====================
+// =========================
 // EDIT
-// =====================
-function editLesson(row,subject,lessonPlan){
-
-    document.getElementById("rowNumber").value = row;
-    document.getElementById("subject").value = subject;
-    document.getElementById("lessonPlan").value = lessonPlan;
-
-    window.scrollTo({top:0,behavior:"smooth"});
-
-    document.getElementById("status").innerText = "Editing...";
+// =========================
+function edit(row,sub,plan){
+    document.getElementById("row").value = row;
+    document.getElementById("subject").value = sub;
+    document.getElementById("lesson").value = plan;
 }
 
 
-// =====================
+// =========================
 // DELETE
-// =====================
-async function deleteLesson(row){
+// =========================
+async function del(row){
 
-    if(!confirm("Delete this lesson?")) return;
+    if(!confirm("Delete?")) return;
 
-    const formData = new FormData();
-    formData.append("action","deleteLesson");
-    formData.append("row",row);
+    const form = new FormData();
+    form.append("action","deleteLesson");
+    form.append("row",row);
 
-    try{
+    const res = await fetch(URL,{
+        method:"POST",
+        body:form
+    });
 
-        const res = await fetch(WEB_APP_URL,{
-            method:"POST",
-            body:formData
-        });
+    document.getElementById("status").innerText = await res.text();
 
-        const text = await res.text();
-
-        document.getElementById("status").innerText = text;
-
-        loadLessonPlans();
-
-    }catch(e){
-        document.getElementById("status").innerText = "Delete failed";
-    }
+    loadLessons();
 }
 
 
-// =====================
+// =========================
 // CLEAR
-// =====================
+// =========================
 function clearForm(){
-    document.getElementById("rowNumber").value = "";
+    document.getElementById("row").value = "";
     document.getElementById("subject").value = "";
-    document.getElementById("lessonPlan").value = "";
+    document.getElementById("lesson").value = "";
 }
 
 
-// =====================
 // INIT
-// =====================
 loadSubjects();
-loadLessonPlans();
+loadLessons();
+
+</script>
+
+</body>
+</html>
