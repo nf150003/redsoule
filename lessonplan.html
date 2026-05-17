@@ -1,325 +1,196 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson Plan Manager</title>
+const WEB_APP_URL =
+"https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
+// =====================
+// SAFE JSON LOADER
+// =====================
+async function safeGet(url){
+    try{
+        const res = await fetch(url);
+        const text = await res.text();
+        console.log("RAW:", text);
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
-
-body{
-    background:linear-gradient(135deg,#f7f9ff,#ffffff,#f2f6ff);
-    min-height:100vh;
-    padding:22px;
-    color:#2f3640;
-}
-
-/* CONTAINER */
-.container{
-    max-width:1050px;
-    margin:auto;
-}
-
-/* HEADER */
-.header{
-    text-align:center;
-    margin-bottom:25px;
-}
-
-.header h1{
-    font-size:32px;
-    color:#2c3e50;
-    font-weight:600;
-}
-
-.header p{
-    color:#7f8c8d;
-    font-size:14px;
-    margin-top:6px;
-}
-
-/* CARD */
-.card{
-    background:#ffffff;
-    border-radius:22px;
-    padding:22px;
-    margin-bottom:22px;
-    box-shadow:0 8px 22px rgba(0,0,0,0.05);
-    border:1px solid #eef2f7;
-}
-
-/* FORM GRID */
-.form-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-}
-
-.full-width{
-    grid-column:1/-1;
-}
-
-label{
-    display:block;
-    margin-bottom:6px;
-    font-weight:500;
-    color:#4b4b4b;
-    font-size:14px;
-}
-
-/* INPUTS */
-select,
-textarea{
-    width:100%;
-    border:1px solid #e6eaf0;
-    outline:none;
-    background:#f9fbff;
-    border-radius:14px;
-    padding:14px;
-    font-size:14px;
-    transition:0.2s;
-    color:#2c3e50;
-}
-
-select:focus,
-textarea:focus{
-    border-color:#a8c5ff;
-    background:#ffffff;
-}
-
-textarea{
-    height:140px;
-    resize:none;
-}
-
-/* STATUS BADGE */
-.badge{
-    display:inline-block;
-    padding:6px 12px;
-    border-radius:20px;
-    background:#eef3ff;
-    color:#4a69bd;
-    font-size:12px;
-    font-weight:500;
-}
-
-/* BUTTONS */
-.button-group{
-    display:flex;
-    gap:10px;
-    margin-top:12px;
-}
-
-button{
-    border:none;
-    border-radius:12px;
-    padding:12px 16px;
-    cursor:pointer;
-    font-weight:500;
-    font-size:14px;
-    transition:0.2s;
-}
-
-.save-btn{
-    flex:1;
-    background:#4a69bd;
-    color:white;
-}
-
-.save-btn:hover{
-    background:#3b5998;
-}
-
-.clear-btn{
-    background:#f1f3f6;
-    color:#333;
-}
-
-.clear-btn:hover{
-    background:#e4e9f2;
-}
-
-/* STATUS */
-.status{
-    margin-top:12px;
-    text-align:center;
-    font-size:13px;
-    color:#555;
-}
-
-/* TABLE */
-.table-wrapper{
-    overflow-x:auto;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:700px;
-}
-
-th{
-    background:#f3f6ff;
-    color:#3b4a66;
-    padding:14px;
-    text-align:left;
-    font-size:14px;
-    font-weight:600;
-}
-
-td{
-    padding:14px;
-    border-bottom:1px solid #f0f2f7;
-    font-size:13px;
-    color:#2f3640;
-}
-
-tr:hover{
-    background:#fafcff;
-}
-
-/* ACTION BUTTONS */
-.action-buttons{
-    display:flex;
-    gap:8px;
-}
-
-.edit-btn{
-    background:#ffeaa7;
-    color:#2d3436;
-    padding:8px 12px;
-    border-radius:10px;
-    font-size:12px;
-}
-
-.delete-btn{
-    background:#ff7675;
-    color:white;
-    padding:8px 12px;
-    border-radius:10px;
-    font-size:12px;
-}
-
-/* EMPTY */
-.empty{
-    text-align:center;
-    padding:25px;
-    color:#888;
-}
-
-/* FOOTER */
-.footer{
-    text-align:center;
-    margin-top:18px;
-    color:#95a5a6;
-    font-size:12px;
-}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-    .form-grid{
-        grid-template-columns:1fr;
-    }
-
-    .button-group{
-        flex-direction:column;
-    }
-
-    .header h1{
-        font-size:26px;
+        return JSON.parse(text);
+    }catch(e){
+        console.error("Parse Error:", e);
+        return null;
     }
 }
 
-</style>
-</head>
 
-<body>
+// =====================
+// LOAD SUBJECTS
+// =====================
+async function loadSubjects(){
 
-<div class="container">
+    const data = await safeGet(WEB_APP_URL + "?action=getSubjects");
 
-    <div class="header">
-        <h1>Lesson Plan Manager</h1>
-        <p>Professional academic planning system</p>
-    </div>
+    const dropdown = document.getElementById("subject");
 
-    <div class="card">
+    if(!data){
+        document.getElementById("status").innerText = "❌ Subject load failed";
+        return;
+    }
 
-        <input type="hidden" id="rowNumber">
+    dropdown.innerHTML = `<option value="">Select Subject</option>`;
 
-        <div class="form-grid">
+    data.forEach(s=>{
+        dropdown.innerHTML += `<option value="${s}">${s}</option>`;
+    });
 
-            <div>
-                <label>Subject</label>
-                <select id="subject">
-                    <option>Loading...</option>
-                </select>
-            </div>
+    document.getElementById("status").innerText = "Subjects loaded ✔";
+}
 
-            <div>
-                <label>Status</label>
-                <div class="badge">Ready</div>
-            </div>
 
-            <div class="full-width">
-                <label>Lesson Plan</label>
-                <textarea id="lessonPlan" placeholder="Write lesson plan..."></textarea>
-            </div>
+// =====================
+// LOAD LESSON PLANS
+// =====================
+async function loadLessonPlans(){
 
-        </div>
+    const data = await safeGet(WEB_APP_URL + "?action=getLessonPlans");
 
-        <div class="button-group">
-            <button class="save-btn" onclick="saveLessonPlan()">Save Lesson Plan</button>
-            <button class="clear-btn" onclick="clearForm()">Clear</button>
-        </div>
+    const table = document.getElementById("lessonTable");
 
-        <div class="status" id="status"></div>
+    if(!data){
+        table.innerHTML = `<tr><td colspan="3">❌ Load failed</td></tr>`;
+        return;
+    }
 
-    </div>
+    if(data.length === 0){
+        table.innerHTML = `<tr><td colspan="3">No data found</td></tr>`;
+        return;
+    }
 
-    <div class="card">
+    table.innerHTML = "";
 
-        <h2 style="font-size:18px;color:#2c3e50;margin-bottom:12px;">
-            Saved Lesson Plans
-        </h2>
+    data.forEach(item=>{
+        table.innerHTML += `
+        <tr>
+            <td><div class="badge">${item.subject}</div></td>
+            <td>${item.lessonPlan}</td>
+            <td>
+                <div class="action-buttons">
 
-        <div class="table-wrapper">
+                    <button class="edit-btn"
+                    onclick='editLesson(
+                        "${item.row}",
+                        ${JSON.stringify(item.subject)},
+                        ${JSON.stringify(item.lessonPlan)}
+                    )'>
+                    Edit
+                    </button>
 
-            <table>
+                    <button class="delete-btn"
+                    onclick='deleteLesson("${item.row}")'>
+                    Delete
+                    </button>
 
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>Lesson Plan</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+                </div>
+            </td>
+        </tr>`;
+    });
 
-                <tbody id="lessonTable">
-                    <tr>
-                        <td colspan="3" class="empty">Loading...</td>
-                    </tr>
-                </tbody>
+}
 
-            </table>
 
-        </div>
+// =====================
+// SAVE
+// =====================
+async function saveLessonPlan(){
 
-    </div>
+    const row = document.getElementById("rowNumber").value;
+    const subject = document.getElementById("subject").value;
+    const lessonPlan = document.getElementById("lessonPlan").value;
 
-    <div class="footer">
-        Academic Management System • Soft UI Edition
-    </div>
+    if(!subject || !lessonPlan){
+        document.getElementById("status").innerText = "Fill all fields";
+        return;
+    }
 
-</div>
+    const formData = new FormData();
+    formData.append("action","saveLesson");
+    formData.append("row",row);
+    formData.append("subject",subject);
+    formData.append("lessonPlan",lessonPlan);
 
-</body>
-</html>
+    try{
+
+        const res = await fetch(WEB_APP_URL,{
+            method:"POST",
+            body:formData
+        });
+
+        const text = await res.text();
+
+        document.getElementById("status").innerText = text;
+
+        clearForm();
+        loadLessonPlans();
+
+    }catch(e){
+        document.getElementById("status").innerText = "Save failed";
+    }
+}
+
+
+// =====================
+// EDIT
+// =====================
+function editLesson(row,subject,lessonPlan){
+
+    document.getElementById("rowNumber").value = row;
+    document.getElementById("subject").value = subject;
+    document.getElementById("lessonPlan").value = lessonPlan;
+
+    window.scrollTo({top:0,behavior:"smooth"});
+
+    document.getElementById("status").innerText = "Editing...";
+}
+
+
+// =====================
+// DELETE
+// =====================
+async function deleteLesson(row){
+
+    if(!confirm("Delete this lesson?")) return;
+
+    const formData = new FormData();
+    formData.append("action","deleteLesson");
+    formData.append("row",row);
+
+    try{
+
+        const res = await fetch(WEB_APP_URL,{
+            method:"POST",
+            body:formData
+        });
+
+        const text = await res.text();
+
+        document.getElementById("status").innerText = text;
+
+        loadLessonPlans();
+
+    }catch(e){
+        document.getElementById("status").innerText = "Delete failed";
+    }
+}
+
+
+// =====================
+// CLEAR
+// =====================
+function clearForm(){
+    document.getElementById("rowNumber").value = "";
+    document.getElementById("subject").value = "";
+    document.getElementById("lessonPlan").value = "";
+}
+
+
+// =====================
+// INIT
+// =====================
+loadSubjects();
+loadLessonPlans();
