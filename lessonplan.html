@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Lesson Plan System</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
 
 /* =======================
@@ -182,3 +191,178 @@ tr:hover{
 }
 
 </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="topbar">
+    <h1>National College & School</h1>
+    <p>Official Academic Lesson Plan Management System</p>
+</div>
+
+<div class="container">
+
+    <!-- FORM -->
+    <div class="card">
+
+        <input type="hidden" id="row">
+
+        <label>Subject</label>
+        <select id="subject">
+            <option>Loading...</option>
+        </select>
+
+        <label>Lesson Plan</label>
+        <textarea id="lesson"></textarea>
+
+        <button class="btn-save" onclick="save()">Save Lesson Plan</button>
+        <button class="btn-clear" onclick="clearForm()">Clear</button>
+
+        <div class="status" id="status"></div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="card">
+
+        <h3 style="margin-bottom:10px;">Submitted Lesson Plans</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Lesson Plan</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="table"></tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<div class="footer">
+    © Academic Management System • College Edition
+</div>
+
+<script>
+
+const URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
+
+// LOAD SUBJECTS
+async function loadSubjects(){
+    try{
+        const res = await fetch(URL+"?action=getSubjects");
+        const data = await res.json();
+
+        const select = document.getElementById("subject");
+        select.innerHTML = `<option value="">Select Subject</option>`;
+
+        data.forEach(s=>{
+            select.innerHTML += `<option value="${s}">${s}</option>`;
+        });
+
+    }catch(e){
+        document.getElementById("status").innerText = "Failed to load subjects";
+    }
+}
+
+// LOAD LESSONS
+async function loadLessons(){
+    try{
+        const res = await fetch(URL+"?action=getLessonPlans");
+        const data = await res.json();
+
+        const table = document.getElementById("table");
+        table.innerHTML = "";
+
+        data.forEach(item=>{
+            table.innerHTML += `
+            <tr>
+                <td>${item.subject}</td>
+                <td>${item.lessonPlan}</td>
+                <td>
+                    <div class="action">
+                        <button class="edit"
+                        onclick='edit(${item.row},${JSON.stringify(item.subject)},${JSON.stringify(item.lessonPlan)})'>
+                        Edit
+                        </button>
+
+                        <button class="delete" onclick="del(${item.row})">
+                        Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+        });
+
+    }catch(e){
+        document.getElementById("table").innerHTML =
+        "<tr><td colspan='3'>Load failed</td></tr>";
+    }
+}
+
+// SAVE
+async function save(){
+    const row = document.getElementById("row").value;
+    const subject = document.getElementById("subject").value;
+    const lesson = document.getElementById("lesson").value;
+
+    if(!subject || !lesson){
+        document.getElementById("status").innerText = "Fill all fields";
+        return;
+    }
+
+    const form = new FormData();
+    form.append("action","saveLesson");
+    form.append("row",row);
+    form.append("subject",subject);
+    form.append("lessonPlan",lesson);
+
+    const res = await fetch(URL,{method:"POST",body:form});
+    document.getElementById("status").innerText = await res.text();
+
+    clearForm();
+    loadLessons();
+}
+
+// EDIT
+function edit(row,sub,plan){
+    document.getElementById("row").value = row;
+    document.getElementById("subject").value = sub;
+    document.getElementById("lesson").value = plan;
+}
+
+// DELETE
+async function del(row){
+    if(!confirm("Delete this record?")) return;
+
+    const form = new FormData();
+    form.append("action","deleteLesson");
+    form.append("row",row);
+
+    const res = await fetch(URL,{method:"POST",body:form});
+
+    document.getElementById("status").innerText = await res.text();
+
+    loadLessons();
+}
+
+// CLEAR
+function clearForm(){
+    document.getElementById("row").value="";
+    document.getElementById("subject").value="";
+    document.getElementById("lesson").value="";
+}
+
+// INIT
+loadSubjects();
+loadLessons();
+
+</script>
+
+</body>
+</html>
