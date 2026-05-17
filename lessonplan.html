@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson Plan Entry</title>
+<title>Lesson Plan Manager</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -16,33 +17,34 @@
 }
 
 body{
-    background:linear-gradient(135deg,#dfe9f3,#ffffff);
+    background:linear-gradient(135deg,#e3f2fd,#ffffff);
     min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
     padding:20px;
 }
 
 .container{
-    width:100%;
-    max-width:450px;
-    background:#fff;
-    padding:30px;
+    max-width:900px;
+    margin:auto;
+}
+
+.card{
+    background:white;
+    padding:25px;
     border-radius:25px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    margin-bottom:25px;
 }
 
 .title{
     text-align:center;
     font-size:28px;
     font-weight:600;
-    margin-bottom:25px;
+    margin-bottom:20px;
     color:#444;
 }
 
 .input-group{
-    margin-bottom:20px;
+    margin-bottom:18px;
 }
 
 label{
@@ -57,152 +59,312 @@ textarea{
     width:100%;
     border:none;
     outline:none;
-    padding:15px;
+    background:#f5f7fb;
     border-radius:15px;
-    background:#f4f7fb;
+    padding:15px;
     font-size:15px;
-    transition:0.3s;
-}
-
-select:focus,
-textarea:focus{
-    background:#eef3ff;
 }
 
 textarea{
+    height:130px;
     resize:none;
-    height:140px;
 }
 
 button{
-    width:100%;
     border:none;
-    padding:15px;
-    border-radius:15px;
-    background:linear-gradient(135deg,#74ebd5,#9face6);
-    color:white;
-    font-size:16px;
-    font-weight:600;
+    padding:12px 20px;
+    border-radius:12px;
     cursor:pointer;
+    font-weight:600;
     transition:0.3s;
 }
 
-button:hover{
-    transform:translateY(-2px);
-    opacity:0.95;
+.save-btn{
+    width:100%;
+    background:linear-gradient(135deg,#74ebd5,#9face6);
+    color:white;
+}
+
+.save-btn:hover{
+    opacity:0.9;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#eef3ff;
+    padding:14px;
+    text-align:left;
+}
+
+td{
+    padding:14px;
+    border-bottom:1px solid #eee;
+    vertical-align:top;
+}
+
+.edit-btn{
+    background:#ffd54f;
+}
+
+.delete-btn{
+    background:#ef5350;
+    color:white;
+    margin-left:5px;
 }
 
 #status{
     margin-top:15px;
     text-align:center;
-    font-size:14px;
     color:#444;
 }
+
+@media(max-width:700px){
+
+    table,
+    thead,
+    tbody,
+    tr,
+    td,
+    th{
+        display:block;
+    }
+
+    tr{
+        margin-bottom:15px;
+        background:#fafafa;
+        border-radius:15px;
+        padding:10px;
+    }
+
+    th{
+        display:none;
+    }
+
+}
+
 </style>
 </head>
 <body>
 
 <div class="container">
 
-    <div class="title">Lesson Plan Entry</div>
+    <div class="card">
 
-    <div class="input-group">
-        <label>Subject</label>
-        <select id="subject">
-            <option value="">Loading Subjects...</option>
-        </select>
+        <div class="title">Lesson Plan Manager</div>
+
+        <input type="hidden" id="rowNumber">
+
+        <div class="input-group">
+            <label>Subject</label>
+            <select id="subject">
+                <option>Loading...</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Lesson Plan</label>
+            <textarea id="lessonPlan"></textarea>
+        </div>
+
+        <button class="save-btn" onclick="saveLessonPlan()">
+            Save Lesson Plan
+        </button>
+
+        <div id="status"></div>
+
     </div>
 
-    <div class="input-group">
-        <label>Lesson Plan</label>
-        <textarea id="lessonPlan" placeholder="Write lesson plan here..."></textarea>
+    <div class="card">
+
+        <div class="title">Submitted Lesson Plans</div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Lesson Plan</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="lessonTable"></tbody>
+
+        </table>
+
     </div>
-
-    <button onclick="saveLessonPlan()">Save Lesson Plan</button>
-
-    <div id="status"></div>
 
 </div>
 
 <script>
 
-// ====== PASTE YOUR WEB APP URL HERE ======
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
 
-// Load subjects from SUB sheet
+
+// LOAD SUBJECTS
 async function loadSubjects(){
 
-    try{
+    const response = await fetch(WEB_APP_URL + "?action=getSubjects");
+    const data = await response.json();
 
-        const response = await fetch(WEB_APP_URL + "?action=getSubjects");
-        const data = await response.json();
+    const dropdown = document.getElementById("subject");
 
-        const subjectDropdown = document.getElementById("subject");
+    dropdown.innerHTML = '<option value="">Select Subject</option>';
 
-        subjectDropdown.innerHTML = '<option value="">Select Subject</option>';
+    data.forEach(subject=>{
 
-        data.forEach(subject => {
+        dropdown.innerHTML += `
+            <option value="${subject}">
+                ${subject}
+            </option>
+        `;
 
-            subjectDropdown.innerHTML += `
-                <option value="${subject}">
-                    ${subject}
-                </option>
-            `;
-
-        });
-
-    }catch(error){
-
-        document.getElementById("status").innerHTML =
-        "Failed to load subjects.";
-
-    }
+    });
 
 }
 
-loadSubjects();
+
+// LOAD LESSON PLANS
+async function loadLessonPlans(){
+
+    const response = await fetch(WEB_APP_URL + "?action=getLessonPlans");
+
+    const data = await response.json();
+
+    const table = document.getElementById("lessonTable");
+
+    table.innerHTML = "";
+
+    data.forEach(item=>{
+
+        table.innerHTML += `
+
+        <tr>
+
+            <td>${item.subject}</td>
+
+            <td>${item.lessonPlan}</td>
+
+            <td>
+
+                <button class="edit-btn"
+                onclick="editLesson(
+                    '${item.row}',
+                    \`${item.subject}\`,
+                    \`${item.lessonPlan}\`
+                )">
+                Edit
+                </button>
+
+                <button class="delete-btn"
+                onclick="deleteLesson('${item.row}')">
+                Delete
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
 
 
-// Save lesson plan
+// SAVE OR UPDATE
 async function saveLessonPlan(){
 
+    const row = document.getElementById("rowNumber").value;
+
     const subject = document.getElementById("subject").value;
+
     const lessonPlan = document.getElementById("lessonPlan").value;
 
-    if(subject === "" || lessonPlan === ""){
-
-        document.getElementById("status").innerHTML =
-        "Please fill all fields.";
-
+    if(subject==="" || lessonPlan===""){
+        alert("Fill all fields");
         return;
     }
 
     const formData = new FormData();
 
+    formData.append("action","saveLesson");
+
+    formData.append("row",row);
+
     formData.append("subject",subject);
+
     formData.append("lessonPlan",lessonPlan);
 
-    try{
+    const response = await fetch(WEB_APP_URL,{
+        method:"POST",
+        body:formData
+    });
 
-        const response = await fetch(WEB_APP_URL,{
-            method:"POST",
-            body:formData
-        });
+    const result = await response.text();
 
-        const result = await response.text();
+    document.getElementById("status").innerHTML = result;
 
-        document.getElementById("status").innerHTML = result;
+    document.getElementById("rowNumber").value = "";
 
-        document.getElementById("lessonPlan").value = "";
+    document.getElementById("lessonPlan").value = "";
 
-    }catch(error){
-
-        document.getElementById("status").innerHTML =
-        "Error saving data.";
-
-    }
+    loadLessonPlans();
 
 }
+
+
+// EDIT
+function editLesson(row,subject,lessonPlan){
+
+    document.getElementById("rowNumber").value = row;
+
+    document.getElementById("subject").value = subject;
+
+    document.getElementById("lessonPlan").value = lessonPlan;
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+// DELETE
+async function deleteLesson(row){
+
+    if(!confirm("Delete this lesson plan?")){
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("action","deleteLesson");
+
+    formData.append("row",row);
+
+    const response = await fetch(WEB_APP_URL,{
+        method:"POST",
+        body:formData
+    });
+
+    const result = await response.text();
+
+    document.getElementById("status").innerHTML = result;
+
+    loadLessonPlans();
+
+}
+
+
+loadSubjects();
+
+loadLessonPlans();
 
 </script>
 
