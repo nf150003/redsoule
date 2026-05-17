@@ -67,7 +67,7 @@ th,td{
 
 <script>
 
-const URL = "YOUR_WEBAPP_URL";
+const URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
 
 // LOAD STUDENTS
 async function loadStudents(){
