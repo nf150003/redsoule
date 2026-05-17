@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Plan Entry</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#dfe9f3,#ffffff);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:450px;
+    background:#fff;
+    padding:30px;
+    border-radius:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.title{
+    text-align:center;
+    font-size:28px;
+    font-weight:600;
+    margin-bottom:25px;
+    color:#444;
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:500;
+    color:#555;
+}
+
+select,
+textarea{
+    width:100%;
+    border:none;
+    outline:none;
+    padding:15px;
+    border-radius:15px;
+    background:#f4f7fb;
+    font-size:15px;
+    transition:0.3s;
+}
+
+select:focus,
+textarea:focus{
+    background:#eef3ff;
+}
+
+textarea{
+    resize:none;
+    height:140px;
+}
+
+button{
+    width:100%;
+    border:none;
+    padding:15px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#74ebd5,#9face6);
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    opacity:0.95;
+}
+
+#status{
+    margin-top:15px;
+    text-align:center;
+    font-size:14px;
+    color:#444;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="title">Lesson Plan Entry</div>
+
+    <div class="input-group">
+        <label>Subject</label>
+        <select id="subject">
+            <option value="">Loading Subjects...</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Lesson Plan</label>
+        <textarea id="lessonPlan" placeholder="Write lesson plan here..."></textarea>
+    </div>
+
+    <button onclick="saveLessonPlan()">Save Lesson Plan</button>
+
+    <div id="status"></div>
+
+</div>
+
+<script>
+
+// ====== PASTE YOUR WEB APP URL HERE ======
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
+
+// Load subjects from SUB sheet
+async function loadSubjects(){
+
+    try{
+
+        const response = await fetch(WEB_APP_URL + "?action=getSubjects");
+        const data = await response.json();
+
+        const subjectDropdown = document.getElementById("subject");
+
+        subjectDropdown.innerHTML = '<option value="">Select Subject</option>';
+
+        data.forEach(subject => {
+
+            subjectDropdown.innerHTML += `
+                <option value="${subject}">
+                    ${subject}
+                </option>
+            `;
+
+        });
+
+    }catch(error){
+
+        document.getElementById("status").innerHTML =
+        "Failed to load subjects.";
+
+    }
+
+}
+
+loadSubjects();
+
+
+// Save lesson plan
+async function saveLessonPlan(){
+
+    const subject = document.getElementById("subject").value;
+    const lessonPlan = document.getElementById("lessonPlan").value;
+
+    if(subject === "" || lessonPlan === ""){
+
+        document.getElementById("status").innerHTML =
+        "Please fill all fields.";
+
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("subject",subject);
+    formData.append("lessonPlan",lessonPlan);
+
+    try{
+
+        const response = await fetch(WEB_APP_URL,{
+            method:"POST",
+            body:formData
+        });
+
+        const result = await response.text();
+
+        document.getElementById("status").innerHTML = result;
+
+        document.getElementById("lessonPlan").value = "";
+
+    }catch(error){
+
+        document.getElementById("status").innerHTML =
+        "Error saving data.";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
