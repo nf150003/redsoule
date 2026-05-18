@@ -113,7 +113,7 @@ button:hover{
 </thead>
 
 <tbody id="tableBody">
-<tr><td colspan="6" class="loading">Loading...</td></tr>
+<tr><td colspan="6" class="loading">Loading data...</td></tr>
 </tbody>
 
 </table>
@@ -127,13 +127,18 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzKhUg5AEnNKu-PhnlK
 let allData = [];
 
 
-// LOAD DATA FROM SHEET
+// =====================
+// LOAD DATA (doGet)
+// =====================
 async function loadData(){
 
     try{
 
         const res = await fetch(WEB_APP_URL + "?action=getData");
-        allData = await res.json();
+
+        const data = await res.json();
+
+        allData = data;
 
         render(allData);
 
@@ -141,11 +146,15 @@ async function loadData(){
 
         document.getElementById("tableBody").innerHTML =
         `<tr><td colspan="6" class="loading">Failed to load data</td></tr>`;
+
+        console.log(err);
     }
 }
 
 
+// =====================
 // RENDER TABLE
+// =====================
 function render(data){
 
     let html = "";
@@ -158,7 +167,6 @@ function render(data){
             <td>${row["S/L"] || ""}</td>
             <td>${row["Code"] || ""}</td>
             <td>${row["ID"] || ""}</td>
-
             <td>${row["Borrow Date"] || ""}</td>
 
             <td>
@@ -181,7 +189,9 @@ function render(data){
 }
 
 
-// STATUS DROPDOWN (MATCH SHEET VALUE)
+// =====================
+// STATUS DROPDOWN
+// =====================
 function statusOptions(current){
 
     const list = ["Due","Borrowed","Submitted","Lost","Damaged"];
@@ -192,7 +202,9 @@ function statusOptions(current){
 }
 
 
-// SEARCH (FIXED)
+// =====================
+// SEARCH FUNCTION
+// =====================
 function filterData(){
 
     const key = document.getElementById("search").value.toLowerCase();
@@ -206,7 +218,9 @@ function filterData(){
 }
 
 
-// SAVE + TRIGGER EMAIL (BACKEND HANDLES EMAIL)
+// =====================
+// SAVE (doPost → EMAIL handled backend)
+// =====================
 async function save(code,row){
 
     const status = document.getElementById("status-"+row).value;
@@ -215,18 +229,17 @@ async function save(code,row){
 
         await fetch(WEB_APP_URL,{
             method:"POST",
-            body:JSON.stringify({
+            body: JSON.stringify({
                 action:"updateStatus",
-                code:code,
-                status:status
+                code: code,
+                status: status
             })
         });
 
-        alert("Status Updated & Email Sent (if enabled)");
+        alert("Updated & Email Sent (if configured)");
 
     }catch(err){
-
-        alert("Failed to update");
+        alert("Update failed");
         console.log(err);
     }
 }
