@@ -194,7 +194,7 @@ function render(data){
 // =====================
 function statusOptions(current){
 
-    const list = ["Due","Borrowed","Submitted","Lost","Damaged"];
+    const list = ["Returned","Due","Damaged","Lost"];
 
     return list.map(s =>
         `<option ${s===current?"selected":""}>${s}</option>`
