@@ -5,15 +5,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Library Status System</title>
+<title>Due Books Dashboard</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
 body{
     font-family:Poppins,sans-serif;
-    background:#f5f7fb;
+    background:#f4f6fb;
     padding:20px;
 }
 
@@ -24,6 +24,7 @@ body{
 
 h2{
     color:#1d4ed8;
+    margin-bottom:10px;
 }
 
 .search-box{
@@ -32,6 +33,7 @@ h2{
     margin:15px 0;
     border-radius:10px;
     border:1px solid #ccc;
+    outline:none;
 }
 
 table{
@@ -46,29 +48,38 @@ th{
     background:#1e3a8a;
     color:white;
     padding:10px;
+    font-size:14px;
 }
 
 td{
     padding:10px;
     border-bottom:1px solid #eee;
+    font-size:14px;
 }
 
 select{
     width:100%;
     padding:6px;
+    border-radius:6px;
 }
 
 button{
     background:#16a34a;
     color:white;
     border:none;
-    padding:7px 12px;
-    border-radius:8px;
+    padding:6px 10px;
+    border-radius:6px;
     cursor:pointer;
 }
 
 button:hover{
     background:#15803d;
+}
+
+.loading{
+    text-align:center;
+    padding:20px;
+    color:#555;
 }
 
 </style>
@@ -79,9 +90,15 @@ button:hover{
 
 <div class="container">
 
-<h2>📚 Borrowed Book Status</h2>
+<h2>📚 Due Books Dashboard</h2>
 
-<input type="text" class="search-box" id="search" placeholder="Search by Code / ID / Date..." onkeyup="filterData()">
+<input
+    type="text"
+    id="search"
+    class="search-box"
+    placeholder="Search by Code or ID..."
+    onkeyup="filterData()"
+/>
 
 <table>
 
@@ -96,7 +113,9 @@ button:hover{
 </tr>
 </thead>
 
-<tbody id="tableBody"></tbody>
+<tbody id="tableBody">
+<tr><td colspan="6" class="loading">Loading...</td></tr>
+</tbody>
 
 </table>
 
@@ -104,18 +123,29 @@ button:hover{
 
 <script>
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzKhUg5AEnNKu-PhnlKE74QfFckqVzzBl9jyKFZ3iN-QsTF7nU_kHo5DPQ3DiC-yvkCEA/exec";
+const WEB_APP_URL = "YOUR_WEB_APP_URL_HERE";
 
 let allData = [];
 
+// LOAD DATA
 async function loadData(){
 
-    const res = await fetch(WEB_APP_URL + "?action=getData");
-    allData = await res.json();
+    try{
 
-    render(allData);
+        const res = await fetch(WEB_APP_URL + "?action=getData");
+        allData = await res.json();
+
+        render(allData);
+
+    }catch(err){
+
+        document.getElementById("tableBody").innerHTML =
+        `<tr><td colspan="6" class="loading">Failed to load</td></tr>`;
+    }
 }
 
+
+// RENDER TABLE
 function render(data){
 
     let html = "";
@@ -131,12 +161,14 @@ function render(data){
 
             <td>
                 <select id="status-${i}">
-                    ${getStatusOptions(row["Status"])}
+                    ${statusOptions(row["Status"])}
                 </select>
             </td>
 
             <td>
-                <button onclick="save('${row["Code"]}',${i})">Save</button>
+                <button onclick="save('${row["Code"]}',${i})">
+                    Save
+                </button>
             </td>
         </tr>
         `;
@@ -146,26 +178,25 @@ function render(data){
 }
 
 
-// STATUS DROPDOWN OPTIONS
-function getStatusOptions(selected){
+// STATUS DROPDOWN
+function statusOptions(current){
 
-    const options = ["Borrowed","Submitted","Lost","Damaged"];
+    const list = ["Due","Borrowed","Submitted","Lost","Damaged"];
 
-    return options.map(o =>
-        `<option ${o===selected?"selected":""}>${o}</option>`
+    return list.map(s =>
+        `<option ${s===current?"selected":""}>${s}</option>`
     ).join("");
 }
 
 
-// SEARCH FUNCTION
+// SEARCH
 function filterData(){
 
     const key = document.getElementById("search").value.toLowerCase();
 
     const filtered = allData.filter(r =>
         (r["Code"]||"").toLowerCase().includes(key) ||
-        (r["ID"]||"").toLowerCase().includes(key) ||
-        (r["Borrow Date"]||"").toLowerCase().includes(key)
+        (r["ID"]||"").toLowerCase().includes(key)
     );
 
     render(filtered);
