@@ -181,7 +181,7 @@ function render(data){
 // STATUS DROPDOWN
 function statusOptions(current){
 
-    const list = ["Due","Borrowed","Returned","Lost","Damaged"];
+    const list = ["Due","Returned","Lost","Damaged"];
 
     return list.map(s =>
         `<option ${s===current?"selected":""}>${s}</option>`
