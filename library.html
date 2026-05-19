@@ -1,179 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Library Dashboard</title>
-
-<style>
-
-body{
-    margin:0;
-    font-family:Arial;
-    background:linear-gradient(135deg,#e0f2fe,#ede9fe,#fef3c7);
-    padding:15px;
-}
-
-/* HEADER */
-.header{
-    background:linear-gradient(90deg,#1e3a8a,#7c3aed,#db2777);
-    color:white;
-    padding:18px;
-    border-radius:12px;
-    margin-bottom:15px;
-}
-
-/* STATS */
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-    gap:10px;
-    margin-bottom:15px;
-}
-
-.card{
-    background:white;
-    padding:12px;
-    border-radius:12px;
-    text-align:center;
-    box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-
-.card span{
-    font-size:22px;
-    font-weight:bold;
-    color:#7c3aed;
-}
-
-/* TABLE WRAP */
-.table-wrap{
-    overflow-x:auto;
-}
-
-/* TABLE */
-table{
-    width:100%;
-    min-width:700px;
-    border-collapse:collapse;
-    background:white;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 5px 15px rgba(0,0,0,0.08);
-}
-
-th{
-    background:#1e3a8a;
-    color:white;
-    padding:10px;
-    text-align:left;
-}
-
-td{
-    padding:10px;
-    border-bottom:1px solid #eee;
-    font-size:14px;
-}
-
-/* BUTTON */
-button{
-    background:#16a34a;
-    color:white;
-    border:none;
-    padding:6px 10px;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#15803d;
-}
-
-/* BADGES */
-.badge{
-    padding:4px 10px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.returned{background:#dcfce7;color:#166534;}
-.due{background:#fee2e2;color:#991b1b;}
-.damaged{background:#fef9c3;color:#92400e;}
-.lost{background:#e0e7ff;color:#3730a3;}
-
-/* TOAST */
-.toast{
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    background:#111827;
-    color:white;
-    padding:10px 14px;
-    border-radius:8px;
-    opacity:0;
-    transition:0.3s;
-}
-
-.toast.show{
-    opacity:1;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="header">
-<h2>📚 Live Library Smart Dashboard</h2>
-</div>
-
-<!-- STATS -->
-<div class="stats">
-    <div class="card">Total<br><span id="total">0</span></div>
-    <div class="card">Returned<br><span id="returned">0</span></div>
-    <div class="card">Due<br><span id="due">0</span></div>
-    <div class="card">Damaged<br><span id="damaged">0</span></div>
-    <div class="card">Lost<br><span id="lost">0</span></div>
-</div>
-
-<div class="table-wrap">
-<table>
-
-<thead>
-<tr>
-    <th>S/L</th>
-    <th>Code</th>
-    <th>ID</th>
-    <th>Borrow Date</th>
-    <th>Status</th>
-    <th>Action</th>
-</tr>
-</thead>
-
-<tbody id="tableBody">
-<tr><td colspan="6">Loading data...</td></tr>
-</tbody>
-
-</table>
-</div>
-
-<div id="toast" class="toast">Saved</div>
-
 <script>
 
 const URL = "https://script.google.com/macros/s/AKfycbzKhUg5AEnNKu-PhnlKE74QfFckqVzzBl9jyKFZ3iN-QsTF7nU_kHo5DPQ3DiC-yvkCEA/exec";
 
 let allData = [];
 
-/* LOAD FROM SHEET */
+/* LOAD */
 async function loadData(){
 
     try{
 
         const res = await fetch(URL + "?action=getData");
-        const data = await res.json();
+
+        const json = await res.json();
+
+        // SAFETY CHECK (THIS FIXES MOST ERRORS)
+        const data = Array.isArray(json) ? json : (json.data || []);
 
         allData = data;
 
@@ -181,12 +22,20 @@ async function loadData(){
         updateStats(data);
 
     }catch(err){
-        console.log("Error loading data", err);
+        console.log("FETCH ERROR:", err);
+        document.getElementById("tableBody").innerHTML =
+        `<tr><td colspan="6">❌ Failed to load data</td></tr>`;
     }
 }
 
-/* RENDER TABLE */
+/* RENDER */
 function render(data){
+
+    if(!data.length){
+        document.getElementById("tableBody").innerHTML =
+        `<tr><td colspan="6">No data found</td></tr>`;
+        return;
+    }
 
     let html = "";
 
@@ -221,21 +70,29 @@ function render(data){
 /* SAVE */
 async function save(code,row){
 
-    await fetch(URL,{
-        method:"POST",
-        body:JSON.stringify({
-            action:"updateStatus",
-            code,
-            status:"Returned"
-        })
-    });
+    try{
 
-    showToast("Updated ✔");
+        await fetch(URL,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                action:"updateStatus",
+                code,
+                status:"Returned"
+            })
+        });
 
-    loadData(); // refresh live
+        showToast("Updated ✔");
+        loadData();
+
+    }catch(err){
+        showToast("Update failed ❌");
+    }
 }
 
-/* LIVE STATS */
+/* STATS */
 function updateStats(data){
 
     let stats = {
@@ -270,17 +127,13 @@ function showToast(msg){
     const t = document.getElementById("toast");
     t.innerText = msg;
     t.classList.add("show");
-
     setTimeout(()=>t.classList.remove("show"),2000);
 }
 
-/* AUTO REFRESH (LIVE MODE) */
-setInterval(loadData, 5000); // every 5 sec = live feel
+/* AUTO REFRESH */
+setInterval(loadData, 5000);
 
-/* START */
+/* INIT */
 loadData();
 
 </script>
-
-</body>
-</html>
