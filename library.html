@@ -2,51 +2,70 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Library Due Dashboard</title>
+<title>Library Smart Dashboard</title>
 
 <style>
 
 body{
-    font-family:Arial, sans-serif;
-    background:#f4f6fb;
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(135deg,#e0f2fe,#ede9fe,#fef3c7);
     padding:20px;
 }
 
-.container{
-    max-width:900px;
-    margin:auto;
+/* HEADER */
+.header{
+    background:linear-gradient(90deg,#1e3a8a,#7c3aed,#db2777);
+    color:white;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:15px;
 }
 
-h2{
-    color:#1e3a8a;
-    margin-bottom:10px;
+/* STATS */
+.stats{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:15px;
 }
 
-.search-box{
-    width:100%;
+.card{
+    flex:1;
+    min-width:120px;
+    background:white;
     padding:12px;
-    margin:10px 0 20px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    outline:none;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
+.card h3{
+    margin:5px 0;
+    font-size:14px;
+}
+
+.card span{
+    font-size:22px;
+    font-weight:bold;
+    color:#7c3aed;
+}
+
+/* TABLE */
 table{
     width:100%;
     border-collapse:collapse;
     background:white;
-    border-radius:10px;
+    border-radius:12px;
     overflow:hidden;
 }
 
 th{
     background:#1e3a8a;
     color:white;
-    padding:12px;
+    padding:10px;
     text-align:left;
 }
 
@@ -56,18 +75,13 @@ td{
     font-size:14px;
 }
 
-select{
-    width:100%;
-    padding:6px;
-    border-radius:6px;
-}
-
+/* BUTTON */
 button{
     background:#16a34a;
     color:white;
     border:none;
     padding:6px 10px;
-    border-radius:6px;
+    border-radius:8px;
     cursor:pointer;
 }
 
@@ -75,11 +89,34 @@ button:hover{
     background:#15803d;
 }
 
-.loading{
-    text-align:center;
-    padding:20px;
-    color:#555;
+/* TOAST */
+.toast{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#111827;
+    color:white;
+    padding:10px 14px;
+    border-radius:8px;
+    opacity:0;
+    transition:0.3s;
 }
+
+.toast.show{
+    opacity:1;
+}
+
+/* STATUS COLORS */
+.badge{
+    padding:4px 8px;
+    border-radius:20px;
+    font-size:12px;
+}
+
+.Returned{background:#dcfce7;color:#166534;}
+.Due{background:#fee2e2;color:#991b1b;}
+.Damaged{background:#fef9c3;color:#92400e;}
+.Lost{background:#e0e7ff;color:#3730a3;}
 
 </style>
 
@@ -87,20 +124,20 @@ button:hover{
 
 <body>
 
-<div class="container">
+<div class="header">
+<h2>📚 Library Smart Dashboard</h2>
+</div>
 
-<h2>📚 Library Due Books Dashboard</h2>
-
-<input
-    type="text"
-    id="search"
-    class="search-box"
-    placeholder="Search by Code or ID..."
-    onkeyup="filterData()"
-/>
+<!-- STATS -->
+<div class="stats">
+    <div class="card"><h3>Total</h3><span id="total">0</span></div>
+    <div class="card"><h3>Returned</h3><span id="returned">0</span></div>
+    <div class="card"><h3>Due</h3><span id="due">0</span></div>
+    <div class="card"><h3>Damaged</h3><span id="damaged">0</span></div>
+    <div class="card"><h3>Lost</h3><span id="lost">0</span></div>
+</div>
 
 <table>
-
 <thead>
 <tr>
     <th>S/L</th>
@@ -113,137 +150,129 @@ button:hover{
 </thead>
 
 <tbody id="tableBody">
-<tr><td colspan="6" class="loading">Loading data...</td></tr>
+<tr><td colspan="6">Loading...</td></tr>
 </tbody>
 
 </table>
 
-</div>
+<div id="toast" class="toast">Saved</div>
 
 <script>
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzKhUg5AEnNKu-PhnlKE74QfFckqVzzBl9jyKFZ3iN-QsTF7nU_kHo5DPQ3DiC-yvkCEA/exec";
+const URL = "https://script.google.com/macros/s/AKfycbzKhUg5AEnNKu-PhnlKE74QfFckqVzzBl9jyKFZ3iN-QsTF7nU_kHo5DPQ3DiC-yvkCEA/exec";
 
 let allData = [];
 
-
-// =====================
-// LOAD DATA (doGet)
-// =====================
+// LOAD DATA
 async function loadData(){
 
-    try{
+    const res = await fetch(URL + "?action=getData");
+    allData = await res.json();
 
-        const res = await fetch(WEB_APP_URL + "?action=getData");
-
-        const data = await res.json();
-
-        allData = data;
-
-        render(allData);
-
-    }catch(err){
-
-        document.getElementById("tableBody").innerHTML =
-        `<tr><td colspan="6" class="loading">Failed to load data</td></tr>`;
-
-        console.log(err);
-    }
+    render(allData);
+    updateStats(allData);
 }
 
-
-// =====================
 // RENDER TABLE
-// =====================
 function render(data){
 
     let html = "";
 
-    data.forEach(row=>{
+    data.forEach(r=>{
 
         html += `
         <tr>
 
-            <td>${row["S/L"] || ""}</td>
-            <td>${row["Code"] || ""}</td>
-            <td>${row["ID"] || ""}</td>
-            <td>${row["Borrow Date"] || ""}</td>
+            <td>${r["S/L"] || ""}</td>
+            <td>${r["Code"] || ""}</td>
+            <td>${r["ID"] || ""}</td>
+            <td>${r["Borrow Date"] || ""}</td>
 
             <td>
-                <select id="status-${row["_row"]}">
-                    ${statusOptions(row["Status"])}
+                <select id="st-${r["_row"]}">
+                    ${options(r.Status)}
                 </select>
             </td>
 
             <td>
-                <button onclick="save('${row["Code"]}',${row["_row"]})">
-                    Save
-                </button>
+                <button onclick="save('${r["Code"]}',${r["_row"]})">Save</button>
             </td>
 
-        </tr>
-        `;
+        </tr>`;
     });
 
     document.getElementById("tableBody").innerHTML = html;
 }
 
-
-// =====================
-// STATUS DROPDOWN
-// =====================
-function statusOptions(current){
+// OPTIONS
+function options(cur){
 
     const list = ["Returned","Due","Damaged","Lost"];
 
-    return list.map(s =>
-        `<option ${s===current?"selected":""}>${s}</option>`
+    return list.map(s=>
+        `<option ${s===cur?"selected":""}>${s}</option>`
     ).join("");
 }
 
-
-// =====================
-// SEARCH FUNCTION
-// =====================
-function filterData(){
-
-    const key = document.getElementById("search").value.toLowerCase();
-
-    const filtered = allData.filter(r =>
-        (r["Code"]||"").toLowerCase().includes(key) ||
-        (r["ID"]||"").toLowerCase().includes(key)
-    );
-
-    render(filtered);
-}
-
-
-// =====================
-// SAVE (doPost → EMAIL handled backend)
-// =====================
+// SAVE
 async function save(code,row){
 
-    const status = document.getElementById("status-"+row).value;
+    const status = document.getElementById("st-"+row).value;
 
-    try{
+    await fetch(URL,{
+        method:"POST",
+        body:JSON.stringify({
+            action:"updateStatus",
+            code,
+            status
+        })
+    });
 
-        await fetch(WEB_APP_URL,{
-            method:"POST",
-            body: JSON.stringify({
-                action:"updateStatus",
-                code: code,
-                status: status
-            })
-        });
-
-        alert("Updated & Email Sent (if configured)");
-
-    }catch(err){
-        alert("Update failed");
-        console.log(err);
-    }
+    showToast("Updated ✔");
+    loadData();
 }
 
+// STATS ENGINE
+function updateStats(data){
+
+    let stats = {
+        total:0,
+        returned:0,
+        due:0,
+        damaged:0,
+        lost:0
+    };
+
+    data.forEach(r=>{
+
+        stats.total++;
+
+        let s = (r.Status || "").toLowerCase();
+
+        if(s==="returned") stats.returned++;
+        else if(s==="due") stats.due++;
+        else if(s==="damaged") stats.damaged++;
+        else if(s==="lost") stats.lost++;
+    });
+
+    document.getElementById("total").innerText = stats.total;
+    document.getElementById("returned").innerText = stats.returned;
+    document.getElementById("due").innerText = stats.due;
+    document.getElementById("damaged").innerText = stats.damaged;
+    document.getElementById("lost").innerText = stats.lost;
+}
+
+// TOAST
+function showToast(msg){
+    const t = document.getElementById("toast");
+    t.innerText = msg;
+    t.classList.add("show");
+
+    setTimeout(()=>t.classList.remove("show"),2000);
+}
+
+// AUTO REFRESH
+setInterval(loadData,30000);
 
 // INIT
 loadData();
