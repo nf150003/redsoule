@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Library Smart Dashboard</title>
+<title>Live Library Dashboard</title>
 
 <style>
 
@@ -12,7 +12,7 @@ body{
     margin:0;
     font-family:Arial;
     background:linear-gradient(135deg,#e0f2fe,#ede9fe,#fef3c7);
-    padding:20px;
+    padding:15px;
 }
 
 /* HEADER */
@@ -26,25 +26,18 @@ body{
 
 /* STATS */
 .stats{
-    display:flex;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
     gap:10px;
-    flex-wrap:wrap;
     margin-bottom:15px;
 }
 
 .card{
-    flex:1;
-    min-width:120px;
     background:white;
     padding:12px;
     border-radius:12px;
     text-align:center;
     box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-
-.card h3{
-    margin:5px 0;
-    font-size:14px;
 }
 
 .card span{
@@ -53,13 +46,20 @@ body{
     color:#7c3aed;
 }
 
+/* TABLE WRAP */
+.table-wrap{
+    overflow-x:auto;
+}
+
 /* TABLE */
 table{
     width:100%;
+    min-width:700px;
     border-collapse:collapse;
     background:white;
     border-radius:12px;
     overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
 }
 
 th{
@@ -89,6 +89,19 @@ button:hover{
     background:#15803d;
 }
 
+/* BADGES */
+.badge{
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.returned{background:#dcfce7;color:#166534;}
+.due{background:#fee2e2;color:#991b1b;}
+.damaged{background:#fef9c3;color:#92400e;}
+.lost{background:#e0e7ff;color:#3730a3;}
+
 /* TOAST */
 .toast{
     position:fixed;
@@ -106,18 +119,6 @@ button:hover{
     opacity:1;
 }
 
-/* STATUS COLORS */
-.badge{
-    padding:4px 8px;
-    border-radius:20px;
-    font-size:12px;
-}
-
-.Returned{background:#dcfce7;color:#166534;}
-.Due{background:#fee2e2;color:#991b1b;}
-.Damaged{background:#fef9c3;color:#92400e;}
-.Lost{background:#e0e7ff;color:#3730a3;}
-
 </style>
 
 </head>
@@ -125,19 +126,21 @@ button:hover{
 <body>
 
 <div class="header">
-<h2>📚 Library Smart Dashboard</h2>
+<h2>📚 Live Library Smart Dashboard</h2>
 </div>
 
 <!-- STATS -->
 <div class="stats">
-    <div class="card"><h3>Total</h3><span id="total">0</span></div>
-    <div class="card"><h3>Returned</h3><span id="returned">0</span></div>
-    <div class="card"><h3>Due</h3><span id="due">0</span></div>
-    <div class="card"><h3>Damaged</h3><span id="damaged">0</span></div>
-    <div class="card"><h3>Lost</h3><span id="lost">0</span></div>
+    <div class="card">Total<br><span id="total">0</span></div>
+    <div class="card">Returned<br><span id="returned">0</span></div>
+    <div class="card">Due<br><span id="due">0</span></div>
+    <div class="card">Damaged<br><span id="damaged">0</span></div>
+    <div class="card">Lost<br><span id="lost">0</span></div>
 </div>
 
+<div class="table-wrap">
 <table>
+
 <thead>
 <tr>
     <th>S/L</th>
@@ -145,15 +148,16 @@ button:hover{
     <th>ID</th>
     <th>Borrow Date</th>
     <th>Status</th>
-    <th>Save</th>
+    <th>Action</th>
 </tr>
 </thead>
 
 <tbody id="tableBody">
-<tr><td colspan="6">Loading...</td></tr>
+<tr><td colspan="6">Loading data...</td></tr>
 </tbody>
 
 </table>
+</div>
 
 <div id="toast" class="toast">Saved</div>
 
@@ -163,22 +167,32 @@ const URL = "https://script.google.com/macros/s/AKfycbzKhUg5AEnNKu-PhnlKE74QfFck
 
 let allData = [];
 
-// LOAD DATA
+/* LOAD FROM SHEET */
 async function loadData(){
 
-    const res = await fetch(URL + "?action=getData");
-    allData = await res.json();
+    try{
 
-    render(allData);
-    updateStats(allData);
+        const res = await fetch(URL + "?action=getData");
+        const data = await res.json();
+
+        allData = data;
+
+        render(data);
+        updateStats(data);
+
+    }catch(err){
+        console.log("Error loading data", err);
+    }
 }
 
-// RENDER TABLE
+/* RENDER TABLE */
 function render(data){
 
     let html = "";
 
     data.forEach(r=>{
+
+        let s = (r.Status || "").toLowerCase();
 
         html += `
         <tr>
@@ -189,13 +203,13 @@ function render(data){
             <td>${r["Borrow Date"] || ""}</td>
 
             <td>
-                <select id="st-${r["_row"]}">
-                    ${options(r.Status)}
-                </select>
+                <span class="badge ${s}">
+                    ${r.Status || ""}
+                </span>
             </td>
 
             <td>
-                <button onclick="save('${r["Code"]}',${r["_row"]})">Save</button>
+                <button onclick="save('${r["Code"]}',${r["_row"]})">Update</button>
             </td>
 
         </tr>`;
@@ -204,35 +218,24 @@ function render(data){
     document.getElementById("tableBody").innerHTML = html;
 }
 
-// OPTIONS
-function options(cur){
-
-    const list = ["Returned","Due","Damaged","Lost"];
-
-    return list.map(s=>
-        `<option ${s===cur?"selected":""}>${s}</option>`
-    ).join("");
-}
-
-// SAVE
+/* SAVE */
 async function save(code,row){
-
-    const status = document.getElementById("st-"+row).value;
 
     await fetch(URL,{
         method:"POST",
         body:JSON.stringify({
             action:"updateStatus",
             code,
-            status
+            status:"Returned"
         })
     });
 
     showToast("Updated ✔");
-    loadData();
+
+    loadData(); // refresh live
 }
 
-// STATS ENGINE
+/* LIVE STATS */
 function updateStats(data){
 
     let stats = {
@@ -247,7 +250,7 @@ function updateStats(data){
 
         stats.total++;
 
-        let s = (r.Status || "").toLowerCase();
+        let s = (r.Status || "").toLowerCase().trim();
 
         if(s==="returned") stats.returned++;
         else if(s==="due") stats.due++;
@@ -262,7 +265,7 @@ function updateStats(data){
     document.getElementById("lost").innerText = stats.lost;
 }
 
-// TOAST
+/* TOAST */
 function showToast(msg){
     const t = document.getElementById("toast");
     t.innerText = msg;
@@ -271,10 +274,10 @@ function showToast(msg){
     setTimeout(()=>t.classList.remove("show"),2000);
 }
 
-// AUTO REFRESH
-setInterval(loadData,30000);
+/* AUTO REFRESH (LIVE MODE) */
+setInterval(loadData, 5000); // every 5 sec = live feel
 
-// INIT
+/* START */
 loadData();
 
 </script>
