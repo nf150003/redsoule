@@ -105,7 +105,7 @@ a{
     </a>
 
     <!-- Leaderboard -->
-    <a class="btn" href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0">
+    <a class="btn" href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0" target="_blank">
       <div class="icon c2">🏆</div>
       Leaderboard
     </a>
@@ -116,12 +116,12 @@ a{
       Lesson Plan
     </a>
 
- <!-- SEAT Plan -->
+    <!-- Seat Plan -->
     <a class="btn" href="#" onclick="generateSeatPlanPDF(event)">
-      <div class="icon c4">📚</div>
+      <div class="icon c4">🪑</div>
       Seat Plan
     </a>
-</a>
+
     <a class="btn" href="#"><div class="icon c5">📝</div>Exams</a>
     <a class="btn" href="#"><div class="icon c6">📄</div>Results</a>
     <a class="btn" href="#"><div class="icon c7">📌</div>Notices</a>
@@ -137,7 +137,7 @@ a{
 /* =========================
    SEND REPORT
 ========================= */
-function sendReport(e) {
+function sendReport(e){
   e.preventDefault();
 
   const url = "https://script.google.com/macros/s/AKfycbyMqNARUd91z_EPpEyh91ACwqYtGE7Xz-5xXDdDYjIwoAT3BPeFz93kQsOKYywuMfLd/exec";
@@ -148,17 +148,10 @@ function sendReport(e) {
     .then(res => res.text())
     .then(text => {
       let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        data = { status: "error", message: text };
-      }
+      try { data = JSON.parse(text); }
+      catch(e){ data = {status:"error", message:text}; }
 
-      if (data.status === "success") {
-        alert("✔ " + data.message);
-      } else {
-        alert("❌ " + data.message);
-      }
+      alert((data.status === "success" ? "✔ " : "❌ ") + data.message);
     })
     .catch(err => {
       console.log(err);
@@ -167,51 +160,37 @@ function sendReport(e) {
 }
 
 /* =========================
-   GENERATE PDF (LESSON PLAN)
+   LESSON PLAN PDF
 ========================= */
-function generatePDF(e) {
+function generatePDF(e){
   e.preventDefault();
 
   const url = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
 
-  alert("⏳ Generating PDF...");
+  alert("⏳ Generating Lesson Plan PDF...");
 
   fetch(url + "?action=generateAndSendPDF")
     .then(res => res.text())
-    .then(data => {
-      alert("✔ PDF process triggered!");
-      console.log(data);
-    })
-    .catch(err => {
-      console.log(err);
-      alert("❌ Failed to generate PDF");
-    });
+    .then(() => alert("✔ Lesson Plan triggered"))
+    .catch(() => alert("❌ Failed Lesson Plan"));
 }
-</script>
 
-  =========================
-   GENERATE PDF (SEAT PLAN)
+/* =========================
+   SEAT PLAN PDF
 ========================= */
-  function generateSeatPlanPDF() {
+function generateSeatPlanPDF(e){
   e.preventDefault();
 
   const url = "https://script.google.com/macros/s/AKfycbyAHU1b4kKvLqwziF9zsiFtcdqT26UKgjpTKqlIIBo/dev";
 
-  alert("⏳ Generating PDF...");
+  alert("⏳ Generating Seat Plan PDF...");
 
   fetch(url + "?action=generateAndSendPDF")
     .then(res => res.text())
-    .then(data => {
-      alert("✔ PDF process triggered!");
-      console.log(data);
-    })
-    .catch(err => {
-      console.log(err);
-      alert("❌ Failed to generate PDF");
-    });
+    .then(() => alert("✔ Seat Plan triggered"))
+    .catch(() => alert("❌ Failed Seat Plan"));
 }
 </script>
-
 
 </body>
 </html>
