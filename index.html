@@ -117,10 +117,10 @@ a{
     </a>
 
     <!-- Seat Plan -->
-    <a class="btn" href="#" onclick="generateSeatPlanPDF(event)">
-      <div class="icon c4">🪑</div>
-      Seat Plan
-    </a>
+   <a class="btn" href="#" onclick="generateSeatPlanPDF(event)">
+  <div class="icon c4">🪑</div>
+  Seat Plan
+</a>
 
     <a class="btn" href="#"><div class="icon c5">📝</div>Exams</a>
     <a class="btn" href="#"><div class="icon c6">📄</div>Results</a>
@@ -181,16 +181,12 @@ function generatePDF(e){
 function generateSeatPlanPDF(e){
   e.preventDefault();
 
-  const url = "https://script.google.com/macros/s/AKfycbyAHU1b4kKvLqwziF9zsiFtcdqT26UKgjpTKqlIIBo/dev";
-
-  alert("⏳ Generating Seat Plan PDF...");
-
-  fetch(url + "?action=generateAndSendPDF")
-    .then(res => res.text())
-    .then(() => alert("✔ Seat Plan triggered"))
-    .catch(() => alert("❌ Failed Seat Plan"));
+  google.script.run
+    .withSuccessHandler(function(res){
+      alert("✔ " + res);
+    })
+    .withFailureHandler(function(err){
+      alert("❌ " + err.message);
+    })
+    .generateSeatPlanPDF();
 }
-</script>
-
-</body>
-</html>
