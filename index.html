@@ -189,5 +189,29 @@ function generatePDF(e) {
 }
 </script>
 
+  =========================
+   GENERATE PDF (SEAT PLAN)
+========================= */
+function generateSeatPlanPDF() {
+  e.preventDefault();
+
+  const url = "https://script.google.com/macros/s/AKfycbyAHU1b4kKvLqwziF9zsiFtcdqT26UKgjpTKqlIIBo/dev";
+
+  alert("⏳ Generating PDF...");
+
+  fetch(url + "?action=generateAndSendPDF")
+    .then(res => res.text())
+    .then(data => {
+      alert("✔ PDF process triggered!");
+      console.log(data);
+    })
+    .catch(err => {
+      console.log(err);
+      alert("❌ Failed to generate PDF");
+    });
+}
+</script>
+
+
 </body>
 </html>
