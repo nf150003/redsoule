@@ -11,76 +11,88 @@
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
-  background:#f4f7fb;
+  background:#eef2f7;
+  color:#1f2937;
 }
 
+/* HEADER */
 .header{
-  background:#2563eb;
-  color:white;
+  background:#1e3a8a;
+  color:#ffffff;
   text-align:center;
-  padding:18px;
-  font-size:18px;
+  padding:24px 16px;
+  font-size:20px;
   font-weight:600;
+  letter-spacing:0.8px;
+  border-bottom:4px solid #0f172a;
 }
 
+/* CONTAINER */
 .container{
-  padding:20px;
-  max-width:500px;
+  padding:30px;
+  max-width:600px;
   margin:auto;
 }
 
+/* GRID (slightly tighter) */
 .grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:12px;
+  gap:10px;
 }
 
+/* SMALL FORMAL BUTTON */
 .btn{
   background:#ffffff;
-  border:none;
-  border-radius:14px;
-  padding:18px 10px;
-  font-size:13px;
+  border:1px solid #d1d5db;
+  border-radius:8px;
+  padding:14px 10px;
+  font-size:12px;
   font-weight:500;
-  color:#1f2937;
+  color:#111827;
   text-align:center;
-  box-shadow:0 6px 15px rgba(0,0,0,0.06);
   cursor:pointer;
   transition:0.2s ease;
+
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
+
   text-decoration:none;
+  box-shadow:0 1px 4px rgba(0,0,0,0.06);
 }
 
 .btn:hover{
-  transform:translateY(-4px);
-  box-shadow:0 10px 20px rgba(0,0,0,0.12);
+  transform:translateY(-2px);
+  box-shadow:0 6px 14px rgba(0,0,0,0.10);
+  border-color:#2563eb;
 }
 
+/* ICON SMALLER */
 .icon{
-  width:45px;
-  height:45px;
-  border-radius:12px;
+  width:38px;
+  height:38px;
+  border-radius:6px;
   display:flex;
   align-items:center;
   justify-content:center;
-  color:white;
-  font-size:18px;
-  margin-bottom:8px;
+  color:#ffffff;
+  font-size:16px;
+  margin-bottom:6px;
 }
 
-.c1{background:#ef4444;}
-.c2{background:#3b82f6;}
-.c3{background:#10b981;}
-.c4{background:#f59e0b;}
-.c5{background:#8b5cf6;}
-.c6{background:#14b8a6;}
-.c7{background:#f97316;}
-.c8{background:#6366f1;}
-.c9{background:#ec4899;}
-.c10{background:#0ea5e9;}
+/* COLORS (UNCHANGED LOGIC) */
+.c1{background:#dc2626;}
+.c2{background:#1d4ed8;}
+.c3{background:#15803d;}
+.c4{background:#b45309;}
+.c5{background:#6d28d9;}
+.c6{background:#0f766e;}
+.c7{background:#c2410c;}
+.c8{background:#4338ca;}
+.c9{background:#be185d;}
+.c10{background:#0369a1;}
 
 a{
   text-decoration:none;
@@ -91,7 +103,7 @@ a{
 <body>
 
 <div class="header">
-  🎓 Sajib's Dashboard
+  EDUCATION MANAGEMENT DASHBOARD
 </div>
 
 <div class="container">
@@ -134,15 +146,12 @@ a{
 </div>
 
 <script>
-/* =========================
-   SEND REPORT
-========================= */
 function sendReport(e){
   e.preventDefault();
 
   const url = "https://script.google.com/macros/s/AKfycbyMqNARUd91z_EPpEyh91ACwqYtGE7Xz-5xXDdDYjIwoAT3BPeFz93kQsOKYywuMfLd/exec";
 
-  alert("⏳ Sending report...");
+  alert("Processing request...");
 
   fetch(url)
     .then(res => res.text())
@@ -151,48 +160,42 @@ function sendReport(e){
       try { data = JSON.parse(text); }
       catch(e){ data = {status:"error", message:text}; }
 
-      alert((data.status === "success" ? "✔ " : "❌ ") + data.message);
+      alert((data.status === "success" ? "SUCCESS: " : "ERROR: ") + data.message);
     })
     .catch(err => {
       console.log(err);
-      alert("❌ Network error");
+      alert("Network error occurred");
     });
 }
 
-/* =========================
-   LESSON PLAN PDF
-========================= */
 function generatePDF(e){
   e.preventDefault();
 
   const url = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
 
-  alert("⏳ Generating Lesson Plan PDF...");
+  alert("Generating document...");
 
   fetch(url + "?action=generateAndSendPDF")
     .then(res => res.text())
-    .then(() => alert("✔ Lesson Plan triggered"))
-    .catch(() => alert("❌ Failed Lesson Plan"));
+    .then(() => alert("Lesson Plan generated successfully"))
+    .catch(() => alert("Failed to generate document"));
 }
 
-/* =========================
-   SEAT PLAN PDF
-========================= */
 function runSeatPlan(e){
   e.preventDefault();
 
   const url = "https://script.google.com/macros/s/AKfycbzGoYon_BYBlhfjmt5Y50W0Y4gOUUAZZXxboraXAq5zTJugmmn4sM8PhMD5yYkjpMRZ/exec";
 
-  alert("⏳ Running Seat Plan...");
+  alert("Processing seat plan...");
 
   fetch(url + "?action=seatplan")
     .then(res => res.text())
     .then(data => {
-      alert("✔ " + data);
+      alert(data);
       console.log(data);
     })
     .catch(err => {
-      alert("❌ Failed: " + err.message);
+      alert("Seat plan failed");
     });
 }
 </script>
