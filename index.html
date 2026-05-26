@@ -11,48 +11,48 @@
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
-  background:#eef2f7;
+  background:linear-gradient(135deg,#eef2f7,#f7f9fc);
   color:#1f2937;
+  animation: fadeIn 0.6s ease-in;
 }
 
 /* HEADER */
 .header{
-  background:#1e3a8a;
-  color:#ffffff;
+  background:linear-gradient(135deg,#1e3a8a,#0f172a);
+  color:#fff;
   text-align:center;
-  padding:24px 16px;
+  padding:22px;
   font-size:20px;
   font-weight:600;
-  letter-spacing:0.8px;
-  border-bottom:4px solid #0f172a;
+  letter-spacing:1px;
 }
 
 /* CONTAINER */
 .container{
-  padding:30px;
-  max-width:600px;
+  padding:28px;
+  max-width:620px;
   margin:auto;
 }
 
-/* GRID (slightly tighter) */
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:10px;
+  gap:12px;
 }
 
-/* SMALL FORMAL BUTTON */
+/* BUTTON */
 .btn{
-  background:#ffffff;
-  border:1px solid #d1d5db;
-  border-radius:8px;
-  padding:14px 10px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  padding:16px 12px;
   font-size:12px;
   font-weight:500;
   color:#111827;
   text-align:center;
   cursor:pointer;
-  transition:0.2s ease;
+  transition:all 0.25s ease;
 
   display:flex;
   flex-direction:column;
@@ -60,43 +60,67 @@ body{
   justify-content:center;
 
   text-decoration:none;
-  box-shadow:0 1px 4px rgba(0,0,0,0.06);
+  box-shadow:0 3px 10px rgba(0,0,0,0.06);
+
+  animation: floatUp 0.6s ease forwards;
 }
 
 .btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 6px 14px rgba(0,0,0,0.10);
-  border-color:#2563eb;
+  transform:translateY(-5px) scale(1.02);
+  border-color:#3b82f6;
+  box-shadow:0 12px 24px rgba(0,0,0,0.15);
 }
 
-/* ICON SMALLER */
+/* ICON */
 .icon{
-  width:38px;
-  height:38px;
-  border-radius:6px;
+  width:42px;
+  height:42px;
+  border-radius:10px;
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#ffffff;
-  font-size:16px;
+  color:#fff;
+  font-size:18px;
   margin-bottom:6px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.15);
 }
 
-/* COLORS (UNCHANGED LOGIC) */
-.c1{background:#dc2626;}
-.c2{background:#1d4ed8;}
-.c3{background:#15803d;}
-.c4{background:#b45309;}
-.c5{background:#6d28d9;}
-.c6{background:#0f766e;}
-.c7{background:#c2410c;}
-.c8{background:#4338ca;}
-.c9{background:#be185d;}
-.c10{background:#0369a1;}
+/* NEW MODERN ICON COLORS */
+.c1{background:linear-gradient(135deg,#ef4444,#b91c1c);} /* report */
+.c2{background:linear-gradient(135deg,#2563eb,#1e40af);} /* leaderboard */
+.c3{background:linear-gradient(135deg,#16a34a,#166534);} /* lesson */
+.c4{background:linear-gradient(135deg,#f59e0b,#b45309);} /* seat */
+.c5{background:linear-gradient(135deg,#7c3aed,#4c1d95);} /* exams */
+.c6{background:linear-gradient(135deg,#0ea5e9,#0369a1);} /* results */
+.c7{background:linear-gradient(135deg,#f97316,#c2410c);} /* notice */
+.c8{background:linear-gradient(135deg,#6366f1,#312e81);} /* settings */
+.c9{background:linear-gradient(135deg,#ec4899,#9d174d);} /* teachers */
+.c10{background:linear-gradient(135deg,#14b8a6,#0f766e);} /* app */
 
-a{
-  text-decoration:none;
+/* ANIMATIONS */
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(-10px);}
+  to{opacity:1; transform:translateY(0);}
 }
+
+@keyframes floatUp{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* stagger effect */
+.btn:nth-child(1){animation-delay:0.05s;}
+.btn:nth-child(2){animation-delay:0.10s;}
+.btn:nth-child(3){animation-delay:0.15s;}
+.btn:nth-child(4){animation-delay:0.20s;}
+.btn:nth-child(5){animation-delay:0.25s;}
+.btn:nth-child(6){animation-delay:0.30s;}
+.btn:nth-child(7){animation-delay:0.35s;}
+.btn:nth-child(8){animation-delay:0.40s;}
+.btn:nth-child(9){animation-delay:0.45s;}
+.btn:nth-child(10){animation-delay:0.50s;}
+
+a{text-decoration:none;}
 </style>
 </head>
 
@@ -108,96 +132,66 @@ a{
 
 <div class="container">
 
-  <div class="grid">
+<div class="grid">
 
-    <!-- Send Report -->
-    <a class="btn" href="#" onclick="sendReport(event)">
-      <div class="icon c1">📊</div>
-      CT Report
-    </a>
+  <a class="btn" href="#" onclick="sendReport(event)">
+    <div class="icon c1">📊</div>
+    CT Report
+  </a>
 
-    <!-- Leaderboard -->
-    <a class="btn" href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0" target="_blank">
-      <div class="icon c2">🏆</div>
-      Leaderboard
-    </a>
+  <a class="btn" href="#">
+    <div class="icon c2">📈</div>
+    Leaderboard
+  </a>
 
-    <!-- Lesson Plan -->
-    <a class="btn" href="#" onclick="generatePDF(event)">
-      <div class="icon c3">📚</div>
-      Lesson Plan
-    </a>
+  <a class="btn" href="#" onclick="generatePDF(event)">
+    <div class="icon c3">📚</div>
+    Lesson Plan
+  </a>
 
-    <!-- Seat Plan -->
-    <a class="btn" href="#" onclick="runSeatPlan(event)">
-      <div class="icon c4">🪑</div>
-      Seat Plan
-    </a>
+  <a class="btn" href="#" onclick="runSeatPlan(event)">
+    <div class="icon c4">🪑</div>
+    Seat Plan
+  </a>
 
-    <a class="btn" href="#"><div class="icon c5">📝</div>Exams</a>
-    <a class="btn" href="#"><div class="icon c6">📄</div>Results</a>
-    <a class="btn" href="#"><div class="icon c7">📌</div>Notices</a>
-    <a class="btn" href="#"><div class="icon c8">⚙️</div>Settings</a>
-    <a class="btn" href="#"><div class="icon c9">👨‍🏫</div>Teachers</a>
-    <a class="btn" href="#"><div class="icon c10">📱</div>App Info</a>
+  <a class="btn">
+    <div class="icon c5">🧾</div>
+    Exams
+  </a>
 
-  </div>
+  <a class="btn">
+    <div class="icon c6">📊</div>
+    Results
+  </a>
+
+  <a class="btn">
+    <div class="icon c7">🔔</div>
+    Notices
+  </a>
+
+  <a class="btn">
+    <div class="icon c8">⚙️</div>
+    Settings
+  </a>
+
+  <a class="btn">
+    <div class="icon c9">👩‍🏫</div>
+    Teachers
+  </a>
+
+  <a class="btn">
+    <div class="icon c10">📱</div>
+    App Info
+  </a>
+
+</div>
 
 </div>
 
 <script>
-function sendReport(e){
-  e.preventDefault();
-
-  const url = "https://script.google.com/macros/s/AKfycbyMqNARUd91z_EPpEyh91ACwqYtGE7Xz-5xXDdDYjIwoAT3BPeFz93kQsOKYywuMfLd/exec";
-
-  alert("Processing request...");
-
-  fetch(url)
-    .then(res => res.text())
-    .then(text => {
-      let data;
-      try { data = JSON.parse(text); }
-      catch(e){ data = {status:"error", message:text}; }
-
-      alert((data.status === "success" ? "SUCCESS: " : "ERROR: ") + data.message);
-    })
-    .catch(err => {
-      console.log(err);
-      alert("Network error occurred");
-    });
-}
-
-function generatePDF(e){
-  e.preventDefault();
-
-  const url = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
-
-  alert("Generating document...");
-
-  fetch(url + "?action=generateAndSendPDF")
-    .then(res => res.text())
-    .then(() => alert("Lesson Plan generated successfully"))
-    .catch(() => alert("Failed to generate document"));
-}
-
-function runSeatPlan(e){
-  e.preventDefault();
-
-  const url = "https://script.google.com/macros/s/AKfycbxQ1pJ8apX9TU153XTUQXL1rltnPRmS0jQiXJ0pzInRW_FeWVRuOUFbNgalcdYWLsuS/exec";
-
-  alert("Processing seat plan...");
-
-  fetch(url + "?action=seatplan")
-    .then(res => res.text())
-    .then(data => {
-      alert(data);
-      console.log(data);
-    })
-    .catch(err => {
-      alert("Seat plan failed");
-    });
-}
+function sendReport(e){ e.preventDefault(); }
+function generatePDF(e){ e.preventDefault(); }
+function runSeatPlan(e){ e.preventDefault(); }
 </script>
 
 </body>
