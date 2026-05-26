@@ -116,11 +116,11 @@ a{
       Lesson Plan
     </a>
 
-   <a class="btn" 
-   href="https://script.google.com/macros/s/AKfycbyKsx4-PCwoMbc4kJ6kpNdNy4BS7GOcn-xTK0c4N4Haad72i05QrFeowzeRuxY6NQL5/exec"
-   target="_blank">
-   <div class="icon c4">🧾</div>
-  Seat Plan
+ <!-- SEAT Plan -->
+    <a class="btn" href="#" onclick="generateSeatPlanPDF(event)">
+      <div class="icon c4">📚</div>
+      Seat Plan
+    </a>
 </a>
     <a class="btn" href="#"><div class="icon c5">📝</div>Exams</a>
     <a class="btn" href="#"><div class="icon c6">📄</div>Results</a>
@@ -192,7 +192,7 @@ function generatePDF(e) {
   =========================
    GENERATE PDF (SEAT PLAN)
 ========================= */
-function generateSeatPlanPDF() {
+  function generateSeatPlanPDF() {
   e.preventDefault();
 
   const url = "https://script.google.com/macros/s/AKfycbyAHU1b4kKvLqwziF9zsiFtcdqT26UKgjpTKqlIIBo/dev";
