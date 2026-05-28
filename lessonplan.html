@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Academic Lesson Plan System</title>
+<title>নির্ঝর ক্যান্টনমেন্ট পাবলিক স্কুল ও কলেজ</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -41,8 +41,8 @@ body{
 }
 
 .topbar p{
-    font-size:12px;
-    opacity:0.9;
+    font-size:13px;
+    opacity:0.95;
 }
 
 /* =======================
@@ -101,93 +101,15 @@ button{
     border-radius:10px;
     padding:12px 14px;
     cursor:pointer;
+    background:linear-gradient(135deg,#6c7ce0,#8e9fff);
+    color:white;
     font-weight:500;
-    font-size:14px;
+    transition:0.3s;
 }
 
-.btn-save{
-    width:100%;
-    margin-top:12px;
-    background:#7d8cff;
-    color:white;
-}
-
-.btn-save:hover{
-    background:#6a78ff;
-}
-
-.btn-clear{
-    width:100%;
-    margin-top:8px;
-    background:#f1f3f9;
-    color:#333;
-}
-
-/* =======================
-   STATUS
-======================= */
-.status{
-    text-align:center;
-    margin-top:10px;
-    font-size:13px;
-    color:#666;
-}
-
-/* =======================
-   TABLE
-======================= */
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th{
-    background:#f3f6ff;
-    padding:12px;
-    text-align:left;
-    font-size:13px;
-    color:#3b4a6b;
-}
-
-td{
-    padding:12px;
-    border-bottom:1px solid #f0f3fa;
-    font-size:13px;
-}
-
-tr:hover{
-    background:#f9fbff;
-}
-
-/* =======================
-   ACTION BUTTONS
-======================= */
-.action{
-    display:flex;
-    gap:6px;
-}
-
-.edit{
-    background:#ffeaa7;
-    font-size:12px;
-    padding:8px 10px;
-}
-
-.delete{
-    background:#ff7675;
-    color:white;
-    font-size:12px;
-    padding:8px 10px;
-}
-
-/* =======================
-   FOOTER
-======================= */
-.footer{
-    text-align:center;
-    padding:15px;
-    font-size:12px;
-    color:#9aa4b2;
+button:hover{
+    opacity:0.9;
+    transform:scale(1.02);
 }
 
 </style>
@@ -195,174 +117,35 @@ tr:hover{
 
 <body>
 
-<!-- HEADER -->
 <div class="topbar">
-    <h1>Nirjhor Cantonment Public School & College</h1>
-    <p>Lesson Plan</p>
+    <h1>নির্ঝর ক্যান্টনমেন্ট পাবলিক স্কুল ও কলেজ</h1>
+    <p>বন্ধের পড়া</p>
 </div>
 
 <div class="container">
 
-    <!-- FORM -->
     <div class="card">
 
-        <input type="hidden" id="row">
-
-        <label>Subject</label>
-        <select id="subject">
-            <option>Loading...</option>
+        <label>বিষয় নির্বাচন করুন</label>
+        <select>
+            <option>বাংলা</option>
+            <option>ইংরেজি</option>
+            <option>গণিত</option>
+            <option>উদ্ভিদবিজ্ঞান</option>
+            <option>প্রাণিবিজ্ঞান</option>
+            <option>পদার্থবিজ্ঞান</option>
+            <option>রসায়ন</option>
+            <option>তথ্য ও যোগাযোগ প্রযুক্তি (আইসিটি)</option>
         </select>
 
-        <label>Lesson Plan</label>
-        <textarea id="lesson"></textarea>
+        <label>পাঠ পরিকল্পনা</label>
+        <textarea placeholder="এখানে লিখুন..."></textarea>
 
-        <button class="btn-save" onclick="save()">Save Lesson Plan</button>
-        <button class="btn-clear" onclick="clearForm()">Clear</button>
-
-        <div class="status" id="status"></div>
-
-    </div>
-
-    <!-- TABLE -->
-    <div class="card">
-
-        <h3 style="margin-bottom:10px;">Submitted Lesson Plans</h3>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Subject</th>
-                    <th>Lesson Plan</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-            <tbody id="table"></tbody>
-        </table>
+        <button>সংরক্ষণ করুন</button>
 
     </div>
 
 </div>
-
-<div class="footer">
-    © Academic Management System • College Edition
-</div>
-
-<script>
-
-const URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
-
-// LOAD SUBJECTS
-async function loadSubjects(){
-    try{
-        const res = await fetch(URL+"?action=getSubjects");
-        const data = await res.json();
-
-        const select = document.getElementById("subject");
-        select.innerHTML = `<option value="">Select Subject</option>`;
-
-        data.forEach(s=>{
-            select.innerHTML += `<option value="${s}">${s}</option>`;
-        });
-
-    }catch(e){
-        document.getElementById("status").innerText = "Failed to load subjects";
-    }
-}
-
-// LOAD LESSONS
-async function loadLessons(){
-    try{
-        const res = await fetch(URL+"?action=getLessonPlans");
-        const data = await res.json();
-
-        const table = document.getElementById("table");
-        table.innerHTML = "";
-
-        data.forEach(item=>{
-            table.innerHTML += `
-            <tr>
-                <td>${item.subject}</td>
-                <td>${item.lessonPlan}</td>
-                <td>
-                    <div class="action">
-                        <button class="edit"
-                        onclick='edit(${item.row},${JSON.stringify(item.subject)},${JSON.stringify(item.lessonPlan)})'>
-                        Edit
-                        </button>
-
-                        <button class="delete" onclick="del(${item.row})">
-                        Delete
-                        </button>
-                    </div>
-                </td>
-            </tr>`;
-        });
-
-    }catch(e){
-        document.getElementById("table").innerHTML =
-        "<tr><td colspan='3'>Load failed</td></tr>";
-    }
-}
-
-// SAVE
-async function save(){
-    const row = document.getElementById("row").value;
-    const subject = document.getElementById("subject").value;
-    const lesson = document.getElementById("lesson").value;
-
-    if(!subject || !lesson){
-        document.getElementById("status").innerText = "Fill all fields";
-        return;
-    }
-
-    const form = new FormData();
-    form.append("action","saveLesson");
-    form.append("row",row);
-    form.append("subject",subject);
-    form.append("lessonPlan",lesson);
-
-    const res = await fetch(URL,{method:"POST",body:form});
-    document.getElementById("status").innerText = await res.text();
-
-    clearForm();
-    loadLessons();
-}
-
-// EDIT
-function edit(row,sub,plan){
-    document.getElementById("row").value = row;
-    document.getElementById("subject").value = sub;
-    document.getElementById("lesson").value = plan;
-}
-
-// DELETE
-async function del(row){
-    if(!confirm("Delete this record?")) return;
-
-    const form = new FormData();
-    form.append("action","deleteLesson");
-    form.append("row",row);
-
-    const res = await fetch(URL,{method:"POST",body:form});
-
-    document.getElementById("status").innerText = await res.text();
-
-    loadLessons();
-}
-
-// CLEAR
-function clearForm(){
-    document.getElementById("row").value="";
-    document.getElementById("subject").value="";
-    document.getElementById("lesson").value="";
-}
-
-// INIT
-loadSubjects();
-loadLessons();
-
-</script>
 
 </body>
 </html>
