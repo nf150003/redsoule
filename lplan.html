@@ -9,49 +9,76 @@
 <style>
 
 body{
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background:#eef3fb;
-    padding:20px;
+    padding:10px;
 }
 
-/* 🟦 MAIN CONTAINER */
+/* 📦 CONTAINER */
 .container{
     max-width:1100px;
-    margin:50px auto;
+    margin:20px auto;
     background:white;
-    padding:25px;
-    border-radius:15px;
+    padding:15px;
+    border-radius:12px;
     border:2px solid #1e3a8a;
-    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
 }
 
+/* 🏫 TITLE */
 h2{
     text-align:center;
     color:#1e3a8a;
-    line-height:1.6;
+    font-size:20px;
+    line-height:1.5;
 }
 
+/* 📋 FORM */
 .form-box{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:1fr;
     gap:10px;
-    margin-top:20px;
+    margin-top:15px;
 }
 
+/* 📱 TABLE FIX FOR MOBILE */
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+    display:block;
+    overflow-x:auto;
+    white-space:nowrap;
+    border:2px solid #1e3a8a;
+}
+
+th, td{
+    border:1px solid #cbd5e1;
+    padding:8px;
+    text-align:center;
+    font-size:14px;
+}
+
+th{
+    background:#1e3a8a;
+    color:white;
+}
+
+/* INPUTS */
 select, textarea{
     padding:10px;
     border:1px solid #ccc;
     border-radius:6px;
-    width:100%;
-    box-sizing:border-box;
     font-size:15px;
+    width:100%;
 }
 
 textarea{
-    height:120px;
+    height:100px;
     resize:none;
 }
 
+/* BUTTONS */
 button{
     padding:10px;
     border:none;
@@ -66,37 +93,26 @@ button:hover{
     background:#059669;
 }
 
-/* 🟦 TABLE STYLE */
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:30px;
-    border:2px solid #1e3a8a;
+/* ACTION BUTTONS */
+.edit-btn{ background:#f59e0b; }
+.delete-btn{ background:red; }
+
+/* 📱 RESPONSIVE */
+@media(min-width:768px){
+
+    .form-box{
+        grid-template-columns:1fr 1fr;
+    }
+
+    h2{
+        font-size:26px;
+    }
 }
 
-th, td{
-    border:1px solid #cbd5e1;
-    padding:10px;
-    text-align:center;
-}
+@media(min-width:1024px){
 
-th{
-    background:#1e3a8a;
-    color:white;
-}
-
-.edit-btn{
-    background:#f59e0b;
-}
-
-.delete-btn{
-    background:red;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-    table{
-        font-size:13px;
+    .form-box{
+        grid-template-columns:1fr 1fr 1fr;
     }
 }
 
@@ -115,7 +131,7 @@ th{
 <div class="form-box">
 
 <select id="subject">
-<option value="">বিষয় নির্বাচন</option>
+<option>বিষয় নির্বাচন</option>
 <option>বাংলা</option>
 <option>ইংরেজি</option>
 <option>গণিত</option>
@@ -127,13 +143,13 @@ th{
 </select>
 
 <select id="class">
-<option value="">শ্রেণী নির্বাচন</option>
+<option>শ্রেণী নির্বাচন</option>
 <option>একাদশ</option>
 <option>দ্বাদশ</option>
 </select>
 
 <select id="section">
-<option value="">শাখা নির্বাচন</option>
+<option>শাখা নির্বাচন</option>
 <option>ওমেগা</option>
 <option>ডেলটা</option>
 <option>পাই</option>
@@ -148,8 +164,8 @@ th{
 
 </div>
 
-<div style="text-align:center;margin-top:15px;">
-<button onclick="saveLesson()">💾 Save Lesson Plan</button>
+<div style="text-align:center;margin-top:10px;">
+<button onclick="saveLesson()">💾 Save</button>
 </div>
 
 <table>
@@ -185,8 +201,6 @@ import {
     deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-
-// 🔥 FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "sjmnew-849d4.firebaseapp.com",
@@ -199,13 +213,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-
-// EDIT MODE
 let editMode = false;
 let editId = "";
 
-
-// ================= SAVE =================
+// 💾 SAVE
 window.saveLesson = async function(){
 
     const subject = document.getElementById("subject").value;
@@ -218,7 +229,6 @@ window.saveLesson = async function(){
         return;
     }
 
-    // EDIT
     if(editMode){
 
         await updateDoc(doc(db,"lessoplan",editId),{
@@ -228,28 +238,21 @@ window.saveLesson = async function(){
             topic
         });
 
-        alert("✏️ Updated");
-
         editMode = false;
         editId = "";
-
         loadData();
-        clearForm();
         return;
     }
 
-    // AUTO SL
     const snapshot = await getDocs(collection(db,"lessoplan"));
-
     let maxSL = 0;
 
-    snapshot.forEach(docSnap=>{
-        const d = docSnap.data();
-        if(d.sl > maxSL) maxSL = d.sl;
+    snapshot.forEach(d=>{
+        const data = d.data();
+        if(data.sl > maxSL) maxSL = data.sl;
     });
 
     const newSL = maxSL + 1;
-
     const docId = "LP" + Date.now();
 
     await setDoc(doc(db,"lessoplan",docId),{
@@ -260,14 +263,11 @@ window.saveLesson = async function(){
         topic
     });
 
-    alert("✅ Saved");
-
     loadData();
     clearForm();
 };
 
-
-// ================= LOAD =================
+// 📥 LOAD
 async function loadData(){
 
     const table = document.getElementById("tableBody");
@@ -286,29 +286,18 @@ async function loadData(){
             <td>${d.class}</td>
             <td>${d.section}</td>
             <td>${d.topic}</td>
-
             <td>
-                <button class="edit-btn"
-                onclick='editLesson("${docSnap.id}", ${JSON.stringify(d)})'>
-                Edit
-                </button>
-
-                <button class="delete-btn"
-                onclick="deleteLesson('${docSnap.id}')">
-                Delete
-                </button>
+                <button class="edit-btn" onclick='editLesson("${docSnap.id}",${JSON.stringify(d)})'>Edit</button>
+                <button class="delete-btn" onclick="deleteLesson('${docSnap.id}')">Delete</button>
             </td>
-        </tr>
-        `;
+        </tr>`;
     });
 }
 
 window.loadData = loadData;
 
-
-// ================= EDIT =================
+// ✏️ EDIT
 window.editLesson = function(id,data){
-
     document.getElementById("subject").value = data.subject;
     document.getElementById("class").value = data.class;
     document.getElementById("section").value = data.section;
@@ -316,31 +305,21 @@ window.editLesson = function(id,data){
 
     editMode = true;
     editId = id;
-
-    window.scrollTo({top:0,behavior:"smooth"});
 };
 
-
-// ================= DELETE =================
+// 🗑 DELETE
 window.deleteLesson = async function(id){
-
-    if(!confirm("Delete this lesson?")) return;
-
+    if(!confirm("Delete?")) return;
     await deleteDoc(doc(db,"lessoplan",id));
-
-    alert("🗑 Deleted");
-
     loadData();
 };
 
-
-// ================= CLEAR =================
+// CLEAR
 function clearForm(){
-
-    document.getElementById("subject").value = "";
-    document.getElementById("class").value = "";
-    document.getElementById("section").value = "";
-    document.getElementById("topic").value = "";
+    document.getElementById("subject").value="";
+    document.getElementById("class").value="";
+    document.getElementById("section").value="";
+    document.getElementById("topic").value="";
 }
 
 loadData();
