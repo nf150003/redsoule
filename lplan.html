@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>নির্ঝর ক্যান্টনমেন্ট পাবলিক স্কুল ও কলেজ - পাঠ পরিকল্পনা</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#eef3fb;
+    padding:20px;
+}
+
+/* 🟦 MAIN CONTAINER */
+.container{
+    max-width:1100px;
+    margin:50px auto;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    border:2px solid #1e3a8a;
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+}
+
+h2{
+    text-align:center;
+    color:#1e3a8a;
+    line-height:1.6;
+}
+
+.form-box{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:10px;
+    margin-top:20px;
+}
+
+select, textarea{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    width:100%;
+    box-sizing:border-box;
+    font-size:15px;
+}
+
+textarea{
+    height:120px;
+    resize:none;
+}
+
+button{
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    background:#10b981;
+    color:white;
+    cursor:pointer;
+    font-size:15px;
+}
+
+button:hover{
+    background:#059669;
+}
+
+/* 🟦 TABLE STYLE */
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:30px;
+    border:2px solid #1e3a8a;
+}
+
+th, td{
+    border:1px solid #cbd5e1;
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#1e3a8a;
+    color:white;
+}
+
+.edit-btn{
+    background:#f59e0b;
+}
+
+.delete-btn{
+    background:red;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    table{
+        font-size:13px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>
+নির্ঝর ক্যান্টনমেন্ট পাবলিক স্কুল ও কলেজ<br>
+পাঠ পরিকল্পনা
+</h2>
+
+<div class="form-box">
+
+<select id="subject">
+<option value="">বিষয় নির্বাচন</option>
+<option>বাংলা</option>
+<option>ইংরেজি</option>
+<option>গণিত</option>
+<option>রসায়নবিজ্ঞান</option>
+<option>পদার্থবিজ্ঞান</option>
+<option>আইসিটি</option>
+<option>উদ্ভিদবিদ্যা</option>
+<option>প্রাণীবিদ্যা</option>
+</select>
+
+<select id="class">
+<option value="">শ্রেণী নির্বাচন</option>
+<option>একাদশ</option>
+<option>দ্বাদশ</option>
+</select>
+
+<select id="section">
+<option value="">শাখা নির্বাচন</option>
+<option>ওমেগা</option>
+<option>ডেলটা</option>
+<option>পাই</option>
+<option>সিগমা</option>
+<option>ফোটন</option>
+<option>প্রোটন</option>
+<option>নিউট্রন</option>
+<option>অরবিট</option>
+</select>
+
+<textarea id="topic" placeholder="পাঠ পরিকল্পনা লিখুন"></textarea>
+
+</div>
+
+<div style="text-align:center;margin-top:15px;">
+<button onclick="saveLesson()">💾 Save Lesson Plan</button>
+</div>
+
+<table>
+
+<thead>
+<tr>
+<th>SL</th>
+<th>বিষয়</th>
+<th>শ্রেণী</th>
+<th>শাখা</th>
+<th>টপিক</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="tableBody"></tbody>
+
+</table>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    setDoc,
+    updateDoc,
+    deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// 🔥 FIREBASE CONFIG
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "sjmnew-849d4.firebaseapp.com",
+  projectId: "sjmnew-849d4",
+  storageBucket: "sjmnew-849d4.appspot.com",
+  messagingSenderId: "551669982044",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+// EDIT MODE
+let editMode = false;
+let editId = "";
+
+
+// ================= SAVE =================
+window.saveLesson = async function(){
+
+    const subject = document.getElementById("subject").value;
+    const className = document.getElementById("class").value;
+    const section = document.getElementById("section").value;
+    const topic = document.getElementById("topic").value.trim();
+
+    if(!subject || !className || !section || !topic){
+        alert("সব তথ্য পূরণ করুন");
+        return;
+    }
+
+    // EDIT
+    if(editMode){
+
+        await updateDoc(doc(db,"lessoplan",editId),{
+            subject,
+            class: className,
+            section,
+            topic
+        });
+
+        alert("✏️ Updated");
+
+        editMode = false;
+        editId = "";
+
+        loadData();
+        clearForm();
+        return;
+    }
+
+    // AUTO SL
+    const snapshot = await getDocs(collection(db,"lessoplan"));
+
+    let maxSL = 0;
+
+    snapshot.forEach(docSnap=>{
+        const d = docSnap.data();
+        if(d.sl > maxSL) maxSL = d.sl;
+    });
+
+    const newSL = maxSL + 1;
+
+    const docId = "LP" + Date.now();
+
+    await setDoc(doc(db,"lessoplan",docId),{
+        sl:newSL,
+        subject,
+        class: className,
+        section,
+        topic
+    });
+
+    alert("✅ Saved");
+
+    loadData();
+    clearForm();
+};
+
+
+// ================= LOAD =================
+async function loadData(){
+
+    const table = document.getElementById("tableBody");
+    table.innerHTML = "";
+
+    const snapshot = await getDocs(collection(db,"lessoplan"));
+
+    snapshot.forEach(docSnap=>{
+
+        const d = docSnap.data();
+
+        table.innerHTML += `
+        <tr>
+            <td>${d.sl}</td>
+            <td>${d.subject}</td>
+            <td>${d.class}</td>
+            <td>${d.section}</td>
+            <td>${d.topic}</td>
+
+            <td>
+                <button class="edit-btn"
+                onclick='editLesson("${docSnap.id}", ${JSON.stringify(d)})'>
+                Edit
+                </button>
+
+                <button class="delete-btn"
+                onclick="deleteLesson('${docSnap.id}')">
+                Delete
+                </button>
+            </td>
+        </tr>
+        `;
+    });
+}
+
+window.loadData = loadData;
+
+
+// ================= EDIT =================
+window.editLesson = function(id,data){
+
+    document.getElementById("subject").value = data.subject;
+    document.getElementById("class").value = data.class;
+    document.getElementById("section").value = data.section;
+    document.getElementById("topic").value = data.topic;
+
+    editMode = true;
+    editId = id;
+
+    window.scrollTo({top:0,behavior:"smooth"});
+};
+
+
+// ================= DELETE =================
+window.deleteLesson = async function(id){
+
+    if(!confirm("Delete this lesson?")) return;
+
+    await deleteDoc(doc(db,"lessoplan",id));
+
+    alert("🗑 Deleted");
+
+    loadData();
+};
+
+
+// ================= CLEAR =================
+function clearForm(){
+
+    document.getElementById("subject").value = "";
+    document.getElementById("class").value = "";
+    document.getElementById("section").value = "";
+    document.getElementById("topic").value = "";
+}
+
+loadData();
+
+</script>
+
+</body>
+</html>
