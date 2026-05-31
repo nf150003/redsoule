@@ -90,6 +90,12 @@ h1{
     color:#fff;
 }
 
+/* ✅ NEW: red highlight for dot */
+.dot.highlight{
+    background: radial-gradient(circle at 30% 30%, #ef4444, #dc2626);
+    box-shadow:0 0 0 3px #991b1b;
+}
+
 .main{
     display:flex;
     justify-content:space-between;
@@ -213,13 +219,11 @@ function render(data){
 
     if(!data || !data.length) return;
 
-    // 🔥 SAFE COLUMN MAPPING (NO KEY ORDER BUG)
     const headers = Object.keys(data[0]);
     const main1Key = headers[0];
     const main2Key = headers[1];
     const subKeys = headers.slice(2);
 
-    // STEP 1: collect ALL subflows globally
     let all = [];
 
     data.forEach((row,rowIndex)=>{
@@ -237,11 +241,9 @@ function render(data){
         });
     });
 
-    // STEP 2: pick ONLY ONE winner
     all.sort((a,b)=>a.diff - b.diff);
     const winner = all.length ? all[0] : null;
 
-    // STEP 3: render
     data.forEach((row,index)=>{
 
         const mainDate = parseDate(row[main1Key]);
@@ -261,6 +263,9 @@ function render(data){
 
         let steps = "";
 
+        // ✅ NEW FLAG
+        let cardHasHighlight = false;
+
         subKeys.forEach((k,i)=>{
 
             if(row[k]){
@@ -269,6 +274,8 @@ function render(data){
                     winner &&
                     winner.rowIndex === index &&
                     winner.keyIndex === i;
+
+                if(isHighlight) cardHasHighlight = true;
 
                 steps += `<div class="step ${isHighlight ? "highlight" : ""}">
                     ${k} : ${formatDate(row[k])}
@@ -279,7 +286,7 @@ function render(data){
         const html = `
         <div class="card ${status}" onclick="this.classList.toggle('active')">
 
-            <div class="dot">${index+1}</div>
+            <div class="dot ${cardHasHighlight ? "highlight" : ""}">${index+1}</div>
 
             <div class="main">
                 <div>${formatDate(row[main1Key] || "")}</div>
