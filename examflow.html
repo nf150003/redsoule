@@ -34,14 +34,12 @@ h1{
     padding:22px 14px;
 }
 
-/* removed timeline line completely */
 .timeline{
     position:relative;
     margin:0;
     padding:0;
 }
 
-/* CARD */
 .card{
     position:relative;
     background:#fff;
@@ -72,7 +70,6 @@ h1{
     box-shadow:0 14px 30px rgba(0,0,0,0.12);
 }
 
-/* SERIAL DOT */
 .dot{
     position:absolute;
     left:-36px;
@@ -93,7 +90,6 @@ h1{
     color:#fff;
 }
 
-/* MAIN FLOW */
 .main{
     display:flex;
     justify-content:space-between;
@@ -108,7 +104,6 @@ h1{
     text-align:center;
 }
 
-/* DETAILS */
 .details{
     max-height:0;
     overflow:hidden;
@@ -133,7 +128,12 @@ h1{
     border-left:4px solid #0ea5e9;
 }
 
-/* STATUS */
+/* ONLY ONE SUBFLOW HIGHLIGHT */
+.step.highlight{
+    color:#ef4444;
+    font-weight:800;
+}
+
 .card.done{
     opacity:0.5;
     filter:grayscale(1);
@@ -148,7 +148,6 @@ h1{
     transform:scale(1.01);
 }
 
-/* MOBILE */
 @media (max-width: 600px){
 
     .card{
@@ -182,7 +181,7 @@ h1{
 
 <script>
 
-const URL = "https://script.google.com/macros/s/AKfycbzJKSCwQOfGTQ8pHwb2QX8XUUnWG3LLNbMlkGS_5Z_BzCeRhZzop8-jJ8tQoa9AzmbQ/exec?action=getFlowchartData";
+const URL = "https://script.google.com/macros/s/AKfycbxS5mloo2qfEpACP0SSoRKXIhao-a6DPq9SfUleYruhznjhGVioqhyw6_pvEQ98PU8w/exec?action=getFlowchartData";
 
 const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
@@ -234,10 +233,28 @@ function render(data){
         const main1 = formatDate(row[keys[0]] || "");
         const main2 = formatDate(row[keys[1]] || "");
 
+        // 🔥 FIND ONLY ONE NEAREST SUBFLOW DATE
+        const subKeys = keys.slice(2);
+
+        let nearestIndex = -1;
+        let nearestDiff = Infinity;
+
+        subKeys.forEach((k, i)=>{
+            const d = parseDate(row[k]);
+            if(d){
+                const diff = (d - now);
+                if(diff >= 0 && diff < nearestDiff){
+                    nearestDiff = diff;
+                    nearestIndex = i;
+                }
+            }
+        });
+
         let steps = "";
-        keys.slice(2).forEach(k=>{
+        subKeys.forEach((k,i)=>{
             if(row[k]){
-                steps += `<div class="step">${k} : ${formatDate(row[k])}</div>`;
+                const isHighlight = (i === nearestIndex);
+                steps += `<div class="step ${isHighlight ? "highlight" : ""}">${k} : ${formatDate(row[k])}</div>`;
             }
         });
 
