@@ -34,33 +34,23 @@ h1{
     padding:22px 14px;
 }
 
+/* removed timeline line completely */
 .timeline{
     position:relative;
-    margin-left:16px;
-    padding-left:30px;
-}
-
-.timeline::before{
-    content:"";
-    position:absolute;
-    left:12px;
-    top:0;
-    bottom:0;
-    width:4px;
-    background: linear-gradient(180deg,#1e3a8a,#2563eb,#0ea5e9,#14b8a6);
-    border-radius:20px;
+    margin:0;
+    padding:0;
 }
 
 /* CARD */
 .card{
     position:relative;
     background:#fff;
-    border-left:6px solid #2563eb;
-    margin:18px 0;
+    margin:18px auto;
     border-radius:14px;
     padding:18px;
     box-shadow:0 10px 22px rgba(0,0,0,0.08);
     cursor:pointer;
+    width:92%;
 
     opacity:0;
     transform:translateY(18px);
@@ -103,7 +93,7 @@ h1{
     color:#fff;
 }
 
-/* MAIN FLOW (now simple 2-part layout) */
+/* MAIN FLOW */
 .main{
     display:flex;
     justify-content:space-between;
@@ -158,18 +148,8 @@ h1{
     transform:scale(1.01);
 }
 
-/* MOBILE FIX */
+/* MOBILE */
 @media (max-width: 600px){
-
-    .timeline{
-        margin-left:0;
-        padding-left:0;
-    }
-
-    .timeline::before{
-        left:50%;
-        transform:translateX(-50%);
-    }
 
     .card{
         width:92%;
