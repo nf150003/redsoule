@@ -37,12 +37,16 @@ h1{
     box-shadow:0 3px 10px rgba(0,0,0,0.08);
 }
 
+/* COLORS */
 .blue{background:#e3f2fd;border:2px solid #1976d2;}
 .green{background:#e8f5e9;border:2px solid #2e7d32;}
 .orange{background:#fff3e0;border:2px solid #ef6c00;}
 .purple{background:#f3e5f5;border:2px solid #6a1b9a;}
 .red{background:#ffebee;border:2px solid #c62828;}
 .teal{background:#e0f2f1;border:2px solid #00796b;}
+.indigo{background:#e8eaf6;border:2px solid #3f51b5;}
+.pink{background:#fce4ec;border:2px solid #ad1457;}
+.cyan{background:#e0f7fa;border:2px solid #006064;}
 
 .title{font-size:18px;font-weight:700;}
 .date{font-size:14px;color:#444;margin-top:4px;}
@@ -75,28 +79,27 @@ h1{
 
 <script>
 
-const URL = "https://script.google.com/macros/s/AKfycbz0smqbtpraCVuC1V7Lhi14r4rmMrf8mUaEcKwZ5qVSeRBu7bBjRHM1Fk5zAEsAj5Gl/exec";
+const URL = "https://script.google.com/macros/s/AKfycbz0smqbtpraCVuC1V7Lhi14r4rmMrf8mUaEcKwZ5qVSeRBu7bBjRHM1Fk5zAEsAj5Gl/exec?action=getFlowchartData";
 
-// 🔥 AUTO LOAD + AUTO REFRESH
 function loadData(){
+
     fetch(URL)
     .then(res => res.text())
     .then(text => {
-        let data;
+
+        let data = [];
+
         try {
             data = JSON.parse(text);
         } catch (e) {
-            console.log(text);
-            data = [];
+            console.log("Raw response:", text);
         }
+
         render(data);
     })
-    .catch(err => {
-        console.log("Error:", err);
-    });
+    .catch(err => console.log("Fetch error:", err));
 }
 
-// render UI
 function render(data){
 
     const box = document.getElementById("flowchart");
@@ -130,16 +133,13 @@ function render(data){
     });
 }
 
-// toggle steps
 function toggle(el){
     const sub = el.querySelector(".subflow");
     sub.style.display = sub.style.display === "block" ? "none" : "block";
 }
 
-// first load
+// AUTO LOAD + AUTO REFRESH
 loadData();
-
-// 🔥 AUTO REFRESH EVERY 10 SECONDS
 setInterval(loadData, 10000);
 
 </script>
