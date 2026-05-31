@@ -26,21 +26,16 @@ h1{
     text-align:center;
     font-size:22px;
     font-weight:700;
-    color:#111;
-    margin-bottom:20px;
 }
 
-/* BOX */
 .box{
     padding:14px;
     margin:16px 0;
     border-radius:14px;
-    text-align:center;
     cursor:pointer;
     box-shadow:0 3px 10px rgba(0,0,0,0.08);
 }
 
-/* COLORS */
 .blue{background:#e3f2fd;border:2px solid #1976d2;}
 .green{background:#e8f5e9;border:2px solid #2e7d32;}
 .orange{background:#fff3e0;border:2px solid #ef6c00;}
@@ -52,7 +47,7 @@ h1{
 .cyan{background:#e0f7fa;border:2px solid #006064;}
 
 .title{font-size:19px;font-weight:700;}
-.date{font-size:14px;color:#444;margin-top:5px;}
+.date{font-size:14px;color:#444;}
 
 .subflow{display:none;margin-top:10px;}
 
@@ -62,7 +57,6 @@ h1{
     padding:9px;
     border-radius:10px;
     border-left:4px solid #555;
-    text-align:left;
 }
 
 .arrow{
@@ -71,54 +65,47 @@ h1{
     margin:5px 0;
 }
 
-@media(max-width:480px){
-    h1{font-size:18px;}
-}
-
 </style>
 </head>
 
 <body>
 
 <div class="container">
-
 <h1>📚 পরীক্ষার ফ্লোচার্ট ২০২৬</h1>
-
 <div id="flowchart">Loading...</div>
-
 </div>
 
 <script>
 
-// ✅ YOUR WEB APP
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzv-_90ktjXnD9U4zgsQPVsEqFIljR8CrhAw6ihkOkovNd1JJqHFgiIfpS4OlcUw9fq/exec";
+const WEB_APP_URL =
+"https://script.google.com/macros/s/AKfycbzv-_90ktjXnD9U4zgsQPVsEqFIljR8CrhAw6ihkOkovNd1JJqHFgiIfpS4OlcUw9fq/exec?action=getFlowchartData";
 
-// FETCH DATA (SAFE MODE)
+// SAFE FETCH (GitHub compatible)
 fetch(WEB_APP_URL)
-.then(res => res.text())   // important fix
+.then(res => res.text())
 .then(text => {
+    let data;
     try {
-        return JSON.parse(text);
+        data = JSON.parse(text);
     } catch (e) {
-        console.log("JSON Error:", text);
-        return [];
+        console.log("RAW:", text);
+        data = [];
     }
+    render(data);
 })
-.then(renderFlowchart)
-.catch(err => console.log("Error:", err));
+.catch(err => console.log(err));
 
-// RENDER
-function renderFlowchart(data){
+function render(data){
 
-    const container = document.getElementById("flowchart");
-    container.innerHTML = "";
+    const box = document.getElementById("flowchart");
+    box.innerHTML = "";
 
-    if (!Array.isArray(data)) {
-        container.innerHTML = "No data found";
+    if (!Array.isArray(data) || data.length === 0) {
+        box.innerHTML = "No data found";
         return;
     }
 
-    data.forEach((item, index) => {
+    data.forEach((item, i) => {
 
         const steps = item.steps || [];
 
@@ -133,18 +120,17 @@ function renderFlowchart(data){
         </div>
         `;
 
-        if(index < data.length - 1){
+        if (i < data.length - 1) {
             html += `<div class="arrow">⬇️</div>`;
         }
 
-        container.insertAdjacentHTML("beforeend", html);
+        box.insertAdjacentHTML("beforeend", html);
     });
 }
 
-// TOGGLE
 function toggle(el){
-    let sub = el.querySelector(".subflow");
-    sub.style.display = (sub.style.display === "block") ? "none" : "block";
+    const sub = el.querySelector(".subflow");
+    sub.style.display = sub.style.display === "block" ? "none" : "block";
 }
 
 </script>
