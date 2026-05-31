@@ -3,108 +3,155 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Exam Flow 2026</title>
+<title>Exam Timeline 2026</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 body{
     margin:0;
-    font-family:"Hind Siliguri",sans-serif;
-    background:linear-gradient(135deg,#eef2ff,#fdf2f8,#ecfeff);
-    min-height:100vh;
-}
-
-.container{
-    max-width:750px;
-    margin:auto;
-    padding:20px;
+    font-family:"Noto Sans Bengali","Hind Siliguri",sans-serif;
+    background: linear-gradient(135deg,#f5f7ff,#fdf2f8,#f0fdfa);
+    color:#1f2937;
+    line-height:1.6;
 }
 
 h1{
+    margin:0;
+    padding:20px;
     text-align:center;
-    font-size:26px;
+    font-size:22px;
     font-weight:800;
-    margin-bottom:20px;
-    color:#111;
+    color:#fff;
+    background: linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9,#14b8a6);
+    box-shadow:0 6px 18px rgba(0,0,0,0.15);
 }
 
-/* FLOW CARD */
+.container{
+    max-width:860px;
+    margin:auto;
+    padding:22px 14px;
+}
+
+.timeline{
+    position:relative;
+    margin-left:16px;
+    padding-left:30px;
+}
+
+.timeline::before{
+    content:"";
+    position:absolute;
+    left:12px;
+    top:0;
+    bottom:0;
+    width:4px;
+    background: linear-gradient(180deg,#1e3a8a,#2563eb,#0ea5e9,#14b8a6);
+    border-radius:20px;
+}
+
 .card{
+    position:relative;
     background:#fff;
+    border-left:6px solid #2563eb;
     margin:18px 0;
-    border-radius:18px;
-    padding:16px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 10px 22px rgba(0,0,0,0.08);
     cursor:pointer;
-    transition:0.25s;
-    border-left:6px solid #6366f1;
+    opacity:0;
+    transform:translateY(18px);
+    animation:fadeUp 0.5s ease forwards;
+}
+
+@keyframes fadeUp{
+    to{ opacity:1; transform:translateY(0); }
 }
 
 .card:hover{
-    transform:translateY(-2px);
+    transform:translateY(-3px);
+    transition:0.2s;
 }
 
-/* MAIN FLOW CENTER */
+/* SERIAL */
+.dot{
+    position:absolute;
+    left:-36px;
+    top:22px;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #22c55e, #16a34a);
+    border:3px solid #ffffff;
+    box-shadow:0 0 0 3px #15803d;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    font-weight:900;
+    color:#fff;
+}
+
+/* MAIN */
 .main{
     display:flex;
     justify-content:space-between;
     align-items:center;
     font-weight:700;
-    font-size:18px;
-    text-align:center;
+    font-size:15px;
+    gap:14px;
 }
 
 .main div{
     flex:1;
+    text-align:center;
 }
 
-/* ARROW BETWEEN */
-.arrow{
+/* ARROW */
+.mid{
     font-size:22px;
-    color:#6366f1;
+    color:#0ea5e9;
 }
 
 /* DETAILS */
 .details{
-    display:none;
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:all 0.45s ease;
+}
+
+.card.active .details{
+    max-height:500px;
+    opacity:1;
     margin-top:12px;
-    padding-top:12px;
-    border-top:1px dashed #ddd;
+    padding-top:10px;
+    border-top:1px solid #e5e7eb;
 }
 
-/* STEP STYLE */
 .step{
-    background:linear-gradient(90deg,#f0f9ff,#fdf4ff);
-    margin:6px 0;
-    padding:10px;
-    border-radius:12px;
-    font-size:15px;
-    border-left:4px solid #06b6d4;
+    background: linear-gradient(135deg,#eff6ff,#fdf4ff,#ecfeff);
+    margin:8px 0;
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:14px;
+    border-left:4px solid #0ea5e9;
 }
 
-/* COLORS RANDOM FEEL */
-.card:nth-child(4n){
-    border-left-color:#f97316;
-}
-.card:nth-child(4n+1){
-    border-left-color:#22c55e;
-}
-.card:nth-child(4n+2){
-    border-left-color:#a855f7;
-}
-.card:nth-child(4n+3){
-    border-left-color:#ef4444;
+/* STATUS */
+.card.done{
+    opacity:0.5;
+    filter:grayscale(1);
 }
 
-/* MOBILE */
-@media(max-width:600px){
-    .main{
-        font-size:16px;
-        flex-direction:column;
-        gap:5px;
-    }
+.card.today{
+    border-left:6px solid #ef4444 !important;
+    box-shadow:0 0 18px rgba(239,68,68,0.4);
+}
+
+.card.upcoming:hover{
+    transform:scale(1.01);
 }
 
 </style>
@@ -112,53 +159,91 @@ h1{
 
 <body>
 
+<h1>📊 EXAM TIMELINE ২০২৬</h1>
+
 <div class="container">
-<h1>📊 Exam Flow 2026</h1>
-<div id="app">Loading...</div>
+    <div class="timeline" id="app">Loading...</div>
 </div>
 
 <script>
 
 const URL = "https://script.google.com/macros/s/AKfycbwnGyCREymDg4VeAyIqCyB027jv5-jofIzJpH9HmEUvkJ_tI-Od3bm8fQue3nr73gy_/exec?action=getFlowchartData";
 
-fetch(URL)
-.then(r => r.json())
-.then(render)
-.catch(() => {
-    document.getElementById("app").innerHTML = "Failed to load data";
-});
+const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+function parseDate(str){
+    const m = str.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if(!m) return null;
+    return new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
+}
+
+function formatDate(input){
+    if(!input) return "";
+
+    const match = input.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if(!match) return input;
+
+    const y = match[1], m = match[2], d = match[3];
+
+    const dateObj = new Date(Number(y), Number(m)-1, Number(d));
+    const weekday = days[dateObj.getDay()];
+
+    return `${d}/${m}/${y} (${weekday})`;
+}
 
 function render(data){
 
     const box = document.getElementById("app");
     box.innerHTML = "";
 
-    data.forEach(row => {
+    let now = new Date();
+
+    data.forEach((row,index)=>{
 
         const keys = Object.keys(row);
 
-        const main1 = row[keys[0]] || "";
-        const main2 = row[keys[1]] || "";
+        const mainDate = parseDate(row[keys[0]]);
+        let status = "";
+        let countdown = "";
 
-        let stepsHTML = "";
+        if(mainDate){
+            const diff = Math.ceil((mainDate - now) / (1000*60*60*24));
 
-        keys.slice(2).forEach(k => {
+            if(diff < 0) status = "done";
+            else if(diff === 0) status = "today";
+            else {
+                status = "upcoming";
+                countdown = `⏳ ${diff} days left`;
+            }
+        }
+
+        const main1 = formatDate(row[keys[0]] || "");
+        const main2 = formatDate(row[keys[1]] || "");
+
+        let steps = "";
+        keys.slice(2).forEach(k=>{
             if(row[k]){
-                stepsHTML += `<div class="step">${k} : ${row[k]}</div>`;
+                steps += `<div class="step">${k} : ${formatDate(row[k])}</div>`;
             }
         });
 
         const html = `
-        <div class="card" onclick="toggle(this)">
+        <div class="card ${status}" onclick="this.classList.toggle('active')" style="animation-delay:${index*0.05}s">
+
+            <div class="dot">${index+1}</div>
+
             <div class="main">
                 <div>${main1}</div>
-                <div class="arrow">⬇</div>
+                <div class="mid">⬇</div>
                 <div>${main2}</div>
             </div>
 
+            ${countdown ? `<div style="text-align:center;color:#f59e0b;font-weight:700;margin-top:6px">${countdown}</div>` : ""}
+
             <div class="details">
-                ${stepsHTML}
+                ${steps}
             </div>
+
         </div>
         `;
 
@@ -166,10 +251,7 @@ function render(data){
     });
 }
 
-function toggle(el){
-    const d = el.querySelector(".details");
-    d.style.display = (d.style.display === "block") ? "none" : "block";
-}
+fetch(URL).then(r=>r.json()).then(render);
 
 </script>
 
