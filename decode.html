@@ -1,1 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Marks Entry Panel</title>
 
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #f4f6f8;
+  }
+
+  h2 {
+    margin-bottom: 15px;
+  }
+
+  select, button {
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+
+  th {
+    background: #007bff;
+    color: white;
+  }
+
+  input {
+    width: 100px;
+    padding: 5px;
+    text-align: center;
+  }
+
+  button {
+    background: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #218838;
+  }
+</style>
+</head>
+
+<body>
+
+<h2>Teacher Marks Entry Panel</h2>
+
+<!-- SUBJECT SELECT -->
+<select id="subject" onchange="loadData()">
+  <option value="">Select Subject</option>
+  <option value="Math">Math</option>
+  <option value="English">English</option>
+  <option value="Physics">Physics</option>
+</select>
+
+<br/>
+
+<button onclick="saveData()">💾 Save Marks</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>CODE</th>
+      <th>MARKS</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbw2HCuq9tsByiDy6feKGYdab2HQBwV7LaxfuUkLbJeAJHK1ESFORZwyxPp4oqFhiKaR/exec"; // 🔴 replace this
+
+let cacheData = [];
+
+/*************************************************
+ * LOAD DATA FROM SHEET
+ *************************************************/
+async function loadData() {
+  const subject = document.getElementById("subject").value;
+  if (!subject) return;
+
+  const res = await fetch(`${API_URL}?subject=${subject}`);
+  cacheData = await res.json();
+
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+
+  cacheData.forEach(row => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${row.code}</td>
+        <td>
+          <input type="number" value="${row.marks || ""}" data-code="${row.code}">
+        </td>
+      </tr>
+    `;
+  });
+}
+
+
+/*************************************************
+ * SAVE UPDATED MARKS
+ *************************************************/
+async function saveData() {
+  const subject = document.getElementById("subject").value;
+  if (!subject) {
+    alert("Select subject first");
+    return;
+  }
+
+  const inputs = document.querySelectorAll("input");
+  const updates = [];
+
+  inputs.forEach(inp => {
+    updates.push({
+      code: inp.dataset.code,
+      marks: inp.value
+    });
+  });
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      subject: subject,
+      data: updates
+    })
+  });
+
+  const result = await res.json();
+
+  if (result.success) {
+    alert("Marks saved successfully!");
+  } else {
+    alert("Error saving marks!");
+  }
+}
+</script>
+
+</body>
+</html>
