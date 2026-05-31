@@ -112,24 +112,32 @@
 
 <div class="container">
 
-    <button class="btn highlight" onclick="goSite()">Seat Plan</button>
-    <button class="btn highlight" onclick="goSite()">Exam Flow 1st Year</button>
-    <button class="btn highlight" onclick="goSite()">CT Analysis</button>
+    <button class="btn highlight" onclick="goSite('https://docs.google.com/spreadsheets/d/1eKh71l0FOYzuvjRMoLL53F6xHawD6ETYrFxyDt8deiM/edit?usp=sharing')">
+        Seat Plan
+    </button>
 
-    <button class="btn" onclick="goSite()">Button 4</button>
-    <button class="btn" onclick="goSite()">Button 5</button>
-    <button class="btn" onclick="goSite()">Button 6</button>
-    <button class="btn" onclick="goSite()">Button 7</button>
-    <button class="btn" onclick="goSite()">Button 8</button>
-    <button class="btn" onclick="goSite()">Button 9</button>
-    <button class="btn" onclick="goSite()">Button 10</button>
+    <button class="btn highlight" onclick="goSite('https://docs.google.com/spreadsheets/d/12LCv9wWFvoB0mmCl8pZX8m2btHklOdTZjkrILamNMTQ/edit?usp=sharing')">
+        Exam Flow 1st Year
+    </button>
+
+    <button class="btn highlight" onclick="goSite('https://docs.google.com/spreadsheets/d/1Om73FfPCt4oQV6AHFIdiVfRL3_IMp3NaTiD4BVvU-cA/edit?usp=sharing')">
+        CT Analysis
+    </button>
+
+    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 4</button>
+    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 5</button>
+    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 6</button>
+    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 7</button>
+    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 8</button>
+    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 9</button>
+    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 10</button>
 
 </div>
 
 <script>
-    function goSite(){
-        window.location.href = "https://www.ncpsc.edu.bd";
-    }
+function goSite(url){
+    window.open(url, "_blank");
+}
 </script>
 
 </body>
