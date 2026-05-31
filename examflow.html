@@ -209,8 +209,36 @@ function render(data){
     const box = document.getElementById("app");
     box.innerHTML = "";
 
-    let now = new Date();
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
+    // STEP 1: collect ALL subflows globally
+    let all = [];
+
+    data.forEach((row, rowIndex)=>{
+        const keys = Object.keys(row);
+        const subKeys = keys.slice(2);
+
+        subKeys.forEach((k, keyIndex)=>{
+
+            const d = parseDate(row[k]);
+            if(!d) return;
+
+            const target = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+            const diff = Math.floor((target - today) / (1000*60*60*24));
+
+            if(diff >= 0){
+                all.push({ rowIndex, keyIndex, diff });
+            }
+        });
+    });
+
+    // STEP 2: pick ONLY ONE nearest globally
+    all.sort((a,b)=>a.diff - b.diff);
+
+    const winner = all.length ? all[0] : null;
+
+    // STEP 3: render UI with strict match
     data.forEach((row,index)=>{
 
         const keys = Object.keys(row);
@@ -230,42 +258,33 @@ function render(data){
             }
         }
 
-        const main1 = formatDate(row[keys[0]] || "");
-        const main2 = formatDate(row[keys[1]] || "");
-
-        // 🔥 FIND ONLY ONE NEAREST SUBFLOW DATE
         const subKeys = keys.slice(2);
 
-        let nearestIndex = -1;
-        let nearestDiff = Infinity;
-
-        subKeys.forEach((k, i)=>{
-            const d = parseDate(row[k]);
-            if(d){
-                const diff = (d - now);
-                if(diff >= 0 && diff < nearestDiff){
-                    nearestDiff = diff;
-                    nearestIndex = i;
-                }
-            }
-        });
-
         let steps = "";
+
         subKeys.forEach((k,i)=>{
+
             if(row[k]){
-                const isHighlight = (i === nearestIndex);
-                steps += `<div class="step ${isHighlight ? "highlight" : ""}">${k} : ${formatDate(row[k])}</div>`;
+
+                const isHighlight =
+                    winner &&
+                    winner.rowIndex === index &&
+                    winner.keyIndex === i;
+
+                steps += `<div class="step ${isHighlight ? "highlight" : ""}">
+                    ${k} : ${formatDate(row[k])}
+                </div>`;
             }
         });
 
         const html = `
-        <div class="card ${status}" onclick="this.classList.toggle('active')" style="animation-delay:${index*0.05}s">
+        <div class="card ${status}" onclick="this.classList.toggle('active')">
 
             <div class="dot">${index+1}</div>
 
             <div class="main">
-                <div>${main1}</div>
-                <div>${main2}</div>
+                <div>${formatDate(row[keys[0]] || "")}</div>
+                <div>${formatDate(row[keys[1]] || "")}</div>
             </div>
 
             ${countdown ? `<div style="text-align:center;color:#f59e0b;font-weight:700;margin-top:6px">${countdown}</div>` : ""}
@@ -280,10 +299,3 @@ function render(data){
         box.insertAdjacentHTML("beforeend", html);
     });
 }
-
-fetch(URL).then(r=>r.json()).then(render);
-
-</script>
-
-</body>
-</html>
