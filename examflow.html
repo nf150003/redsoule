@@ -84,18 +84,26 @@ h1{
 
 <h1>📚 পরীক্ষার ফ্লোচার্ট ২০২৬</h1>
 
-<div id="flowchart"></div>
+<div id="flowchart">Loading...</div>
 
 </div>
 
 <script>
 
-// ✅ YOUR DEPLOYED URL
+// ✅ YOUR WEB APP
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby0-XbB6EcLzii2Xqrpd4qKIuAlQO-D2JQGfr9EIHVmRcDOvqFC6vJCsNFjlcTdcJ2-/exec?action=getFlowchartData";
 
-// LOAD DATA
+// FETCH DATA (SAFE MODE)
 fetch(WEB_APP_URL)
-.then(res => res.json())
+.then(res => res.text())   // important fix
+.then(text => {
+    try {
+        return JSON.parse(text);
+    } catch (e) {
+        console.log("JSON Error:", text);
+        return [];
+    }
+})
 .then(renderFlowchart)
 .catch(err => console.log("Error:", err));
 
@@ -105,15 +113,22 @@ function renderFlowchart(data){
     const container = document.getElementById("flowchart");
     container.innerHTML = "";
 
+    if (!Array.isArray(data)) {
+        container.innerHTML = "No data found";
+        return;
+    }
+
     data.forEach((item, index) => {
 
+        const steps = item.steps || [];
+
         let html = `
-        <div class="box ${item.color}" onclick="toggle(this)">
-            <div class="title">${item.title}</div>
-            <div class="date">${item.date}</div>
+        <div class="box ${item.color || 'blue'}" onclick="toggle(this)">
+            <div class="title">${item.title || ''}</div>
+            <div class="date">${item.date || ''}</div>
 
             <div class="subflow">
-                ${item.steps.map(s => `<div class="sub">${s}</div>`).join("")}
+                ${steps.map(s => `<div class="sub">${s}</div>`).join("")}
             </div>
         </div>
         `;
