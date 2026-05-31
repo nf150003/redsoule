@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Marks Entry Panel</title>
+<title>Marks Entry System</title>
 
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background: #f4f6f8;
-  }
+body {
+  font-family: Arial;
+  padding: 20px;
+  background: #f4f6f8;
+}
 
-  h2 {
-    margin-bottom: 15px;
-  }
+h2 {
+  margin-bottom: 10px;
+}
 
-  select, button {
-    padding: 10px;
-    margin: 10px 0;
-    font-size: 16px;
-  }
+select, button {
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 16px;
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background: white;
-  }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  margin-top: 20px;
+}
 
-  th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-  }
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
 
-  th {
-    background: #007bff;
-    color: white;
-  }
+th {
+  background: #007bff;
+  color: white;
+}
 
-  input {
-    width: 100px;
-    padding: 5px;
-    text-align: center;
-  }
+input {
+  width: 100px;
+  padding: 5px;
+  text-align: center;
+}
 
-  button {
-    background: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
+button {
+  background: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
 
-  button:hover {
-    background: #218838;
-  }
+button:hover {
+  background: darkgreen;
+}
 </style>
 </head>
 
@@ -63,15 +63,11 @@
 
 <h2>Teacher Marks Entry Panel</h2>
 
-<!-- SUBJECT SELECT -->
 <select id="subject" onchange="loadData()">
-  <option value="">Select Subject</option>
-  <option value="Math">Math</option>
-  <option value="English">English</option>
-  <option value="Physics">Physics</option>
+  <option value="">Loading subjects...</option>
 </select>
 
-<br/>
+<br>
 
 <button onclick="saveData()">💾 Save Marks</button>
 
@@ -86,29 +82,49 @@
 </table>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbw2HCuq9tsByiDy6feKGYdab2HQBwV7LaxfuUkLbJeAJHK1ESFORZwyxPp4oqFhiKaR/exec"; // 🔴 replace this
 
-let cacheData = [];
+const API_URL = "https://script.google.com/macros/s/AKfycbw2HCuq9tsByiDy6feKGYdab2HQBwV7LaxfuUkLbJeAJHK1ESFORZwyxPp4oqFhiKaR/exec";
+
+let cache = [];
 
 /*************************************************
- * LOAD DATA FROM SHEET
+ * LOAD SUBJECTS
+ *************************************************/
+async function loadSubjects() {
+  const res = await fetch(API_URL + "?action=subjects");
+  const data = await res.json();
+
+  const select = document.getElementById("subject");
+  select.innerHTML = `<option value="">Select Subject</option>`;
+
+  data.subjects.forEach(sub => {
+    const opt = document.createElement("option");
+    opt.value = sub;
+    opt.textContent = sub;
+    select.appendChild(opt);
+  });
+}
+
+
+/*************************************************
+ * LOAD DATA
  *************************************************/
 async function loadData() {
   const subject = document.getElementById("subject").value;
   if (!subject) return;
 
-  const res = await fetch(`${API_URL}?subject=${subject}`);
-  cacheData = await res.json();
+  const res = await fetch(API_URL + "?subject=" + subject);
+  cache = await res.json();
 
   const tbody = document.getElementById("tbody");
   tbody.innerHTML = "";
 
-  cacheData.forEach(row => {
+  cache.forEach(row => {
     tbody.innerHTML += `
       <tr>
         <td>${row.code}</td>
         <td>
-          <input type="number" value="${row.marks || ""}" data-code="${row.code}">
+          <input type="number" value="${row.marks || ''}" data-code="${row.code}">
         </td>
       </tr>
     `;
@@ -117,20 +133,18 @@ async function loadData() {
 
 
 /*************************************************
- * SAVE UPDATED MARKS
+ * SAVE DATA
  *************************************************/
 async function saveData() {
   const subject = document.getElementById("subject").value;
-  if (!subject) {
-    alert("Select subject first");
-    return;
-  }
+  if (!subject) return alert("Select subject first");
 
   const inputs = document.querySelectorAll("input");
-  const updates = [];
+
+  const data = [];
 
   inputs.forEach(inp => {
-    updates.push({
+    data.push({
       code: inp.dataset.code,
       marks: inp.value
     });
@@ -140,18 +154,21 @@ async function saveData() {
     method: "POST",
     body: JSON.stringify({
       subject: subject,
-      data: updates
+      data: data
     })
   });
 
   const result = await res.json();
 
-  if (result.success) {
-    alert("Marks saved successfully!");
-  } else {
-    alert("Error saving marks!");
-  }
+  alert(result.success ? "Saved successfully!" : "Error saving!");
 }
+
+
+/*************************************************
+ * INIT
+ *************************************************/
+loadSubjects();
+
 </script>
 
 </body>
