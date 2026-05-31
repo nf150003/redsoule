@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>পরীক্ষার ফ্লোচার্ট ২০২৬</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Noto+Sans+Bengali:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 body{
     margin:0;
-    font-family:"Hind Siliguri","Noto Sans Bengali",Arial,sans-serif;
+    font-family:"Hind Siliguri",Arial,sans-serif;
     background:#f4f6f9;
     color:#222;
 }
@@ -26,14 +26,17 @@ h1{
     text-align:center;
     font-size:22px;
     font-weight:700;
+    margin-bottom:15px;
 }
 
+/* CARD */
 .box{
     padding:14px;
     margin:16px 0;
     border-radius:14px;
     cursor:pointer;
     box-shadow:0 3px 10px rgba(0,0,0,0.08);
+    transition:0.2s;
 }
 
 .blue{background:#e3f2fd;border:2px solid #1976d2;}
@@ -46,10 +49,21 @@ h1{
 .pink{background:#fce4ec;border:2px solid #ad1457;}
 .cyan{background:#e0f7fa;border:2px solid #006064;}
 
-.title{font-size:19px;font-weight:700;}
-.date{font-size:14px;color:#444;}
+.title{
+    font-size:18px;
+    font-weight:700;
+}
 
-.subflow{display:none;margin-top:10px;}
+.date{
+    font-size:14px;
+    color:#444;
+    margin-top:4px;
+}
+
+.subflow{
+    display:none;
+    margin-top:10px;
+}
 
 .sub{
     background:#fff;
@@ -57,11 +71,12 @@ h1{
     padding:9px;
     border-radius:10px;
     border-left:4px solid #555;
+    text-align:left;
 }
 
 .arrow{
     text-align:center;
-    font-size:22px;
+    font-size:20px;
     margin:5px 0;
 }
 
@@ -77,24 +92,28 @@ h1{
 
 <script>
 
-const WEB_APP_URL =
-"https://script.google.com/macros/s/AKfycbzv-_90ktjXnD9U4zgsQPVsEqFIljR8CrhAw6ihkOkovNd1JJqHFgiIfpS4OlcUw9fq/exec?action=getFlowchartData";
+// 👉 YOUR GOOGLE SCRIPT URL
+const URL = "https://script.google.com/macros/s/AKfycbzv-_90ktjXnD9U4zgsQPVsEqFIljR8CrhAw6ihkOkovNd1JJqHFgiIfpS4OlcUw9fq/exec?action=getFlowchartData";
 
-// SAFE FETCH (GitHub compatible)
-fetch(WEB_APP_URL)
+// FETCH DATA (safe for GitHub Pages)
+fetch(URL)
 .then(res => res.text())
 .then(text => {
     let data;
     try {
         data = JSON.parse(text);
     } catch (e) {
-        console.log("RAW:", text);
+        console.log("RAW RESPONSE:", text);
         data = [];
     }
     render(data);
 })
-.catch(err => console.log(err));
+.catch(err => {
+    console.log("Fetch error:", err);
+    document.getElementById("flowchart").innerHTML = "Failed to load data";
+});
 
+// RENDER FLOWCHART
 function render(data){
 
     const box = document.getElementById("flowchart");
@@ -107,7 +126,7 @@ function render(data){
 
     data.forEach((item, i) => {
 
-        const steps = item.steps || [];
+        const steps = Array.isArray(item.steps) ? item.steps : [];
 
         let html = `
         <div class="box ${item.color || 'blue'}" onclick="toggle(this)">
@@ -128,9 +147,10 @@ function render(data){
     });
 }
 
+// TOGGLE SUB STEPS
 function toggle(el){
     const sub = el.querySelector(".subflow");
-    sub.style.display = sub.style.display === "block" ? "none" : "block";
+    sub.style.display = (sub.style.display === "block") ? "none" : "block";
 }
 
 </script>
