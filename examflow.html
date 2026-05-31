@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>পরীক্ষার ফ্লোচার্ট ২০২৬</title>
 
-<!-- CLEAR BANGLA FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Noto+Sans+Bengali:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -15,7 +14,6 @@ body{
     font-family:"Hind Siliguri","Noto Sans Bengali",Arial,sans-serif;
     background:#f4f6f9;
     color:#222;
-    -webkit-font-smoothing:antialiased;
 }
 
 .container{
@@ -32,75 +30,49 @@ h1{
     margin-bottom:20px;
 }
 
-/* ===== CARD BASE ===== */
+/* BOX */
 .box{
     padding:14px;
     margin:16px 0;
     border-radius:14px;
     text-align:center;
     cursor:pointer;
-    border:2px solid transparent;
     box-shadow:0 3px 10px rgba(0,0,0,0.08);
-    transition:0.2s;
 }
 
-.box:active{
-    transform:scale(0.99);
-}
+/* COLORS */
+.blue{background:#e3f2fd;border:2px solid #1976d2;}
+.green{background:#e8f5e9;border:2px solid #2e7d32;}
+.orange{background:#fff3e0;border:2px solid #ef6c00;}
+.purple{background:#f3e5f5;border:2px solid #6a1b9a;}
+.red{background:#ffebee;border:2px solid #c62828;}
+.teal{background:#e0f2f1;border:2px solid #00796b;}
+.indigo{background:#e8eaf6;border:2px solid #3f51b5;}
+.pink{background:#fce4ec;border:2px solid #ad1457;}
+.cyan{background:#e0f7fa;border:2px solid #006064;}
 
-/* ===== COLORS ===== */
-.blue{background:#e3f2fd;border-color:#1976d2;}
-.green{background:#e8f5e9;border-color:#2e7d32;}
-.orange{background:#fff3e0;border-color:#ef6c00;}
-.purple{background:#f3e5f5;border-color:#6a1b9a;}
-.red{background:#ffebee;border-color:#c62828;}
-.teal{background:#e0f2f1;border-color:#00796b;}
-.indigo{background:#e8eaf6;border-color:#3f51b5;}
-.pink{background:#fce4ec;border-color:#ad1457;}
-.cyan{background:#e0f7fa;border-color:#006064;}
+.title{font-size:19px;font-weight:700;}
+.date{font-size:14px;color:#444;margin-top:5px;}
 
-/* TEXT */
-.title{
-    font-size:19px;
-    font-weight:700;
-}
-
-.date{
-    font-size:14px;
-    color:#444;
-    margin-top:5px;
-}
-
-/* SUB FLOW */
-.subflow{
-    display:none;
-    margin-top:10px;
-}
+.subflow{display:none;margin-top:10px;}
 
 .sub{
     background:#fff;
     margin:5px 0;
     padding:9px;
     border-radius:10px;
-    font-size:14px;
     border-left:4px solid #555;
     text-align:left;
 }
 
-/* ARROW */
 .arrow{
     text-align:center;
     font-size:22px;
-    color:#444;
     margin:5px 0;
-    font-weight:bold;
 }
 
-/* MOBILE */
 @media(max-width:480px){
     h1{font-size:18px;}
-    .title{font-size:16px;}
-    .sub{font-size:13px;}
 }
 
 </style>
@@ -112,146 +84,54 @@ h1{
 
 <h1>📚 পরীক্ষার ফ্লোচার্ট ২০২৬</h1>
 
-<!-- 1 -->
-<div class="box blue" onclick="toggle(this)">
-    <div class="title">প্রবেশিকা পরীক্ষা</div>
-    <div class="date">২০ জুন ২০২৬</div>
-    <div class="subflow">
-        <div class="sub">📥 ইনপুট প্যানেল বন্ধ — শনিবার | ২০ জুন ২০২৬</div>
-        <div class="sub">📄 খাতা প্রদর্শন সমাপ্তি — রবিবার | ২১ জুন ২০২৬</div>
-        <div class="sub">📊 ফলাফল প্রকাশ — সোমবার | ২২ জুন ২০২৬</div>
-        <div class="sub">📩 এসএমএস প্রেরণ — সোমবার | ২২ জুন ২০২৬</div>
-        <div class="sub">📈 রেজাল্ট বিশ্লেষণ — মঙ্গলবার | ২৩ জুন ২০২৬</div>
-    </div>
-</div>
-
-<div class="arrow">⬇️</div>
-
-<!-- 2 -->
-<div class="box green" onclick="toggle(this)">
-    <div class="title">ক্লাস টেস্ট - ১</div>
-    <div class="date">৫ জুলাই ২০২৬</div>
-    <div class="subflow">
-        <div class="sub">📥 ইনপুট প্যানেল বন্ধ — রবিবার | ৫ জুলাই ২০২৬</div>
-        <div class="sub">📄 খাতা প্রদর্শন সমাপ্তি — সোমবার | ৬ জুলাই ২০২৬</div>
-        <div class="sub">📊 ফলাফল প্রকাশ — মঙ্গলবার | ৭ জুলাই ২০২৬</div>
-        <div class="sub">📩 এসএমএস প্রেরণ — মঙ্গলবার | ৭ জুলাই ২০২৬</div>
-        <div class="sub">📈 রেজাল্ট বিশ্লেষণ — বুধবার | ৮ জুলাই ২০২৬</div>
-    </div>
-</div>
-
-<div class="arrow">⬇️</div>
-
-<!-- 3 -->
-<div class="box orange" onclick="toggle(this)">
-    <div class="title">অর্ধবার্ষিক পরীক্ষা</div>
-    <div class="date">২৫ জুলাই ২০২৬</div>
-    <div class="subflow">
-        <div class="sub">📥 ইনপুট প্যানেল বন্ধ — শনিবার | ২৫ জুলাই ২০২৬</div>
-        <div class="sub">📄 খাতা প্রদর্শন সমাপ্তি — রবিবার | ২৬ জুলাই ২০২৬</div>
-        <div class="sub">📊 ফলাফল প্রকাশ — সোমবার | ২৭ জুলাই ২০২৬</div>
-        <div class="sub">📩 এসএমএস প্রেরণ — সোমবার | ২৭ জুলাই ২০২৬</div>
-        <div class="sub">📈 রেজাল্ট বিশ্লেষণ — মঙ্গলবার | ২৮ জুলাই ২০২৬</div>
-    </div>
-</div>
-
-<div class="arrow">⬇️</div>
-
-<!-- 4 -->
-<div class="box purple" onclick="toggle(this)">
-    <div class="title">ক্লাস টেস্ট - ২</div>
-    <div class="date">১০ আগস্ট ২০২৬</div>
-    <div class="subflow">
-        <div class="sub">📥 ইনপুট প্যানেল বন্ধ — সোমবার | ১০ আগস্ট ২০২৬</div>
-        <div class="sub">📄 খাতা প্রদর্শন সমাপ্তি — মঙ্গলবার | ১১ আগস্ট ২০২৬</div>
-        <div class="sub">📊 ফলাফল প্রকাশ — বুধবার | ১২ আগস্ট ২০২৬</div>
-        <div class="sub">📩 এসএমএস প্রেরণ — বুধবার | ১২ আগস্ট ২০২৬</div>
-        <div class="sub">📈 রেজাল্ট বিশ্লেষণ — বৃহস্পতিবার | ১৩ আগস্ট ২০২৬</div>
-    </div>
-</div>
-
-<div class="arrow">⬇️</div>
-
-<!-- 5 -->
-<div class="box red" onclick="toggle(this)">
-    <div class="title">বার্ষিক পরীক্ষা</div>
-    <div class="date">৩০ আগস্ট ২০২৬</div>
-    <div class="subflow">
-        <div class="sub">📥 ইনপুট প্যানেল বন্ধ — রবিবার | ৩০ আগস্ট ২০২৬</div>
-        <div class="sub">📄 খাতা প্রদর্শন সমাপ্তি — সোমবার | ৩১ আগস্ট ২০২৬</div>
-        <div class="sub">📊 ফলাফল প্রকাশ — মঙ্গলবার | ১ সেপ্টেম্বর ২০২৬</div>
-        <div class="sub">📩 এসএমএস প্রেরণ — মঙ্গলবার | ১ সেপ্টেম্বর ২০২৬</div>
-        <div class="sub">📈 রেজাল্ট বিশ্লেষণ — বুধবার | ২ সেপ্টেম্বর ২০২৬</div>
-    </div>
-</div>
-
-<div class="arrow">⬇️</div>
-
-<!-- 6 -->
-<div class="box teal" onclick="toggle(this)">
-    <div class="title">ক্লাস টেস্ট - ৩</div>
-    <div class="date">১৫ সেপ্টেম্বর ২০২৬</div>
-    <div class="subflow">
-        <div class="sub">📥 ইনপুট প্যানেল বন্ধ — মঙ্গলবার | ১৫ সেপ্টেম্বর ২০২৬</div>
-        <div class="sub">📄 খাতা প্রদর্শন সমাপ্তি — বুধবার | ১৬ সেপ্টেম্বর ২০২৬</div>
-        <div class="sub">📊 ফলাফল প্রকাশ — বৃহস্পতিবার | ১৭ সেপ্টেম্বর ২০২৬</div>
-        <div class="sub">📩 এসএমএস প্রেরণ — বৃহস্পতিবার | ১৭ সেপ্টেম্বর ২০২৬</div>
-        <div class="sub">📈 রেজাল্ট বিশ্লেষণ — শুক্রবার | ১৮ সেপ্টেম্বর ২০২৬</div>
-    </div>
-</div>
-
-<div class="arrow">⬇️</div>
-
-<!-- 7 -->
-<div class="box indigo" onclick="toggle(this)">
-    <div class="title">প্রি-টেস্ট</div>
-    <div class="date">৫ অক্টোবর ২০২৬</div>
-    <div class="subflow">
-        <div class="sub">📥 ইনপুট প্যানেল বন্ধ — সোমবার | ৫ অক্টোবর ২০২৬</div>
-        <div class="sub">📄 খাতা প্রদর্শন সমাপ্তি — মঙ্গলবার | ৬ অক্টোবর ২০২৬</div>
-        <div class="sub">📊 ফলাফল প্রকাশ — বুধবার | ৭ অক্টোবর ২০২৬</div>
-        <div class="sub">📩 এসএমএস প্রেরণ — বুধবার | ৭ অক্টোবর ২০২৬</div>
-        <div class="sub">📈 রেজাল্ট বিশ্লেষণ — বৃহস্পতিবার | ৮ অক্টোবর ২০২৬</div>
-    </div>
-</div>
-
-<div class="arrow">⬇️</div>
-
-<!-- 8 -->
-<div class="box pink" onclick="toggle(this)">
-    <div class="title">টেস্ট পরীক্ষা</div>
-    <div class="date">২০ অক্টোবর ২০২৬</div>
-    <div class="subflow">
-        <div class="sub">📥 ইনপুট প্যানেল বন্ধ — মঙ্গলবার | ২০ অক্টোবর ২০২৬</div>
-        <div class="sub">📄 খাতা প্রদর্শন সমাপ্তি — বুধবার | ২১ অক্টোবর ২০২৬</div>
-        <div class="sub">📊 ফলাফল প্রকাশ — বৃহস্পতিবার | ২২ অক্টোবর ২০২৬</div>
-        <div class="sub">📩 এসএমএস প্রেরণ — বৃহস্পতিবার | ২২ অক্টোবর ২০২৬</div>
-        <div class="sub">📈 রেজাল্ট বিশ্লেষণ — শুক্রবার | ২৩ অক্টোবর ২০২৬</div>
-    </div>
-</div>
-
-<div class="arrow">⬇️</div>
-
-<!-- 9 -->
-<div class="box cyan" onclick="toggle(this)">
-    <div class="title">মডেল টেস্ট</div>
-    <div class="date">৫ নভেম্বর ২০২৬</div>
-    <div class="subflow">
-        <div class="sub">📥 ইনপুট প্যানেল বন্ধ — বৃহস্পতিবার | ৫ নভেম্বর ২০২৬</div>
-        <div class="sub">📄 খাতা প্রদর্শন সমাপ্তি — শুক্রবার | ৬ নভেম্বর ২০২৬</div>
-        <div class="sub">📊 ফলাফল প্রকাশ — শনিবার | ৭ নভেম্বর ২০২৬</div>
-        <div class="sub">📩 এসএমএস প্রেরণ — শনিবার | ৭ নভেম্বর ২০২৬</div>
-        <div class="sub">📈 রেজাল্ট বিশ্লেষণ — রবিবার | ৮ নভেম্বর ২০২৬</div>
-    </div>
-</div>
+<div id="flowchart"></div>
 
 </div>
 
 <script>
+
+// ✅ YOUR DEPLOYED URL
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby0-XbB6EcLzii2Xqrpd4qKIuAlQO-D2JQGfr9EIHVmRcDOvqFC6vJCsNFjlcTdcJ2-/exec?action=getFlowchartData";
+
+// LOAD DATA
+fetch(WEB_APP_URL)
+.then(res => res.json())
+.then(renderFlowchart)
+.catch(err => console.log("Error:", err));
+
+// RENDER
+function renderFlowchart(data){
+
+    const container = document.getElementById("flowchart");
+    container.innerHTML = "";
+
+    data.forEach((item, index) => {
+
+        let html = `
+        <div class="box ${item.color}" onclick="toggle(this)">
+            <div class="title">${item.title}</div>
+            <div class="date">${item.date}</div>
+
+            <div class="subflow">
+                ${item.steps.map(s => `<div class="sub">${s}</div>`).join("")}
+            </div>
+        </div>
+        `;
+
+        if(index < data.length - 1){
+            html += `<div class="arrow">⬇️</div>`;
+        }
+
+        container.insertAdjacentHTML("beforeend", html);
+    });
+}
+
+// TOGGLE
 function toggle(el){
     let sub = el.querySelector(".subflow");
     sub.style.display = (sub.style.display === "block") ? "none" : "block";
 }
+
 </script>
 
 </body>
