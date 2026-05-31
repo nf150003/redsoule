@@ -55,9 +55,9 @@ h1{
     position:relative;
     background:#fff;
     border-left:6px solid #2563eb;
-    margin:18px 0;
+    margin:26px 0 18px;
     border-radius:14px;
-    padding:18px;
+    padding:26px 18px 18px; /* extra top space for dot */
     box-shadow:0 10px 22px rgba(0,0,0,0.08);
     cursor:pointer;
     opacity:0;
@@ -69,18 +69,14 @@ h1{
     to{ opacity:1; transform:translateY(0); }
 }
 
-.card:hover{
-    transform:translateY(-3px);
-    transition:0.2s;
-}
-
-/* SERIAL */
+/* ✅ SERIAL FIXED: now top-center */
 .dot{
     position:absolute;
-    left:-36px;
-    top:22px;
-    width:28px;
-    height:28px;
+    top:-14px;
+    left:50%;
+    transform:translateX(-50%);
+    width:30px;
+    height:30px;
     border-radius:50%;
     background: radial-gradient(circle at 30% 30%, #22c55e, #16a34a);
     border:3px solid #ffffff;
@@ -91,6 +87,11 @@ h1{
     font-size:13px;
     font-weight:900;
     color:#fff;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+    transition:0.2s;
 }
 
 /* MAIN */
@@ -139,7 +140,6 @@ h1{
     border-left:4px solid #0ea5e9;
 }
 
-/* STATUS */
 .card.done{
     opacity:0.5;
     filter:grayscale(1);
@@ -179,12 +179,10 @@ function parseDate(str){
 
 function formatDate(input){
     if(!input) return "";
-
     const match = input.match(/(\d{4})-(\d{2})-(\d{2})/);
     if(!match) return input;
 
     const y = match[1], m = match[2], d = match[3];
-
     const dateObj = new Date(Number(y), Number(m)-1, Number(d));
     const weekday = days[dateObj.getDay()];
 
