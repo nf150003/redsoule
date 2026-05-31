@@ -54,16 +54,21 @@
     }
 
     .btn{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-decoration:none;
+
         padding:18px 10px;
         border-radius:16px;
-        border:none;
-        cursor:pointer;
         font-weight:600;
         font-size:14px;
         color:white;
+
         background: rgba(255,255,255,0.08);
         backdrop-filter: blur(10px);
         border:1px solid rgba(255,255,255,0.1);
+
         transition:0.3s;
         box-shadow:0 8px 20px rgba(0,0,0,0.3);
         position:relative;
@@ -112,33 +117,34 @@
 
 <div class="container">
 
-    <button class="btn highlight" onclick="goSite('https://docs.google.com/spreadsheets/d/1eKh71l0FOYzuvjRMoLL53F6xHawD6ETYrFxyDt8deiM/edit?usp=sharing')">
-        Seat Plan
-    </button>
+    <a class="btn highlight" target="_blank"
+    href="https://docs.google.com/spreadsheets/d/1eKh71l0FOYzuvjRMoLL53F6xHawD6ETYrFxyDt8deiM/edit?usp=sharing">
+    Seat Plan
+    </a>
 
-    <button class="btn highlight" onclick="goSite('https://docs.google.com/spreadsheets/d/12LCv9wWFvoB0mmCl8pZX8m2btHklOdTZjkrILamNMTQ/edit?usp=sharing')">
-        Exam Flow 1st Year
-    </button>
+    <a class="btn highlight" target="_blank"
+    href="https://docs.google.com/spreadsheets/d/12LCv9wWFvoB0mmCl8pZX8m2btHklOdTZjkrILamNMTQ/edit?usp=sharing">
+    Exam Flow 1st Year
+    </a>
 
-    <button class="btn highlight" onclick="goSite('https://docs.google.com/spreadsheets/d/1Om73FfPCt4oQV6AHFIdiVfRL3_IMp3NaTiD4BVvU-cA/edit?usp=sharing')">
-        CT Analysis
-    </button>
+    <a class="btn highlight" target="_blank"
+    href="https://docs.google.com/spreadsheets/d/1Om73FfPCt4oQV6AHFIdiVfRL3_IMp3NaTiD4BVvU-cA/edit?usp=sharing">
+    CT Analysis
+    </a>
 
-    <button class="btn" onclick="goSite('https://docs.google.com/spreadsheets/d/15IPGSg8_7jCzo15n_10PFakSI7fxSHcHIE5rT5zYa9A/edit?usp=drivesdk')">Coding</button>
-    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 5</button>
-    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 6</button>
-    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 7</button>
-    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 8</button>
-    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 9</button>
-    <button class="btn" onclick="goSite('https://www.ncpsc.edu.bd')">Button 10</button>
+    <a class="btn" target="_blank"
+    href="https://docs.google.com/spreadsheets/d/15IPGSg8_7jCzo15n_10PFakSI7fxSHcHIE5rT5zYa9A/edit?usp=drivesdk">
+    Coding
+    </a>
+
+    <a class="btn" target="_blank" href="https://www.ncpsc.edu.bd">Button 5</a>
+    <a class="btn" target="_blank" href="https://www.ncpsc.edu.bd">Button 6</a>
+    <a class="btn" target="_blank" href="https://www.ncpsc.edu.bd">Button 7</a>
+    <a class="btn" target="_blank" href="https://www.ncpsc.edu.bd">Button 8</a>
+    <a class="btn" target="_blank" href="https://www.ncpsc.edu.bd">Button 9</a>
+    <a class="btn" target="_blank" href="https://www.ncpsc.edu.bd">Button 10</a>
 
 </div>
-
-<script>
-function goSite(url){
-    window.open(url, "_blank");
-}
-</script>
 
 </body>
 </html>
