@@ -128,7 +128,6 @@ h1{
     border-left:4px solid #0ea5e9;
 }
 
-/* ONLY ONE SUBFLOW HIGHLIGHT */
 .step.highlight{
     color:#ef4444;
     font-weight:800;
@@ -212,14 +211,19 @@ function render(data){
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
+    if(!data || !data.length) return;
+
+    // 🔥 SAFE COLUMN MAPPING (NO KEY ORDER BUG)
+    const headers = Object.keys(data[0]);
+    const main1Key = headers[0];
+    const main2Key = headers[1];
+    const subKeys = headers.slice(2);
+
     // STEP 1: collect ALL subflows globally
     let all = [];
 
-    data.forEach((row, rowIndex)=>{
-        const keys = Object.keys(row);
-        const subKeys = keys.slice(2);
-
-        subKeys.forEach((k, keyIndex)=>{
+    data.forEach((row,rowIndex)=>{
+        subKeys.forEach((k,keyIndex)=>{
 
             const d = parseDate(row[k]);
             if(!d) return;
@@ -233,17 +237,14 @@ function render(data){
         });
     });
 
-    // STEP 2: pick ONLY ONE nearest globally
+    // STEP 2: pick ONLY ONE winner
     all.sort((a,b)=>a.diff - b.diff);
-
     const winner = all.length ? all[0] : null;
 
-    // STEP 3: render UI with strict match
+    // STEP 3: render
     data.forEach((row,index)=>{
 
-        const keys = Object.keys(row);
-
-        const mainDate = parseDate(row[keys[0]]);
+        const mainDate = parseDate(row[main1Key]);
         let status = "";
         let countdown = "";
 
@@ -257,8 +258,6 @@ function render(data){
                 countdown = `⏳ ${diff} days left`;
             }
         }
-
-        const subKeys = keys.slice(2);
 
         let steps = "";
 
@@ -283,8 +282,8 @@ function render(data){
             <div class="dot">${index+1}</div>
 
             <div class="main">
-                <div>${formatDate(row[keys[0]] || "")}</div>
-                <div>${formatDate(row[keys[1]] || "")}</div>
+                <div>${formatDate(row[main1Key] || "")}</div>
+                <div>${formatDate(row[main2Key] || "")}</div>
             </div>
 
             ${countdown ? `<div style="text-align:center;color:#f59e0b;font-weight:700;margin-top:6px">${countdown}</div>` : ""}
@@ -299,3 +298,10 @@ function render(data){
         box.insertAdjacentHTML("beforeend", html);
     });
 }
+
+fetch(URL).then(r=>r.json()).then(render);
+
+</script>
+
+</body>
+</html>
