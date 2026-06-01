@@ -122,7 +122,12 @@ a{text-decoration:none;}
       Exam Flow
     </a>
 
-    <a class="btn"><div class="icon c6">📄</div>Results</a>
+    <!-- ONLY CHANGE HERE -->
+    <a class="btn" href="#" onclick="runDecode(event)">
+      <div class="icon c6">📄</div>
+      Decode
+    </a>
+
     <a class="btn"><div class="icon c7">📌</div>Notices</a>
     <a class="btn"><div class="icon c8">⚙️</div>Settings</a>
     <a class="btn"><div class="icon c9">👨‍🏫</div>Teachers</a>
@@ -138,11 +143,14 @@ const CT_URL = "https://script.google.com/macros/s/AKfycbxX_K42K4LU-xr-CAIRY0_rE
 const LESSON_URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
 const SEAT_URL = "https://script.google.com/macros/s/AKfycbzinhHLB2iNLlzP0ZUb8Y2kcGnKVs5jfUzfN_7b05rvyUJpyyqdrLDdui96cuuRMsZg/exec";
 
+/* DECODE URL ADDED */
+const DECODE_URL = "https://script.google.com/macros/s/AKfycbwrLQ6tolf20LlT9DQbsUnrPDlhalfz_9ThWun0wawq7cnd1I34QLYnQoTKZ79UQ-9M/exec";
+
 function sendReport(e){
   e.preventDefault();
   alert("Processing CT Report...");
 
-  fetch(CT_URL + "?action=report", { method: "GET" })
+  fetch(CT_URL + "?action=report")
     .then(r => r.text())
     .then(t => alert(t || "Done"))
     .catch(() => alert("Failed"));
@@ -152,7 +160,7 @@ function generatePDF(e){
   e.preventDefault();
   alert("Generating Lesson Plan...");
 
-  fetch(LESSON_URL + "?action=lessonplan", { method: "GET" })
+  fetch(LESSON_URL + "?action=lessonplan")
     .then(r => r.text())
     .then(t => alert(t || "Done"))
     .catch(() => alert("Failed"));
@@ -162,10 +170,23 @@ function runSeatPlan(e){
   e.preventDefault();
   alert("Generating Seat Plan...");
 
-  fetch(SEAT_URL + "?action=seatplan", { method: "GET" })
+  fetch(SEAT_URL + "?action=seatplan")
     .then(r => r.text())
     .then(t => alert(t || "Done"))
     .catch(() => alert("Failed"));
+}
+
+/* DECODE BUTTON FUNCTION */
+function runDecode(e){
+  e.preventDefault();
+  alert("Generating Decoded PDFs and sending email...");
+
+  fetch(DECODE_URL, {
+    method: "POST"
+  })
+  .then(r => r.text())
+  .then(t => alert(t || "Done"))
+  .catch(() => alert("Failed"));
 }
 
 </script>
