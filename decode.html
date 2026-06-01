@@ -6,20 +6,21 @@
 <title>Marks Entry System</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tinos:wght@400;700&display=swap');
 
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
+  font-family:Tahoma, Arial, sans-serif;
 }
 
 body{
-  background:#f5f7fb;
+  background:#3a6ea5;
+  background:linear-gradient(to bottom,#5c8fd8 0%,#3a6ea5 100%);
   min-height:100vh;
-  padding:30px;
-  color:#1f2937;
+  padding:25px;
+  color:#000;
 }
 
 /* MAIN WRAPPER */
@@ -28,122 +29,116 @@ body{
   margin:auto;
 }
 
-/* HEADER */
+/* XP WINDOW */
+.top-box,
+.table-box{
+  background:#ece9d8;
+  border:2px solid #003c74;
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:
+    inset 1px 1px #ffffff,
+    inset -1px -1px #7f9db9,
+    5px 5px 15px rgba(0,0,0,.35);
+}
+
+/* XP TITLE BAR */
+.top-box::before{
+  content:"Marks Entry System";
+  display:block;
+  background:linear-gradient(to bottom,#0a246a,#3a6ea5);
+  color:#fff;
+  font-weight:bold;
+  padding:8px 12px;
+  font-size:13px;
+}
+
 .top-box{
-  background:#ffffff;
-  border:1px solid #e5e7eb;
-  border-radius:18px;
-  padding:25px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.06);
-  margin-bottom:20px;
+  margin-bottom:15px;
 }
 
 h2{
-  font-size:26px;
-  font-weight:700;
-  margin-bottom:15px;
-  color:#111827;
+  font-size:22px;
+  padding:18px;
+  color:#000;
+  font-weight:bold;
 }
 
 /* CONTROLS */
 select{
-  padding:12px 14px;
-  border-radius:12px;
-  border:1px solid #d1d5db;
-  font-size:15px;
-  min-width:220px;
-  outline:none;
+  margin-left:18px;
+  margin-bottom:18px;
+  padding:6px 8px;
+  min-width:240px;
+  border:2px inset #ffffff;
   background:#fff;
-  transition:0.2s;
-}
-
-select:focus{
-  border-color:#3b82f6;
-  box-shadow:0 0 0 3px rgba(59,130,246,0.15);
+  font-size:13px;
+  outline:none;
 }
 
 button{
-  padding:12px 18px;
-  border:none;
-  border-radius:12px;
+  padding:6px 16px;
+  border:2px outset #d4d0c8;
+  background:#ece9d8;
+  color:#000;
+  font-weight:bold;
   cursor:pointer;
-  font-weight:600;
-  transition:0.25s;
-  font-size:14px;
+  font-size:13px;
 }
 
-/* SAVE BUTTON */
+button:hover{
+  background:#f5f4ea;
+}
+
+button:active{
+  border:2px inset #d4d0c8;
+}
+
 .save-btn{
-  background:#2563eb;
-  color:white;
   margin-left:10px;
-  box-shadow:0 6px 15px rgba(37,99,235,0.2);
-}
-
-.save-btn:hover{
-  background:#1d4ed8;
-  transform:translateY(-1px);
-}
-
-/* TABLE BOX */
-.table-box{
-  background:#ffffff;
-  border:1px solid #e5e7eb;
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 6px 20px rgba(0,0,0,0.06);
 }
 
 /* TABLE */
 table{
   width:100%;
   border-collapse:collapse;
+  background:#fff;
 }
 
 th{
-  background:#f3f4f6;
-  padding:14px;
-  font-size:14px;
-  text-transform:uppercase;
-  letter-spacing:0.5px;
-  color:#374151;
-  border-bottom:1px solid #e5e7eb;
+  background:linear-gradient(to bottom,#f8f8f8,#dcdcdc);
+  border:1px solid #808080;
+  color:#000;
+  padding:10px;
+  font-size:13px;
+  font-weight:bold;
 }
 
 td{
-  padding:12px;
+  border:1px solid #c0c0c0;
+  padding:10px;
   text-align:center;
-  border-bottom:1px solid #f1f5f9;
-  font-size:14px;
+  font-size:13px;
 }
 
-/* ROW HOVER */
 tr:hover{
-  background:#f9fafb;
+  background:#dbe8f6;
 }
 
-/* CODE CELL STYLE */
 td:first-child{
-  font-weight:600;
-  color:#2563eb;
+  font-weight:bold;
+  color:#003399;
 }
 
 /* INPUT */
 input{
   width:120px;
-  padding:8px 10px;
-  border-radius:10px;
-  border:1px solid #d1d5db;
-  text-align:center;
-  font-weight:600;
-  outline:none;
+  padding:5px;
+  border:2px inset #ffffff;
   background:#fff;
-  transition:0.2s;
-}
-
-input:focus{
-  border-color:#3b82f6;
-  box-shadow:0 0 0 3px rgba(59,130,246,0.15);
+  text-align:center;
+  font-weight:bold;
+  outline:none;
 }
 
 /* FOOTER */
@@ -151,26 +146,34 @@ input:focus{
   text-align:center;
   margin-top:15px;
   font-size:12px;
-  color:#6b7280;
+  color:#fff;
+  font-weight:bold;
+  text-shadow:1px 1px 2px rgba(0,0,0,.7);
 }
 
 /* RESPONSIVE */
 @media(max-width:768px){
-  .wrapper{
-    padding:0;
+
+  body{
+    padding:10px;
   }
 
-  select, button{
-    width:100%;
-    margin-top:10px;
+  select,
+  button{
+    width:calc(100% - 36px);
+    margin:8px 18px;
   }
 
   .save-btn{
-    margin-left:0;
+    margin-left:18px;
   }
 
   input{
     width:100%;
+  }
+
+  h2{
+    font-size:18px;
   }
 }
 </style>
