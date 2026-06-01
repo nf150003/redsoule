@@ -179,16 +179,20 @@ function runSeatPlan(e){
 /* DECODE BUTTON FUNCTION */
 function runDecode(e){
   e.preventDefault();
-  alert("Generating Decoded PDFs and sending email...");
 
   fetch(DECODE_URL, {
-    method: "POST"
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      action: "generatePDF"
+    })
   })
-  .then(r => r.text())
-  .then(t => alert(t || "Done"))
+  .then(r => r.json())
+  .then(d => alert(d.message || "Done"))
   .catch(() => alert("Failed"));
 }
-
 </script>
 
 </body>
