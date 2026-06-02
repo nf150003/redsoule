@@ -184,17 +184,19 @@ function runDecode(e){
     method: "POST",
     body: JSON.stringify({
       action: "generatePDF"
-    }),
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
-    }
+    })
   })
   .then(res => res.text())
   .then(text => {
-    alert(text);
+    try {
+      const data = JSON.parse(text);
+      alert(data.message || "Done");
+    } catch (err) {
+      alert(text);
+    }
   })
   .catch(err => {
-    alert("Network Error: " + err.message);
+    alert("Failed: " + err.message);
   });
 }
 </script>
