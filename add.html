@@ -178,12 +178,12 @@ function runSeatPlan(e){
 
 /* DECODE BUTTON FUNCTION */
 function runDecode(e){
+   alert("Running decoding system ...");
   e.preventDefault();
-
   fetch(DECODE_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "text/plain;charset=utf-8"
     },
     body: JSON.stringify({
       action: "generatePDF"
@@ -191,19 +191,18 @@ function runDecode(e){
   })
   .then(res => res.text())
   .then(text => {
-    console.log("RAW RESPONSE:", text);
-
     try {
       const data = JSON.parse(text);
       alert(data.message || "Done");
     } catch (err) {
-      alert("Server response: " + text);
+      alert(text);
     }
   })
   .catch(err => {
-    alert("Request failed: " + err.message);
+    alert("Failed: " + err.message);
   });
 }
+
 </script>
 
 </body>
