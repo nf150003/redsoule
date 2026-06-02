@@ -144,7 +144,7 @@ const LESSON_URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WY
 const SEAT_URL = "https://script.google.com/macros/s/AKfycbzinhHLB2iNLlzP0ZUb8Y2kcGnKVs5jfUzfN_7b05rvyUJpyyqdrLDdui96cuuRMsZg/exec";
 
 /* DECODE URL ADDED */
-const DECODE_URL = "https://script.google.com/macros/s/AKfycbwhUvKNPej1fS01IBlE3fpwZCKqWWaHFOXpGo-f1qKlTcdVftZT_qCcwtdJGgldfR0/exec";
+const DECODE_URL = "https://script.google.com/macros/s/AKfycbxj1SKWGhYf5FIHMs1RomzClwo70vGoRxURUwUk8gpIkmpPFSpzo0GBvvsrICAvGaAE/exec";
 
 function sendReport(e){
   e.preventDefault();
@@ -180,6 +180,8 @@ function runSeatPlan(e){
 function runDecode(e){
   e.preventDefault();
 
+  alert("Generating PDFs...");
+
   fetch(DECODE_URL, {
     method: "POST",
     headers: {
@@ -189,9 +191,20 @@ function runDecode(e){
       action: "generatePDF"
     })
   })
-  .then(r => r.json())
-  .then(d => alert(d.message || "Done"))
-  .catch(() => alert("Failed"));
+  .then(res => res.text())
+  .then(text => {
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      data = { message: text };
+    }
+
+    alert(data.message || "Done");
+  })
+  .catch(err => {
+    alert("Failed: " + err.message);
+  });
 }
 </script>
 
