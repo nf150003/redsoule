@@ -183,24 +183,11 @@ function runDecode(e){
   alert("Generating PDFs...");
 
   fetch(DECODE_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "generatePDF"
-    })
+    method: "POST"
   })
   .then(res => res.text())
   .then(text => {
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      data = { message: text };
-    }
-
-    alert(data.message || "Done");
+    alert(text);
   })
   .catch(err => {
     alert("Failed: " + err.message);
