@@ -2,299 +2,192 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Marks Entry System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Education Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Tinos:wght@400;700&display=swap');
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Tahoma, Arial, sans-serif;
-}
-
 body{
-  background:#3a6ea5;
-  background:linear-gradient(to bottom,#5c8fd8 0%,#3a6ea5 100%);
-  min-height:100vh;
-  padding:25px;
-  color:#000;
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background: linear-gradient(135deg,#eef2f7,#f8fafc);
+  color:#1f2937;
+  overflow-x:hidden;
 }
 
-/* MAIN WRAPPER */
-.wrapper{
-  max-width:1000px;
+.header{
+  background:#1e3a8a;
+  color:#fff;
+  text-align:center;
+  padding:24px 16px;
+  font-size:20px;
+  font-weight:600;
+  border-bottom:4px solid #0f172a;
+}
+
+.container{
+  padding:30px;
+  max-width:600px;
   margin:auto;
 }
 
-/* XP WINDOW */
-.top-box,
-.table-box{
-  background:#ece9d8;
-  border:2px solid #003c74;
-  border-radius:8px;
-  overflow:hidden;
-  box-shadow:
-    inset 1px 1px #ffffff,
-    inset -1px -1px #7f9db9,
-    5px 5px 15px rgba(0,0,0,.35);
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
 }
 
-/* XP TITLE BAR */
-.top-box::before{
-  content:"Marks Entry System";
-  display:block;
-  background:linear-gradient(to bottom,#0a246a,#3a6ea5);
-  color:#fff;
-  font-weight:bold;
-  padding:8px 12px;
-  font-size:13px;
-}
-
-.top-box{
-  margin-bottom:15px;
-}
-
-h2{
-  font-size:22px;
-  padding:18px;
-  color:#000;
-  font-weight:bold;
-}
-
-/* CONTROLS */
-select{
-  margin-left:18px;
-  margin-bottom:18px;
-  padding:6px 8px;
-  min-width:240px;
-  border:2px inset #ffffff;
+.btn{
   background:#fff;
-  font-size:13px;
-  outline:none;
-}
-
-button{
-  padding:6px 16px;
-  border:2px outset #d4d0c8;
-  background:#ece9d8;
-  color:#000;
-  font-weight:bold;
-  cursor:pointer;
-  font-size:13px;
-}
-
-button:hover{
-  background:#f5f4ea;
-}
-
-button:active{
-  border:2px inset #d4d0c8;
-}
-
-.save-btn{
-  margin-left:10px;
-}
-
-/* TABLE */
-table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fff;
-}
-
-th{
-  background:linear-gradient(to bottom,#f8f8f8,#dcdcdc);
-  border:1px solid #808080;
-  color:#000;
-  padding:10px;
-  font-size:13px;
-  font-weight:bold;
-}
-
-td{
-  border:1px solid #c0c0c0;
-  padding:10px;
-  text-align:center;
-  font-size:13px;
-}
-
-tr:hover{
-  background:#dbe8f6;
-}
-
-td:first-child{
-  font-weight:bold;
-  color:#003399;
-}
-
-/* INPUT */
-input{
-  width:120px;
-  padding:5px;
-  border:2px inset #ffffff;
-  background:#fff;
-  text-align:center;
-  font-weight:bold;
-  outline:none;
-}
-
-/* FOOTER */
-.footer{
-  text-align:center;
-  margin-top:15px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  padding:14px 10px;
   font-size:12px;
+  font-weight:500;
+  text-align:center;
+  cursor:pointer;
+  transition:0.25s ease;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  box-shadow:0 2px 10px rgba(0,0,0,0.06);
+}
+
+.btn:hover{
+  transform:translateY(-4px) scale(1.02);
+  box-shadow:0 12px 22px rgba(0,0,0,0.12);
+  border-color:#2563eb;
+}
+
+.icon{
+  width:40px;
+  height:40px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   color:#fff;
-  font-weight:bold;
-  text-shadow:1px 1px 2px rgba(0,0,0,.7);
+  font-size:16px;
+  margin-bottom:6px;
 }
 
-/* RESPONSIVE */
-@media(max-width:768px){
+.c1{background:#ef4444;}
+.c2{background:#3b82f6;}
+.c3{background:#22c55e;}
+.c4{background:#f59e0b;}
+.c5{background:#8b5cf6;}
+.c6{background:#14b8a6;}
+.c7{background:#f97316;}
+.c8{background:#6366f1;}
+.c9{background:#ec4899;}
+.c10{background:#0ea5e9;}
 
-  body{
-    padding:10px;
-  }
-
-  select,
-  button{
-    width:calc(100% - 36px);
-    margin:8px 18px;
-  }
-
-  .save-btn{
-    margin-left:18px;
-  }
-
-  input{
-    width:100%;
-  }
-
-  h2{
-    font-size:18px;
-  }
-}
+a{text-decoration:none;}
 </style>
 </head>
 
 <body>
 
-<div class="wrapper">
+<div class="header">ADMIN PANEL</div>
 
-  <div class="top-box">
-    <h2>🎓 Teacher Marks Entry Panel</h2>
+<div class="container">
 
-    <select id="subject" onchange="loadData()">
-      <option value="">Loading subjects...</option>
-    </select>
+  <div class="grid">
 
-    <button class="save-btn" onclick="saveData()">💾 Save Marks</button>
-  </div>
+    <a class="btn" href="#" onclick="sendReport(event)">
+      <div class="icon c1">📊</div>
+      CT Report
+    </a>
 
-  <div class="table-box">
-    <table>
-      <thead>
-        <tr>
-          <th>CODE</th>
-          <th>MARKS</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
-  </div>
+    <a class="btn" href="https://docs.google.com/spreadsheets/d/1eVfzUfSB1W00rZz-xEXkSUHj3dr511BhSK6mMB8yS7o/edit?gid=0#gid=0" target="_blank">
+      <div class="icon c2">🏆</div>
+      Leaderboard
+    </a>
 
-  <div class="footer">
-    NCPSC COLLEGE RESULT MANAGEMENT SYSTEM
+    <a class="btn" href="#" onclick="generatePDF(event)">
+      <div class="icon c3">📚</div>
+      Lesson Plan
+    </a>
+
+    <a class="btn" href="#" onclick="runSeatPlan(event)">
+      <div class="icon c4">🪑</div>
+      Seat Plan
+    </a>
+
+    <a class="btn" href="examflow.html" target="_blank">
+      <div class="icon c5">🏆</div>
+      Exam Flow
+    </a>
+
+    <!-- ONLY CHANGE HERE -->
+    <a class="btn" href="#" onclick="runDecode(event)">
+      <div class="icon c6">📄</div>
+      Decode
+    </a>
+
+    <a class="btn"><div class="icon c7">📌</div>Notices</a>
+    <a class="btn"><div class="icon c8">⚙️</div>Settings</a>
+    <a class="btn"><div class="icon c9">👨‍🏫</div>Teachers</a>
+    <a class="btn"><div class="icon c10">📱</div>App Info</a>
+
   </div>
 
 </div>
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbw37dBJ2Bk8lUWyIvhO_JMEg5IrKCBfwUkygyhxSoKWNAEkytzF4MmjLL8j9CUd_dqq/exec";
+const CT_URL = "https://script.google.com/macros/s/AKfycbxX_K42K4LU-xr-CAIRY0_rEtVl6nUxTmuLjHDI0Os88s2ZdEjr-oyw8LnQvTGUppFR/exec";
+const LESSON_URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WYCdewrni8Zyc1H6FUZrFfGV-cfr1oAPkQPwelzLlqRlaXJxN/exec";
+const SEAT_URL = "https://script.google.com/macros/s/AKfycbzinhHLB2iNLlzP0ZUb8Y2kcGnKVs5jfUzfN_7b05rvyUJpyyqdrLDdui96cuuRMsZg/exec";
 
-let cache = [];
+/* DECODE URL ADDED */
+const DECODE_URL = "https://script.google.com/macros/s/AKfycbwhUvKNPej1fS01IBlE3fpwZCKqWWaHFOXpGo-f1qKlTcdVftZT_qCcwtdJGgldfR0/exec";
 
-/*************************************************
- * LOAD SUBJECTS
- *************************************************/
-async function loadSubjects() {
-  const res = await fetch(API_URL + "?action=subjects");
-  const data = await res.json();
+function sendReport(e){
+  e.preventDefault();
+  alert("Processing CT Report...");
 
-  const select = document.getElementById("subject");
-  select.innerHTML = `<option value="">Select Subject</option>`;
-
-  data.subjects.forEach(sub => {
-    const opt = document.createElement("option");
-    opt.value = sub;
-    opt.textContent = sub;
-    select.appendChild(opt);
-  });
+  fetch(CT_URL + "?action=report")
+    .then(r => r.text())
+    .then(t => alert(t || "Done"))
+    .catch(() => alert("Failed"));
 }
 
-/*************************************************
- * LOAD DATA
- *************************************************/
-async function loadData() {
-  const subject = document.getElementById("subject").value;
-  if (!subject) return;
+function generatePDF(e){
+  e.preventDefault();
+  alert("Generating Lesson Plan...");
 
-  const res = await fetch(API_URL + "?subject=" + subject);
-  cache = await res.json();
-
-  const tbody = document.getElementById("tbody");
-  tbody.innerHTML = "";
-
-  cache.forEach(row => {
-    tbody.innerHTML += `
-      <tr>
-        <td>${row.code}</td>
-        <td>
-          <input type="number" value="${row.marks || ''}" data-code="${row.code}">
-        </td>
-      </tr>
-    `;
-  });
+  fetch(LESSON_URL + "?action=lessonplan")
+    .then(r => r.text())
+    .then(t => alert(t || "Done"))
+    .catch(() => alert("Failed"));
 }
 
-/*************************************************
- * SAVE DATA
- *************************************************/
-async function saveData() {
-  const subject = document.getElementById("subject").value;
-  if (!subject) return alert("Select subject first");
+function runSeatPlan(e){
+  e.preventDefault();
+  alert("Generating Seat Plan...");
 
-  const inputs = document.querySelectorAll("input");
-
-  const data = [];
-
-  inputs.forEach(inp => {
-    data.push({
-      code: inp.dataset.code,
-      marks: inp.value
-    });
-  });
-
-  const res = await fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      subject: subject,
-      data: data
-    })
-  });
-
-  const result = await res.json();
-
-  alert(result.success ? "Saved successfully!" : "Error saving!");
+  fetch(SEAT_URL + "?action=seatplan")
+    .then(r => r.text())
+    .then(t => alert(t || "Done"))
+    .catch(() => alert("Failed"));
 }
 
-/*************************************************
- * INIT
- *************************************************/
-loadSubjects();
+/* DECODE BUTTON FUNCTION */
+function runDecode(e){
+  e.preventDefault();
+  alert("Generating Decoded PDFs and sending email...");
+
+  fetch(DECODE_URL, {
+    method: "POST"
+  })
+  .then(r => r.text())
+  .then(t => alert(t || "Done"))
+  .catch(() => alert("Failed"));
+}
 
 </script>
 
