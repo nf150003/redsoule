@@ -144,7 +144,7 @@ const LESSON_URL = "https://script.google.com/macros/s/AKfycbzUVnC6nBfLWr2TdA0WY
 const SEAT_URL = "https://script.google.com/macros/s/AKfycbzinhHLB2iNLlzP0ZUb8Y2kcGnKVs5jfUzfN_7b05rvyUJpyyqdrLDdui96cuuRMsZg/exec";
 
 /* DECODE URL ADDED */
-const DECODE_URL = "https://script.google.com/macros/s/AKfycbxT6VNoqiA2_5BYXpnacy6RtpDH_JPPup4MqiovKTObpnOj9wUcPmBJ9MiEmQ6Zrb8Z/exec";
+const DECODE_URL = "https://script.google.com/macros/s/AKfycbyemB7lZWC-nQSnqDehZorqr0lPAxNt7sn_2kbPmxR3WWKamxmBYY2qcq55Nx_Jq1Oj/exec";
 
 function sendReport(e){
   e.preventDefault();
@@ -180,14 +180,18 @@ function runSeatPlan(e){
 function runDecode(e){
   e.preventDefault();
 
-  alert("Generating PDFs...");
-
   fetch(DECODE_URL, {
-    method: "POST"
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      action: "generatePDF"
+    })
   })
-  .then(res => res.text())
-  .then(text => {
-    alert(text);
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
   })
   .catch(err => {
     alert("Failed: " + err.message);
