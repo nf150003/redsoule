@@ -183,7 +183,7 @@ function runDecode(e){
   fetch(DECODE_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "text/plain;charset=utf-8"
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       action: "generatePDF"
@@ -191,15 +191,17 @@ function runDecode(e){
   })
   .then(res => res.text())
   .then(text => {
+    console.log("RAW RESPONSE:", text);
+
     try {
       const data = JSON.parse(text);
       alert(data.message || "Done");
     } catch (err) {
-      alert(text);
+      alert("Server response: " + text);
     }
   })
   .catch(err => {
-    alert("Failed: " + err.message);
+    alert("Request failed: " + err.message);
   });
 }
 </script>
