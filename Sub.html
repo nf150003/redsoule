@@ -1,84 +1,157 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ERP Subject Viewer</title>
+  <base target="_top">
 
   <style>
-    body { font-family: Arial; padding:20px; background:#f4f4f4; }
-    .box { max-width:900px; margin:auto; background:white; padding:20px; border-radius:10px; }
+    body{
+      background:#3A6EA5;
+      font-family:Tahoma, Arial, sans-serif;
+      padding:20px;
+    }
 
-    table { width:100%; border-collapse: collapse; margin-top:20px; }
-    th, td { border:1px solid #ddd; padding:10px; text-align:center; }
-    th { background: teal; color:white; }
+    .window{
+      width:600px;
+      margin:auto;
+      background:#ECE9D8;
+      border:1px solid #003C74;
+    }
+
+    .titlebar{
+      background:linear-gradient(to bottom,#0A246A,#3A6EA5);
+      color:white;
+      padding:6px 10px;
+      font-weight:bold;
+      font-size:13px;
+    }
+
+    .content{
+      padding:10px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:white;
+    }
+
+    th{
+      background:#D4D0C8;
+      border:1px solid #808080;
+      padding:6px;
+      text-align:center;
+      font-size:12px;
+    }
+
+    td{
+      border:1px solid #C0C0C0;
+      padding:4px;
+      text-align:center;
+      font-size:12px;
+    }
+
+    input{
+      width:80px;
+      border:1px solid #7F9DB9;
+      padding:2px;
+      font-family:Tahoma;
+      text-align:center;
+    }
+
+    .footer{
+      text-align:right;
+      margin-top:10px;
+    }
+
+    button{
+      padding:4px 20px;
+      border:1px solid #003C74;
+      background:#ECE9D8;
+      font-family:Tahoma;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#D6D3CE;
+    }
   </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="window">
 
-  <h2 id="title">📊 Subject Sheet</h2>
+  <div class="titlebar">
+    Marks Entry
+  </div>
 
-  <input id="search" placeholder="Search Code..." onkeyup="filter()">
+  <div class="content">
 
-  <table>
-    <thead>
-      <tr id="header"></tr>
-    </thead>
-    <tbody id="body"></tbody>
-  </table>
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Marks</th>
+        </tr>
+      </thead>
+
+      <tbody id="dataArea"></tbody>
+    </table>
+
+    <div class="footer">
+      <button onclick="saveMarks()">
+        Save
+      </button>
+    </div>
+
+  </div>
 
 </div>
 
 <script>
 
-// 🔥 GET SUBJECT FROM URL
-const params = new URLSearchParams(window.location.search);
-const subject = params.get("subject");
+google.script.run
+.withSuccessHandler(loadCodes)
+.getCodes();
 
-// API URL
-const API = "YOUR_SCRIPT_URL" + "?subject=" + subject;
+function loadCodes(data){
 
-let allData = [];
+  const area=document.getElementById("dataArea");
 
-// Set title dynamically
-document.getElementById("title").innerText =
-  "📊 " + subject.toUpperCase() + " Sheet";
+  data.forEach(item=>{
 
-fetch(API)
-  .then(res => res.json())
-  .then(data => {
-    allData = data;
-    render(data);
+    area.innerHTML += `
+      <tr>
+        <td>${item.code}</td>
+
+        <td>
+          <input
+            type="number"
+            value="${item.marks || ''}"
+            data-row="${item.row}">
+        </td>
+      </tr>
+    `;
   });
 
-function render(data) {
-
-  if (!data.length) return;
-
-  let headers = Object.keys(data[0]);
-
-  document.getElementById("header").innerHTML =
-    headers.map(h => `<th>${h}</th>`).join("");
-
-  document.getElementById("body").innerHTML =
-    data.map(row =>
-      "<tr>" +
-      headers.map(h => `<td>${row[h]}</td>`).join("") +
-      "</tr>"
-    ).join("");
 }
 
-function filter() {
-  let val = document.getElementById("search").value.toLowerCase();
+function saveMarks(){
 
-  let filtered = allData.filter(row =>
-    Object.values(row).some(v =>
-      String(v).toLowerCase().includes(val)
-    )
-  );
+  const saveData=[];
 
-  render(filtered);
+  document.querySelectorAll("input").forEach(inp=>{
+
+    saveData.push({
+      row:Number(inp.dataset.row),
+      marks:inp.value
+    });
+
+  });
+
+  google.script.run.saveMarks(saveData);
+
+  alert("Marks Saved");
 }
 
 </script>
