@@ -5,28 +5,35 @@
 
   <style>
     body{
+      font-family: Tahoma, Arial;
       background:#3A6EA5;
-      font-family:Tahoma, Arial, sans-serif;
       padding:20px;
     }
 
     .window{
-      width:600px;
+      width:650px;
       margin:auto;
       background:#ECE9D8;
-      border:1px solid #003C74;
+      border:2px solid #0A246A;
     }
 
     .titlebar{
       background:linear-gradient(to bottom,#0A246A,#3A6EA5);
       color:white;
-      padding:6px 10px;
+      padding:8px;
       font-weight:bold;
       font-size:13px;
     }
 
     .content{
       padding:10px;
+    }
+
+    .sheetname{
+      font-size:12px;
+      margin-bottom:8px;
+      color:#003366;
+      font-weight:bold;
     }
 
     table{
@@ -37,25 +44,24 @@
 
     th{
       background:#D4D0C8;
-      border:1px solid #808080;
+      border:1px solid #666;
       padding:6px;
-      text-align:center;
-      font-size:12px;
+      font-size:13px;
     }
 
     td{
-      border:1px solid #C0C0C0;
-      padding:4px;
+      border:1px solid #999;
       text-align:center;
-      font-size:12px;
+      padding:5px;
+      font-size:13px;
     }
 
     input{
-      width:80px;
-      border:1px solid #7F9DB9;
-      padding:2px;
-      font-family:Tahoma;
+      width:90px;
       text-align:center;
+      border:1px solid #666;
+      padding:3px;
+      font-family:Tahoma;
     }
 
     .footer{
@@ -64,15 +70,22 @@
     }
 
     button{
-      padding:4px 20px;
-      border:1px solid #003C74;
+      padding:5px 20px;
+      border:1px solid #0A246A;
       background:#ECE9D8;
-      font-family:Tahoma;
       cursor:pointer;
+      font-family:Tahoma;
     }
 
     button:hover{
       background:#D6D3CE;
+    }
+
+    #status{
+      margin-top:8px;
+      font-size:12px;
+      color:green;
+      font-weight:bold;
     }
   </style>
 </head>
@@ -82,10 +95,12 @@
 <div class="window">
 
   <div class="titlebar">
-    Marks Entry
+    Universal Marks Entry System
   </div>
 
   <div class="content">
+
+    <div class="sheetname" id="sheetTitle"></div>
 
     <table>
       <thead>
@@ -95,14 +110,14 @@
         </tr>
       </thead>
 
-      <tbody id="dataArea"></tbody>
+      <tbody id="data"></tbody>
     </table>
 
     <div class="footer">
-      <button onclick="saveMarks()">
-        Save
-      </button>
+      <button onclick="saveData()">Save</button>
     </div>
+
+    <div id="status"></div>
 
   </div>
 
@@ -110,48 +125,71 @@
 
 <script>
 
+let sheetName = "";
+
+/* ======================
+   GET SHEET FROM URL
+====================== */
+function getSheetFromURL(){
+  const params = new URLSearchParams(window.location.search);
+  return params.get("sheet") || "English";
+}
+
+sheetName = getSheetFromURL();
+
+document.getElementById("sheetTitle").innerText =
+  "Sheet: " + sheetName;
+
+/* ======================
+   LOAD DATA
+====================== */
 google.script.run
-.withSuccessHandler(loadCodes)
-.getCodes();
+.withSuccessHandler(function(res){
 
-function loadCodes(data){
+  let html = "";
 
-  const area=document.getElementById("dataArea");
-
-  data.forEach(item=>{
-
-    area.innerHTML += `
+  res.forEach(r=>{
+    html += `
       <tr>
-        <td>${item.code}</td>
-
+        <td>${r.code}</td>
         <td>
-          <input
-            type="number"
-            value="${item.marks || ''}"
-            data-row="${item.row}">
+          <input type="number"
+                 value="${r.marks || ''}"
+                 data-row="${r.row}">
         </td>
       </tr>
     `;
   });
 
-}
+  document.getElementById("data").innerHTML = html;
 
-function saveMarks(){
+})
+.getData(sheetName);
 
-  const saveData=[];
 
-  document.querySelectorAll("input").forEach(inp=>{
+/* ======================
+   SAVE DATA
+====================== */
+function saveData(){
 
-    saveData.push({
-      row:Number(inp.dataset.row),
-      marks:inp.value
+  let inputs = document.querySelectorAll("input");
+
+  let send = [];
+
+  inputs.forEach(i=>{
+    send.push({
+      row: Number(i.dataset.row),
+      marks: i.value
     });
-
   });
 
-  google.script.run.saveMarks(saveData);
+  google.script.run
+  .withSuccessHandler(function(msg){
+    document.getElementById("status").innerHTML =
+      "✓ Saved Successfully";
+  })
+  .saveData(sheetName, send);
 
-  alert("Marks Saved");
 }
 
 </script>
