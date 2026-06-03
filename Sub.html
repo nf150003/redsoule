@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ERP Subject Viewer</title>
+
+  <style>
+    body { font-family: Arial; padding:20px; background:#f4f4f4; }
+    .box { max-width:900px; margin:auto; background:white; padding:20px; border-radius:10px; }
+
+    table { width:100%; border-collapse: collapse; margin-top:20px; }
+    th, td { border:1px solid #ddd; padding:10px; text-align:center; }
+    th { background: teal; color:white; }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <h2 id="title">📊 Subject Sheet</h2>
+
+  <input id="search" placeholder="Search Code..." onkeyup="filter()">
+
+  <table>
+    <thead>
+      <tr id="header"></tr>
+    </thead>
+    <tbody id="body"></tbody>
+  </table>
+
+</div>
+
+<script>
+
+// 🔥 GET SUBJECT FROM URL
+const params = new URLSearchParams(window.location.search);
+const subject = params.get("subject");
+
+// API URL
+const API = "YOUR_SCRIPT_URL" + "?subject=" + subject;
+
+let allData = [];
+
+// Set title dynamically
+document.getElementById("title").innerText =
+  "📊 " + subject.toUpperCase() + " Sheet";
+
+fetch(API)
+  .then(res => res.json())
+  .then(data => {
+    allData = data;
+    render(data);
+  });
+
+function render(data) {
+
+  if (!data.length) return;
+
+  let headers = Object.keys(data[0]);
+
+  document.getElementById("header").innerHTML =
+    headers.map(h => `<th>${h}</th>`).join("");
+
+  document.getElementById("body").innerHTML =
+    data.map(row =>
+      "<tr>" +
+      headers.map(h => `<td>${row[h]}</td>`).join("") +
+      "</tr>"
+    ).join("");
+}
+
+function filter() {
+  let val = document.getElementById("search").value.toLowerCase();
+
+  let filtered = allData.filter(row =>
+    Object.values(row).some(v =>
+      String(v).toLowerCase().includes(val)
+    )
+  );
+
+  render(filtered);
+}
+
+</script>
+
+</body>
+</html>
